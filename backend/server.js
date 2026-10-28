@@ -11,7 +11,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Serve static assets and uploaded files (HostPinnacle friendly)
+// Serve static assets, public web pages, and uploaded files
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use(express.static(path.join(__dirname, "public")));
 
@@ -21,13 +21,24 @@ app.use((req, res, next) => {
   next();
 });
 
-// Root Ping Handler (Required by cPanel / Phusion Passenger on HostPinnacle)
+// Root Route: Serves index.html to web browsers, or JSON to API clients & monitoring
 app.get("/", (req, res) => {
+  const acceptsHtml = req.accepts("html");
+  const acceptsJson = req.headers["accept"] && req.headers["accept"].includes("application/json");
+
+  if (acceptsHtml && !acceptsJson && !req.xhr) {
+    return res.sendFile(path.join(__dirname, "public", "index.html"));
+  }
+
   res.json({
     status: "online",
     name: "HARVION SDA Ministry Enterprise API",
     version: "2.0.0",
     healthCheck: "/api/health",
+    webPages: {
+      home: "/",
+      about: "/about.html",
+    },
     endpoints: {
       books: "/api/books",
       orders: "/api/orders",
@@ -37,6 +48,38 @@ app.get("/", (req, res) => {
     },
     serverTime: new Date().toISOString(),
     message: "HARVION Literature Evangelism, Health & Truth Platform is active."
+  });
+});
+
+// About Page Handler
+app.get(["/about", "/about.html"], (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "about.html"));
+});
+
+// Home Page Handler
+app.get(["/home", "/index.html"], (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
+});
+
+// Dedicated API Overview Endpoint
+app.get("/api", (req, res) => {
+  res.json({
+    status: "online",
+    name: "HARVION SDA Ministry Enterprise API",
+    version: "2.0.0",
+    healthCheck: "/api/health",
+    webPages: {
+      home: "/",
+      about: "/about.html",
+    },
+    endpoints: {
+      books: "/api/books",
+      orders: "/api/orders",
+      payments: "/api/payments",
+      colporteurs: "/api/colporteurs",
+      ministry: "/api/ministry",
+    },
+    serverTime: new Date().toISOString(),
   });
 });
 
@@ -60,6 +103,9 @@ app.use("/api/ministry", require("./routes/ministry"));
 
 // 404 Handler
 app.use((req, res) => {
+  if (req.accepts("html")) {
+    return res.status(404).sendFile(path.join(__dirname, "public", "index.html"));
+  }
   res.status(404).json({ success: false, message: "Endpoint not found" });
 });
 
@@ -73,6 +119,7 @@ if (require.main === module) {
   const server = app.listen(PORT, () => {
     console.log(`===============================================`);
     console.log(`🌱 HARVION Backend running on http://localhost:${PORT}`);
+    console.log(`📖 Web Pages: http://localhost:${PORT}/ and http://localhost:${PORT}/about.html`);
     console.log(`📦 Firebase Project: ${process.env.FIREBASE_PROJECT_ID || "vine-3e4ab"}`);
     console.log(`🌐 Ready for HostPinnacle cPanel / Passenger`);
     console.log(`===============================================`);

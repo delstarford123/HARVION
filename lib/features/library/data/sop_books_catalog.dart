@@ -720,3 +720,4 @@ class SopBooksCatalog {
     return allSopBooks.where((b) => b.series == seriesName).toList();
   }
 }
+

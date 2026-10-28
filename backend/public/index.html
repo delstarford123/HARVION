@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HARVION — Literature Evangelism, Health Reform & Present Truth</title>
+  <meta name="description" content="HARVION is an enterprise Seventh-day Adventist ministry platform uniting the Spirit of Prophecy, Literature Evangelism, Medical Missionary Health, Country Living, and Modern Digital Soul-Winning.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@300;400;500;600;700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-blue: #0d2f5a;
+      --secondary-blue: #1A365D;
+      --accent-gold: #D4AF37;
+      --gold-hover: #c19b26;
+      --nature-green: #2E7D32;
+      --light-green: #E8F5E9;
+      --bg-light: #F8F9FA;
+      --surface-white: #FFFFFF;
+      --text-dark: #1E293B;
+      --text-muted: #64748B;
+      --border-color: #E2E8F0;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+      --shadow-md: 0 4px 14px rgba(0,0,0,0.08);
+      --shadow-lg: 0 10px 25px rgba(13,47,90,0.12);
+      --radius: 12px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--bg-light);
+      color: var(--text-dark);
+      line-height: 1.6;
+    }
+
+    /* Top Banner */
+    .top-bar {
+      background: linear-gradient(90deg, var(--primary-blue), #103b70);
+      color: #FFFFFF;
+      padding: 8px 24px;
+      font-size: 13px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid var(--accent-gold);
+    }
+
+    .top-bar-left span {
+      margin-right: 16px;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(46, 125, 50, 0.25);
+      border: 1px solid #4CAF50;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #A5D6A7;
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      background-color: #4CAF50;
+      border-radius: 50%;
+      box-shadow: 0 0 8px #4CAF50;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.2); }
+    }
+
+    /* Navigation */
+    header {
+      background: var(--surface-white);
+      box-shadow: var(--shadow-sm);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--primary-blue);
+    }
+
+    .brand-icon {
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(135deg, var(--primary-blue), var(--nature-green));
+      border: 2px solid var(--accent-gold);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent-gold);
+      font-weight: bold;
+      font-size: 22px;
+      box-shadow: 0 4px 10px rgba(212,175,55,0.25);
+    }
+
+    .brand-text h1 {
+      font-family: 'Cinzel', serif;
+      font-size: 24px;
+      letter-spacing: 1.5px;
+      font-weight: 700;
+      color: var(--primary-blue);
+      line-height: 1.1;
+    }
+
+    .brand-text span {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--nature-green);
+      font-weight: 600;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 24px;
+      align-items: center;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: var(--text-dark);
+      font-weight: 500;
+      font-size: 14px;
+      transition: color 0.2s;
+    }
+
+    nav a:hover, nav a.active {
+      color: var(--accent-gold);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+
+    .btn-gold {
+      background: var(--accent-gold);
+      color: #000000;
+      border: 1px solid #b8972b;
+    }
+
+    .btn-gold:hover {
+      background: var(--gold-hover);
+      box-shadow: 0 4px 12px rgba(212,175,55,0.3);
+      transform: translateY(-1px);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--primary-blue);
+      border: 1.5px solid var(--primary-blue);
+    }
+
+    .btn-outline:hover {
+      background: var(--primary-blue);
+      color: #FFFFFF;
+    }
+
+    /* Hero Section */
+    .hero {
+      background: linear-gradient(135deg, rgba(13,47,90,0.96), rgba(46,125,50,0.88)), url('https://images.unsplash.com/photo-1507692049790-de58290a4334?auto=format&fit=crop&w=1920&q=80') center/cover;
+      color: #FFFFFF;
+      padding: 90px 24px;
+      text-align: center;
+      position: relative;
+    }
+
+    .hero-content {
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: rgba(212,175,55,0.2);
+      border: 1px solid var(--accent-gold);
+      color: var(--accent-gold);
+      padding: 6px 16px;
+      border-radius: 30px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    .hero h2 {
+      font-family: 'Cinzel', serif;
+      font-size: 42px;
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 20px;
+      color: #FFFFFF;
+    }
+
+    .hero p {
+      font-family: 'Merriweather', serif;
+      font-size: 18px;
+      line-height: 1.7;
+      color: #E2E8F0;
+      margin-bottom: 32px;
+      font-weight: 300;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* Pillars Overview */
+    .section {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 70px 24px;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .section-title h3 {
+      font-family: 'Cinzel', serif;
+      font-size: 32px;
+      color: var(--primary-blue);
+      margin-bottom: 12px;
+    }
+
+    .section-title p {
+      color: var(--text-muted);
+      font-size: 16px;
+      max-width: 650px;
+      margin: 0 auto;
+    }
+
+    .pillars-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 28px;
+    }
+
+    .pillar-card {
+      background: var(--surface-white);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 32px 24px;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .pillar-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--accent-gold);
+    }
+
+    .pillar-icon {
+      width: 56px;
+      height: 56px;
+      background: var(--light-green);
+      color: var(--nature-green);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      margin-bottom: 20px;
+    }
+
+    .pillar-card h4 {
+      font-size: 20px;
+      color: var(--primary-blue);
+      margin-bottom: 12px;
+      font-weight: 700;
+    }
+
+    .pillar-card p {
+      color: var(--text-muted);
+      font-size: 14px;
+      line-height: 1.6;
+      margin-bottom: 18px;
+      flex-grow: 1;
+    }
+
+    .pillar-tag {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--nature-green);
+      background: var(--light-green);
+      padding: 4px 10px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      align-self: flex-start;
+    }
+
+    /* Bible & SOP Quote Banner */
+    .quote-banner {
+      background: linear-gradient(135deg, var(--primary-blue), #16407a);
+      color: #FFFFFF;
+      border-radius: var(--radius);
+      padding: 48px 36px;
+      margin: 40px 0;
+      position: relative;
+      border-left: 6px solid var(--accent-gold);
+    }
+
+    .quote-text {
+      font-family: 'Merriweather', serif;
+      font-size: 18px;
+      font-style: italic;
+      line-height: 1.8;
+      margin-bottom: 16px;
+      color: #F1F5F9;
+    }
+
+    .quote-author {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--accent-gold);
+      letter-spacing: 1px;
+    }
+
+    /* API Status Card */
+    .api-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .api-info h4 {
+      font-size: 18px;
+      color: var(--primary-blue);
+      margin-bottom: 6px;
+    }
+
+    .api-info p {
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    .api-links {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .api-link {
+      font-family: monospace;
+      font-size: 12px;
+      background: #F1F5F9;
+      color: var(--primary-blue);
+      padding: 8px 14px;
+      border-radius: 6px;
+      text-decoration: none;
+      border: 1px solid #CBD5E1;
+      transition: all 0.2s;
+    }
+
+    .api-link:hover {
+      background: var(--primary-blue);
+      color: #FFFFFF;
+      border-color: var(--primary-blue);
+    }
+
+    /* Footer */
+    footer {
+      background: var(--primary-blue);
+      color: #FFFFFF;
+      padding: 60px 24px 30px;
+      border-top: 4px solid var(--accent-gold);
+    }
+
+    .footer-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+
+    .footer-col h5 {
+      font-family: 'Cinzel', serif;
+      font-size: 16px;
+      color: var(--accent-gold);
+      margin-bottom: 16px;
+      letter-spacing: 1px;
+    }
+
+    .footer-col p {
+      color: #CBD5E1;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .footer-col ul {
+      list-style: none;
+    }
+
+    .footer-col li {
+      margin-bottom: 10px;
+    }
+
+    .footer-col a {
+      color: #E2E8F0;
+      text-decoration: none;
+      font-size: 13px;
+      transition: color 0.2s;
+    }
+
+    .footer-col a:hover {
+      color: var(--accent-gold);
+    }
+
+    .footer-bottom {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: #94A3B8;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    @media (max-width: 768px) {
+      .hero h2 { font-size: 30px; }
+      .hero p { font-size: 15px; }
+      nav ul { display: none; }
+      .top-bar { flex-direction: column; gap: 6px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top System Bar -->
+  <div class="top-bar">
+    <div class="top-bar-left">
+      <span>🌱 <strong>HARVION Ministry Ecosystem</strong></span>
+      <span>• Literature Evangelism, Health & Truth</span>
+    </div>
+    <div class="top-bar-right">
+      <span class="status-pill">
+        <span class="status-dot"></span>
+        HostPinnacle Cloud Backend: ONLINE
+      </span>
+    </div>
+  </div>
+
+  <!-- Header Navigation -->
+  <header>
+    <div class="nav-container">
+      <a href="/" class="brand">
+        <div class="brand-icon">✝</div>
+        <div class="brand-text">
+          <h1>HARVION</h1>
+          <span>SDA Truth & Evangelism</span>
+        </div>
+      </a>
+      <nav>
+        <ul>
+          <li><a href="/" class="active">Home</a></li>
+          <li><a href="/about.html">About & Adventist Faith</a></li>
+          <li><a href="/api/health">API Health</a></li>
+          <li><a href="/api/books">Books API</a></li>
+          <li><a href="https://m.egwwritings.org" target="_blank" rel="noopener">EGW Writings</a></li>
+          <li><a href="/about.html" class="btn btn-gold">Learn About Harvion</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">The Great Commission in the Digital Age</div>
+      <h2>Proclaiming Truth, Healing Bodies, and Restoring Souls</h2>
+      <p>
+        "And I saw another angel fly in the midst of heaven, having the everlasting gospel to preach unto them that dwell on the earth." — <em>Revelation 14:6</em>
+      </p>
+      <div class="hero-actions">
+        <a href="/about.html" class="btn btn-gold">
+          📖 Read How HARVION Aligns with Adventist Faith
+        </a>
+        <a href="/api/health" class="btn btn-outline" style="border-color: #FFFFFF; color: #FFFFFF;">
+          ⚡ Check Backend API Status
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Mission Pillars Grid -->
+  <section class="section">
+    <div class="section-title">
+      <h3>The Pillars of the HARVION Ministry</h3>
+      <p>Harmonizing the Three Angels' Messages, the Spirit of Prophecy, Medical Missionary Work, and Literature Evangelism.</p>
+    </div>
+
+    <div class="pillars-grid">
+      <!-- Pillar 1: Spirit of Prophecy -->
+      <div class="pillar-card">
+        <div class="pillar-icon">📖</div>
+        <h4>50 Spirit of Prophecy Books</h4>
+        <p>Complete curated library of Ellen G. White writings with full offline canonical chapters and instant official EGW Writings links (Steps to Christ, The Great Controversy, Ministry of Healing, and more).</p>
+        <span class="pillar-tag">Revelation 19:10</span>
+      </div>
+
+      <!-- Pillar 2: Literature Evangelism -->
+      <div class="pillar-card">
+        <div class="pillar-icon">📚</div>
+        <h4>Colporteur & Publishing Work</h4>
+        <p>Connecting literature evangelists and readers worldwide. Real-time camp meeting locations, physical book deliveries, digital PDF tracks, and fair colporteur commission support.</p>
+        <span class="pillar-tag">Silent Messengers</span>
+      </div>
+
+      <!-- Pillar 3: Medical Missionary Health -->
+      <div class="pillar-card">
+        <div class="pillar-icon">🌿</div>
+        <h4>The Right Arm of the Gospel</h4>
+        <p>Health reform founded on the 8 natural laws of health (NEWSTART): Nutrition, Exercise, Water, Sunlight, Temperance, Air, Rest, and Trust in God. Natural remedies and wholesome living.</p>
+        <span class="pillar-tag">3 John 1:2</span>
+      </div>
+
+      <!-- Pillar 4: Adventist Home & Family -->
+      <div class="pillar-card">
+        <div class="pillar-icon">👨‍👩‍👧‍👦</div>
+        <h4>Pillars of the Adventist Home</h4>
+        <p>Principles of Christian marriage, parenting, child guidance, home worship, and building households that stand as a little symbol of heaven on earth.</p>
+        <span class="pillar-tag">Joshua 24:15</span>
+      </div>
+
+      <!-- Pillar 5: Country Living & Farming -->
+      <div class="pillar-card">
+        <div class="pillar-icon">🌾</div>
+        <h4>Country Living & Organic Farming</h4>
+        <p>Practical step-by-step agricultural guides, soil fertility, seed saving, greenhouse management, and preparing families for self-reliance in accordance with divine counsel.</p>
+        <span class="pillar-tag">Genesis 2:15</span>
+      </div>
+
+      <!-- Pillar 6: Digital Evangelism & Livestreams -->
+      <div class="pillar-card">
+        <div class="pillar-icon">🎥</div>
+        <h4>Livestreams & Digital Sermons</h4>
+        <p>Broadcasting present truth through interactive sermons, prayer walls, TikTok LIVE integration, YouTube streams, conduct codes, and instant push notifications to believers.</p>
+        <span class="pillar-tag">Mark 16:15</span>
+      </div>
+    </div>
+
+    <!-- Scriptural Quote Banner -->
+    <div class="quote-banner">
+      <div class="quote-text">
+        "Our publications should go everywhere. Let them be issued in many languages. The third angel's message is to be given through this medium and through the living teacher. You who believe the truth for this time, wake up!"
+      </div>
+      <div class="quote-author">— ELLEN G. WHITE, Testimonies for the Church, Vol. 9, p. 61</div>
+    </div>
+
+    <!-- Live API Status Card -->
+    <div class="api-card">
+      <div class="api-info">
+        <h4>Enterprise Cloud Backend & API</h4>
+        <p>HostPinnacle cPanel / Passenger Node.js service connected to Firebase Cloud Infrastructure.</p>
+      </div>
+      <div class="api-links">
+        <a href="/api/health" class="api-link">GET /api/health</a>
+        <a href="/api/books" class="api-link">GET /api/books</a>
+        <a href="/api/orders" class="api-link">GET /api/orders</a>
+        <a href="/about.html" class="btn btn-gold" style="padding: 6px 14px; font-size: 13px;">Full About Page →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-container">
+      <div class="footer-col">
+        <h5>HARVION MINISTRY</h5>
+        <p>
+          Dedicated to proclaiming the Everlasting Gospel, restoring the spiritual and physical health of humanity, and equipping the remnant church through the printed and digital page.
+        </p>
+      </div>
+      <div class="footer-col">
+        <h5>FAITH & THEOLOGY</h5>
+        <ul>
+          <li><a href="/about.html#adventist-faith">The Three Angels' Messages</a></li>
+          <li><a href="/about.html#sop">The Spirit of Prophecy</a></li>
+          <li><a href="/about.html#health">Health Reform & NEWSTART</a></li>
+          <li><a href="/about.html#home">Pillars of Adventist Home</a></li>
+          <li><a href="/about.html#colporteur">Literature Evangelism</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>PLATFORM RESOURCES</h5>
+        <ul>
+          <li><a href="/about.html">About Application</a></li>
+          <li><a href="/api/health">Server Health</a></li>
+          <li><a href="/api/books">Literature Catalog</a></li>
+          <li><a href="https://m.egwwritings.org" target="_blank" rel="noopener">Official EGW Writings</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>CONTACT & FELLOWSHIP</h5>
+        <p>
+          <strong>Minister & Developer:</strong> Alfredo Onuko<br>
+          <strong>Email:</strong> afredoonuko@gmail.com<br>
+          <strong>Phone:</strong> 0745090990<br>
+          <strong>Community:</strong> <a href="https://chat.whatsapp.com/J8Lg4qCKyVqALdtDlXGClh?mode=gi_t" target="_blank" rel="noopener" style="color: var(--accent-gold); text-decoration: underline;">Join WhatsApp Fellowship</a>
+        </p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div>&copy; 2026 HARVION SDA Ministry. Dedicated to God's Glory.</div>
+      <div>Operating in harmony with the Seventh-day Adventist World Church.</div>
+    </div>
+  </footer>
+
+</body>
+</html>

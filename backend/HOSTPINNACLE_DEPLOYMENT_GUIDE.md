@@ -1,22 +1,22 @@
 # 🚀 HostPinnacle cPanel Node.js Deployment Guide for HARVION
 
-This guide explains how to deploy the **HARVION API Backend** on **HostPinnacle** (or any cPanel host running CloudLinux with "Setup Node.js App").
+This guide explains how to deploy the **HARVION Web & API Backend** on **HostPinnacle** (or any cPanel host running CloudLinux with "Setup Node.js App").
 
 ---
 
-### Step 1: Zip the Backend Directory
-Compress the contents of the `backend/` folder into a single ZIP file (`harvion-backend.zip`).
-**Important**: Do NOT include `node_modules/` in the ZIP file! HostPinnacle will install them directly on the server.
+### Step 1: Ready-Made Deployment Archive
+A pre-packaged archive has been built for you: **`backend/harvion-backend-deploy.zip`** (approx. 68 KB).
+It includes:
+- `server.js` (Express & Phusion Passenger web server)
+- `public/index.html` (HARVION Home Web Page)
+- `public/about.html` (Comprehensive About & Adventist Faith Alignment Guide)
+- `firebaseAdmin.js` & `serviceAccountKey.json` (Firebase Cloud connectivity)
+- `package.json` & `package-lock.json`
+- `.env` & `.htaccess`
+- `routes/` (books, orders, payments, colporteurs, ministry)
+- `uploads/` (static storage for media and book covers)
 
-Include:
-- `server.js`
-- `firebaseAdmin.js`
-- `package.json`
-- `package-lock.json`
-- `serviceAccountKey.json`
-- `.env`
-- `routes/` (folder with all route files)
-- `uploads/` (folder)
+*(It safely excludes `node_modules/` so upload is instantaneous; cPanel installs dependencies natively).*
 
 ---
 
@@ -28,8 +28,8 @@ Include:
    - **Node.js version**: Choose `18.x` or `20.x` (Recommended).
    - **Application mode**: `Production`.
    - **Application root**: `harvion_api` (or any directory name in your home root).
-   - **Application URL**: Select your domain or subdomain (e.g., `api.yourdomain.co.ke` or `yourdomain.co.ke/api`).
-   - **Application startup file**: `server.js` (matches your `package.json` main file).
+   - **Application URL**: Select your domain or subdomain (e.g., `yourdomain.co.ke` or `api.yourdomain.co.ke`).
+   - **Application startup file**: `server.js`.
 5. Click **Create** at the top right.
 
 ---
@@ -37,53 +37,62 @@ Include:
 ### Step 3: Upload the Backend Code
 1. In cPanel, open **File Manager**.
 2. Navigate into the folder created in Step 2 (`/home/yourusername/harvion_api`).
-3. Click **Upload** and upload `harvion-backend.zip`.
-4. Right-click `harvion-backend.zip` and select **Extract**.
-5. Ensure `server.js`, `package.json`, `firebaseAdmin.js`, `routes/`, and `serviceAccountKey.json` are situated directly in the root of that folder.
+3. Click **Upload** and upload `harvion-backend-deploy.zip`.
+4. Right-click `harvion-backend-deploy.zip` and select **Extract**.
+5. Ensure `server.js`, `public/`, `routes/`, `uploads/`, `package.json`, and `serviceAccountKey.json` are situated directly in the root of that folder.
 
 ---
 
 ### Step 4: Install Dependencies & Run
 1. Go back to **Setup Node.js App** in cPanel and click on your application.
-2. In the **Configuration** section, click **Run NPM Install** (cPanel will automatically read `package.json` and download `express`, `cors`, `dotenv`, and `firebase-admin`).
+2. In the **Configuration** section, click **Run NPM Install** (cPanel will automatically download `express`, `cors`, `dotenv`, and `firebase-admin`).
 3. Once completed, click **Restart** at the top.
 
 ---
 
-### Step 5: Verify the Deployment
-Open your browser and visit your application URL:
-```
-https://api.yourdomain.co.ke/
-```
-You will receive this active JSON confirmation:
-```json
-{
-  "status": "online",
-  "name": "HARVION SDA Ministry Enterprise API",
-  "version": "2.0.0",
-  "healthCheck": "/api/health",
-  "serverTime": "2026-10-28T...",
-  "message": "HARVION Literature Evangelism, Health & Truth Platform is active."
-}
-```
+### Step 5: Verify the Deployment in Your Browser
 
-Check the health route:
-```
-https://api.yourdomain.co.ke/api/health
-```
+1. **Home Web Page (HARVION Platform Overview)**:
+   ```
+   https://yourdomain.co.ke/
+   ```
+   *(or `https://yourdomain.co.ke/index.html`)*
+   Displays the full HARVION web portal with hero banner, 6 ministry pillars, live backend status, and quick links.
+
+2. **About & Adventist Faith Page**:
+   ```
+   https://yourdomain.co.ke/about.html
+   ```
+   *(or `https://yourdomain.co.ke/about`)*
+   Displays the comprehensive theological guide showing how HARVION matches the 28 Fundamental Beliefs, the Three Angels' Messages, the Spirit of Prophecy, and ethical monetization.
+
+3. **Backend API Health Check**:
+   ```
+   https://yourdomain.co.ke/api/health
+   ```
+   Returns:
+   ```json
+   {
+     "status": "online",
+     "name": "HARVION API Server",
+     "version": "2.0.0",
+     "firebaseProject": "vine-3e4ab",
+     "time": "2026-10-28T..."
+   }
+   ```
 
 ---
 
-### Available Endpoints on HostPinnacle
-| Method | Endpoint | Description |
-|---|---|---|
-| `GET` | `/` | Root service ping & status check |
-| `GET` | `/api/health` | Service health & Firebase connection status |
-| `GET` | `/api/books` | Literature evangelism book catalog (supports filters & search) |
-| `GET` | `/api/books/:id` | Single book details |
-| `POST`| `/api/books` | Add new book to catalog (Admin/Colporteur) |
-| `POST`| `/api/orders` | Place literature orders with M-Pesa integration |
-| `GET` | `/api/colporteurs/locations` | Camp meeting & colporteur field booths |
-| `GET` | `/api/ministry/livestreams` | Real-time live broadcast announcements |
-| `GET` | `/uploads/:filename` | Serve custom uploaded book covers or media |
-
+### Complete Endpoint Reference
+| Method | URL / Path | Content | Description |
+|---|---|---|---|
+| `GET` | `/` or `/index.html` | HTML | Harvion Home Landing Page |
+| `GET` | `/about` or `/about.html` | HTML | About the Application & Adventist Faith Alignment |
+| `GET` | `/api/health` | JSON | Backend health check & Firebase connectivity status |
+| `GET` | `/api` | JSON | API directory and service discovery |
+| `GET` | `/api/books` | JSON | Complete literature evangelism bookstore catalog |
+| `POST`| `/api/books` | JSON | Add new book to catalog (Admin/Colporteur) |
+| `POST`| `/api/orders` | JSON | Place literature orders with M-Pesa tracking |
+| `GET` | `/api/colporteurs/locations` | JSON | Camp meeting & colporteur field booth coordinates |
+| `GET` | `/api/ministry/livestreams` | JSON | Real-time live broadcast announcements |
+| `GET` | `/uploads/:filename` | Media | Public book covers, tract previews & sermon images |

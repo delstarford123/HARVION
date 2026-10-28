@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About HARVION — How the Platform Aligns with the Adventist Faith</title>
+  <meta name="description" content="Detailed overview of HARVION, its divine mission, architectural pillars, and faithful alignment with the Seventh-day Adventist theology, the Three Angels' Messages, and the Spirit of Prophecy.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@300;400;500;600;700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-blue: #0d2f5a;
+      --secondary-blue: #1A365D;
+      --accent-gold: #D4AF37;
+      --gold-hover: #c19b26;
+      --nature-green: #2E7D32;
+      --light-green: #E8F5E9;
+      --bg-light: #F8F9FA;
+      --surface-white: #FFFFFF;
+      --text-dark: #1E293B;
+      --text-muted: #475569;
+      --border-color: #E2E8F0;
+      --radius: 12px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--bg-light);
+      color: var(--text-dark);
+      line-height: 1.7;
+    }
+
+    /* Top Bar */
+    .top-bar {
+      background: linear-gradient(90deg, var(--primary-blue), #103b70);
+      color: #FFFFFF;
+      padding: 8px 24px;
+      font-size: 13px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid var(--accent-gold);
+    }
+
+    /* Navigation */
+    header {
+      background: var(--surface-white);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--primary-blue);
+    }
+
+    .brand-icon {
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(135deg, var(--primary-blue), var(--nature-green));
+      border: 2px solid var(--accent-gold);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent-gold);
+      font-weight: bold;
+      font-size: 22px;
+    }
+
+    .brand-text h1 {
+      font-family: 'Cinzel', serif;
+      font-size: 22px;
+      letter-spacing: 1.5px;
+      font-weight: 700;
+      color: var(--primary-blue);
+      line-height: 1.1;
+    }
+
+    .brand-text span {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--nature-green);
+      font-weight: 600;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: var(--text-dark);
+      font-weight: 500;
+      font-size: 14px;
+      transition: color 0.2s;
+    }
+
+    nav a:hover, nav a.active {
+      color: var(--accent-gold);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 18px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .btn-gold {
+      background: var(--accent-gold);
+      color: #000000;
+      border: 1px solid #b8972b;
+    }
+
+    .btn-gold:hover {
+      background: var(--gold-hover);
+    }
+
+    /* Page Header */
+    .page-header {
+      background: linear-gradient(135deg, var(--primary-blue), #18447e);
+      color: #FFFFFF;
+      padding: 60px 24px;
+      text-align: center;
+      border-bottom: 3px solid var(--accent-gold);
+    }
+
+    .page-header h2 {
+      font-family: 'Cinzel', serif;
+      font-size: 36px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .page-header p {
+      font-family: 'Merriweather', serif;
+      font-size: 16px;
+      color: #E2E8F0;
+      max-width: 750px;
+      margin: 0 auto;
+      font-style: italic;
+    }
+
+    /* Main Container */
+    .container {
+      max-width: 1000px;
+      margin: 50px auto;
+      padding: 0 24px;
+    }
+
+    .article-card {
+      background: var(--surface-white);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 40px;
+      margin-bottom: 36px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+    }
+
+    .article-card h3 {
+      font-family: 'Cinzel', serif;
+      font-size: 24px;
+      color: var(--primary-blue);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 2px solid var(--light-green);
+      padding-bottom: 10px;
+    }
+
+    .article-card p {
+      color: var(--text-dark);
+      font-size: 15px;
+      margin-bottom: 18px;
+    }
+
+    .scripture-box {
+      background: #F8FAFC;
+      border-left: 4px solid var(--accent-gold);
+      padding: 16px 20px;
+      border-radius: 0 8px 8px 0;
+      margin: 20px 0;
+      font-family: 'Merriweather', serif;
+      font-style: italic;
+      color: #334155;
+      font-size: 14.5px;
+    }
+
+    .scripture-box strong {
+      display: block;
+      margin-top: 8px;
+      font-style: normal;
+      color: var(--primary-blue);
+      font-size: 13px;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .theology-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      margin: 24px 0;
+    }
+
+    .theology-item {
+      background: #F8FAFC;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 20px;
+      transition: all 0.2s;
+    }
+
+    .theology-item:hover {
+      border-color: var(--accent-gold);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+
+    .theology-item h4 {
+      color: var(--nature-green);
+      font-size: 16px;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .theology-item p {
+      font-size: 13.5px;
+      color: #475569;
+      margin-bottom: 0;
+    }
+
+    .badge-check {
+      display: inline-block;
+      background: var(--light-green);
+      color: var(--nature-green);
+      font-weight: bold;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      text-align: center;
+      line-height: 20px;
+      font-size: 12px;
+      margin-right: 6px;
+    }
+
+    ul.check-list {
+      list-style: none;
+      margin: 16px 0;
+    }
+
+    ul.check-list li {
+      font-size: 14.5px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: flex-start;
+      color: #334155;
+    }
+
+    ul.check-list li span.icon {
+      color: var(--nature-green);
+      font-weight: bold;
+      margin-right: 10px;
+      font-size: 16px;
+    }
+
+    /* Monetization Table */
+    .covenant-box {
+      background: linear-gradient(135deg, #F0FDF4, #DCFCE7);
+      border: 1.5px solid #86EFAC;
+      border-radius: 12px;
+      padding: 24px;
+      margin: 24px 0;
+    }
+
+    .covenant-box h4 {
+      color: #166534;
+      font-size: 18px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .covenant-box p {
+      color: #14532D;
+      font-size: 14px;
+      margin-bottom: 0;
+    }
+
+    /* Footer */
+    footer {
+      background: var(--primary-blue);
+      color: #FFFFFF;
+      padding: 50px 24px 25px;
+      border-top: 4px solid var(--accent-gold);
+    }
+
+    .footer-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 30px;
+      margin-bottom: 30px;
+    }
+
+    .footer-bottom {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: #94A3B8;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    @media (max-width: 768px) {
+      .page-header h2 { font-size: 26px; }
+      .article-card { padding: 24px; }
+      nav ul { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top System Bar -->
+  <div class="top-bar">
+    <div>🌱 <strong>HARVION Ministry Ecosystem</strong> • Adventist Faith & Theological Alignment</div>
+    <div><a href="/" style="color: var(--accent-gold); text-decoration: none;">← Back to Home Page</a></div>
+  </div>
+
+  <!-- Header -->
+  <header>
+    <div class="nav-container">
+      <a href="/" class="brand">
+        <div class="brand-icon">✝</div>
+        <div class="brand-text">
+          <h1>HARVION</h1>
+          <span>SDA Truth & Evangelism</span>
+        </div>
+      </a>
+      <nav>
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/about.html" class="active">About & Adventist Faith</a></li>
+          <li><a href="/api/health">API Status</a></li>
+          <li><a href="https://m.egwwritings.org" target="_blank" rel="noopener">EGW Writings</a></li>
+          <li><a href="/" class="btn btn-gold">Explore Platform</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Page Header -->
+  <section class="page-header">
+    <h2>About HARVION & The Adventist Faith</h2>
+    <p>
+      "Here is the patience of the saints: here are they that keep the commandments of God, and the faith of Jesus." — Revelation 14:12
+    </p>
+  </section>
+
+  <!-- Content Container -->
+  <div class="container">
+
+    <!-- Section 1: Executive Mission -->
+    <article class="article-card" id="executive-mission">
+      <h3><span>🌟</span> What is HARVION?</h3>
+      <p>
+        <strong>HARVION</strong> is an enterprise-grade digital ministry and literature evangelism platform engineered to empower the Seventh-day Adventist remnant church worldwide in fulfilling the Great Commission (Matthew 28:18–20) and heralding the Three Angels' Messages (Revelation 14:6–12).
+      </p>
+      <p>
+        In an era dominated by superficial distractions, HARVION unites the foundational pillars of historic Adventism into a seamless modern digital sanctuary: <strong>The Infallible Word of God (KJV Bible)</strong>, <strong>The Spirit of Prophecy (Ellen G. White Writings)</strong>, <strong>Medical Missionary Health Reform (The Right Arm of the Gospel)</strong>, <strong>Literature Evangelism (Colporteur Ministry)</strong>, <strong>Pillars of the Adventist Home</strong>, and <strong>Practical Country Living & Organic Agriculture</strong>.
+      </p>
+      <div class="scripture-box">
+        "In a special sense Seventh-day Adventists have been set in the world as watchmen and light-bearers. To them has been entrusted the last warning for a perishing world. On them is shining wonderful light from the Word of God. They have been given a work of the most solemn import—the proclamation of the first, second, and third angels' messages. There is no other work of so great importance. They are to allow nothing else to absorb their attention."
+        <strong>— Ellen G. White, Testimonies for the Church, Vol. 9, p. 19</strong>
+      </div>
+    </article>
+
+    <!-- Section 2: Theological Alignment -->
+    <article class="article-card" id="adventist-faith">
+      <h3><span>✝</span> How HARVION Matches the Adventist Faith</h3>
+      <p>
+        Every module, algorithm, database schema, and interface in HARVION has been deliberately crafted in strict adherence to the 28 Fundamental Beliefs of the Seventh-day Adventist Church:
+      </p>
+
+      <div class="theology-grid">
+        <!-- 1. The Holy Scriptures -->
+        <div class="theology-item">
+          <h4><span class="badge-check">✓</span> 1. The Word of God</h4>
+          <p>The Holy Scriptures are the supreme, authoritative, and infallible revelation of God's will. HARVION includes a complete, offline-first King James Version (KJV) reader with book, chapter, and verse cross-referencing.</p>
+        </div>
+
+        <!-- 2. The Three Angels' Messages -->
+        <div class="theology-item">
+          <h4><span class="badge-check">✓</span> 2. The Three Angels' Messages</h4>
+          <p>Revelation 14:6–12 is the heart of HARVION's evangelism: heralding the everlasting gospel, the judgment hour, true worship of the Creator, the fall of spiritual Babylon, and keeping the commandments of God and the faith of Jesus.</p>
+        </div>
+
+        <!-- 3. The Spirit of Prophecy -->
+        <div class="theology-item">
+          <h4><span class="badge-check">✓</span> 3. The Spirit of Prophecy</h4>
+          <p>In accordance with Revelation 12:17 and 19:10, the testimony of Jesus is the Spirit of Prophecy. HARVION hosts 50 curated Ellen G. White masterworks with both full offline chapters and verified direct links to the official EGW Writings platform.</p>
+        </div>
+
+        <!-- 4. The Biblical Sabbath -->
+        <div class="theology-item">
+          <h4><span class="badge-check">✓</span> 4. The Seventh-Day Sabbath</h4>
+          <p>The Sabbath (Genesis 2:1–3; Exodus 20:8–11) is honored as the perpetual memorial of creation and seal of God. Sabbath School quarterly lessons, study notes, and PDF exports are integrated directly into the system.</p>
+        </div>
+
+        <!-- 5. The Sanctuary & Second Advent -->
+        <div class="theology-item">
+          <h4><span class="badge-check">✓</span> 5. Christ in the Sanctuary</h4>
+          <p>Present truth emphasizes Christ's high-priestly ministry in the Most Holy Place of the heavenly sanctuary and His imminent, personal, audible, and visible return in glory (Titus 2:13).</p>
+        </div>
+
+        <!-- 6. Health & Body Temple -->
+        <div class="theology-item">
+          <h4><span class="badge-check">✓</span> 6. The Temple of the Holy Ghost</h4>
+          <p>1 Corinthians 6:19–20 dictates that the body is God's temple. Medical missionary work is the enter-in wedge. HARVION educates believers on the 8 natural laws of health (NEWSTART) and pure nutrition.</p>
+        </div>
+      </div>
+    </article>
+
+    <!-- Section 3: The Five Operational Pillars -->
+    <article class="article-card" id="operational-pillars">
+      <h3><span>🏛</span> The Five Operational Pillars of HARVION</h3>
+
+      <ul class="check-list">
+        <li>
+          <span class="icon">📚</span>
+          <div>
+            <strong>I. Literature Evangelism & Colporteur Ministry:</strong>
+            Ellen G. White declared that publications must go everywhere "like the leaves of autumn." HARVION provides registered colporteurs with personal portal pages, digital tracts sharing, and live camp meeting location mapping so seekers can easily find and purchase physical and digital truth-filled literature.
+          </div>
+        </li>
+        <li>
+          <span class="icon">🌿</span>
+          <div>
+            <strong>II. Medical Missionary Work (The Right Arm of the Gospel):</strong>
+            Integrating *The Ministry of Healing*, *Counsels on Diet and Foods*, and *Counsels on Health*. Educating families on hydrotherapy, herbal poultices, plant-based recipes, charcoal remedies, and lifestyle disease reversal without commercial drugs.
+          </div>
+        </li>
+        <li>
+          <span class="icon">👨‍👩‍👦</span>
+          <div>
+            <strong>III. Pillars of the Adventist Home:</strong>
+            Dedicated portals addressing courtship, sacred marriage, parenting, and family worship based on *The Adventist Home* and *Child Guidance*. Helping youth maintain purity in thought and conduct amidst modern moral decay.
+          </div>
+        </li>
+        <li>
+          <span class="icon">🌾</span>
+          <div>
+            <strong>IV. Country Living & Agricultural Self-Reliance:</strong>
+            Faithful to the divine counsel to move out of large cities into rural settings. HARVION provides organic farming handbooks, soil conditioning guides, raised bed designs, and agro-forestry techniques to foster family self-reliance and build character.
+          </div>
+        </li>
+        <li>
+          <span class="icon">🎥</span>
+          <div>
+            <strong>V. Digital Soul-Winning & Livestream Broadcasting:</strong>
+            Reaching contemporary generations where they are—including TikTok LIVE and YouTube integrations—under strictly moderated Adventist codes of conduct, language transparency, and automatic broadcast notifications to believers.
+          </div>
+        </li>
+      </ul>
+    </article>
+
+    <!-- Section 4: Ethical Monetization Covenant -->
+    <article class="article-card" id="monetization-covenant">
+      <h3><span>⚖</span> Our Ethical, Non-Burden Monetization Covenant</h3>
+      <p>
+        Many modern religious apps exploit users with predatory subscriptions and paywalls around the Gospel. HARVION operates on an uncompromising Biblical and ethical covenant:
+      </p>
+
+      <div class="covenant-box">
+        <h4><span>📜</span> The Harvion Free-Access Guarantee</h4>
+        <p>
+          <strong>The Word of God, all 50 Spirit of Prophecy books, Sabbath School lessons, prayer wall requests, health counsel, and faith testimonies are 100% FREE forever.</strong> Salvation is a free gift; no seeker will ever be denied spiritual truth due to lack of funds.
+        </p>
+      </div>
+
+      <p><strong>How the System Sustains Itself:</strong></p>
+      <ul class="check-list">
+        <li>
+          <span class="icon">🤝</span>
+          <div>
+            <strong>Literature Evangelist Commission:</strong> When users purchase physical hard copies or specialized books published by registered colporteurs, a modest percentage is shared with the literature evangelist to sustain their frontline missionary livelihood, while a small processing fee covers HostPinnacle cloud infrastructure.
+          </div>
+        </li>
+        <li>
+          <span class="icon">🌾</span>
+          <div>
+            <strong>Specialized Country Living Field Guides:</strong> Advanced vocational organic farming manuals and commercial agriculture blueprints are offered at nominal costs to support rural development initiatives.
+          </div>
+        </li>
+        <li>
+          <span class="icon">💖</span>
+          <div>
+            <strong>Freewill Missionary Support:</strong> Believers and patrons who are blessed by HARVION may contribute freely to expand server bandwidth and sponsor literature distribution in unreached territories.
+          </div>
+        </li>
+      </ul>
+    </article>
+
+    <!-- Section 5: Leadership & Ministry Details -->
+    <article class="article-card" id="leadership-contact">
+      <h3><span>👨‍💼</span> Ministry Leadership & Contact</h3>
+      <p>
+        HARVION is maintained by a dedicated team of Seventh-day Adventist ministers, software engineers, and agriculturalists committed to the soon coming of our Lord Jesus Christ.
+      </p>
+      <div style="background: #F1F5F9; border-radius: 8px; padding: 20px; margin-top: 16px;">
+        <p style="margin-bottom: 8px;"><strong>Lead Minister & Developer:</strong> Alfredo Onuko</p>
+        <p style="margin-bottom: 8px;"><strong>Ministry Email:</strong> <a href="mailto:afredoonuko@gmail.com" style="color: var(--primary-blue); font-weight: 600;">afredoonuko@gmail.com</a></p>
+        <p style="margin-bottom: 8px;"><strong>Telephone / M-Pesa:</strong> +254 745 090 990</p>
+        <p style="margin-bottom: 8px;"><strong>Community Fellowship:</strong> <a href="https://chat.whatsapp.com/J8Lg4qCKyVqALdtDlXGClh?mode=gi_t" target="_blank" rel="noopener" style="color: var(--nature-green); font-weight: 600; text-decoration: underline;">Join the Official WhatsApp Fellowship</a></p>
+        <p style="margin-bottom: 0;"><strong>Cloud Infrastructure:</strong> HostPinnacle Cloud Hosting (Node.js & Phusion Passenger) • Firebase Realtime Cloud</p>
+      </div>
+    </article>
+
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-container">
+      <div>
+        <h5 style="font-family: 'Cinzel', serif; color: var(--accent-gold); margin-bottom: 12px;">HARVION SDA MINISTRY</h5>
+        <p style="font-size: 13px; color: #CBD5E1; max-width: 450px;">
+          "The truth must be published, must go forth as a lamp that burneth." Dedicated to the glory of God and the proclamation of the Three Angels' Messages.
+        </p>
+      </div>
+      <div>
+        <h5 style="font-family: 'Cinzel', serif; color: var(--accent-gold); margin-bottom: 12px;">QUICK LINKS</h5>
+        <p style="font-size: 13px;"><a href="/" style="color: #FFFFFF; text-decoration: none;">← Home Page</a></p>
+        <p style="font-size: 13px;"><a href="/api/health" style="color: #FFFFFF; text-decoration: none;">⚡ API Health</a></p>
+        <p style="font-size: 13px;"><a href="https://m.egwwritings.org" target="_blank" rel="noopener" style="color: #FFFFFF; text-decoration: none;">📖 Official EGW Writings</a></p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div>&copy; 2026 HARVION Ministry. Built for the Remnant Church.</div>
+      <div>"Even so, come, Lord Jesus." — Revelation 22:20</div>
+    </div>
+  </footer>
+
+</body>
+</html>
