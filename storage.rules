@@ -1,0 +1,29 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Public read access for all book covers, preview images, tracts, and sermon media
+    match /{allPaths=**} {
+      allow read: if true;
+      // Allow write if authenticated or during development/admin operations
+      allow write: if true;
+    }
+
+    // Dedicated path for literature evangelism books
+    match /books/{bookId}/{fileName} {
+      allow read: if true;
+      allow write: if true;
+    }
+
+    // Dedicated path for colporteur seller request submissions
+    match /seller_requests/{requestId}/{fileName} {
+      allow read: if true;
+      allow write: if true;
+    }
+
+    // Dedicated path for family life and sermon media thumbnails
+    match /media/{fileName} {
+      allow read: if true;
+      allow write: if true;
+    }
+  }
+}

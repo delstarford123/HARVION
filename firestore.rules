@@ -1,0 +1,117 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper function for authentication check
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Daily Quotes & Devotionals
+    match /daily_quotes/{quoteId} {
+      allow read: if true;
+      allow write: if true;
+    }
+
+    match /devotionals/{devId} {
+      allow read: if true;
+      allow write: if true;
+    }
+
+    // Literature Evangelism Bookstore Catalog
+    match /bookstore_items/{bookId} {
+      allow read: if true;
+      allow write: if true;
+    }
+
+    // Colporteur Seller Requests & Approvals
+    match /book_seller_requests/{requestId} {
+      allow read: if true;
+      allow create: if true;
+      allow update, delete: if true;
+    }
+
+    // Admin In-App Notifications
+    match /admin_notifications/{notifId} {
+      allow read, write: if true;
+    }
+
+    // Camp Meeting & Colporteur Live Field Locations
+    match /camp_meeting_locations/{locationId} {
+      allow read: if true;
+      allow write: if true;
+    }
+
+    // Family Life Pillars of Adventist Home
+    match /family_pillars/{pillarId} {
+      allow read: if true;
+      allow write: if true;
+    }
+
+    // Sermons, Teachings & Livestreams
+    match /sermons/{sermonId} {
+      allow read: if true;
+      allow write: if true;
+    }
+
+    match /livestreams/{streamId} {
+      allow read, write: if true;
+      match /comments/{commentId} {
+        allow read, write: if true;
+      }
+    }
+
+    // Digital Evangelism Tracts
+    match /digital_tracts/{tractId} {
+      allow read: if true;
+      allow write: if true;
+    }
+
+    // Churches Directory
+    match /churches_directory/{churchId} {
+      allow read: if true;
+      allow write: if true;
+    }
+
+    // Prayer Wall Requests
+    match /prayer_requests/{prayerId} {
+      allow read: if true;
+      allow write: if true;
+    }
+
+    // Healthy Recipes
+    match /healthy_recipes/{recipeId} {
+      allow read: if true;
+      allow write: if true;
+    }
+
+    // Colporteur Profiles & Leads
+    match /colporteurs/{colporteurId} {
+      allow read, write: if true;
+      match /leads/{leadId} {
+        allow read, write: if true;
+      }
+    }
+
+    // Bookstore Orders
+    match /orders/{orderId} {
+      allow read, write: if true;
+    }
+
+    // Live Broadcast Announcements & Push Notifications
+    match /live_announcements/{announcementId} {
+      allow read, write: if true;
+    }
+
+    // Faith Testimonies & Miracles
+    match /testimonies/{testimonyId} {
+      allow read, write: if true;
+    }
+
+    // Default fallback
+    match /{document=**} {
+      allow read: if true;
+      allow write: if true;
+    }
+  }
+}

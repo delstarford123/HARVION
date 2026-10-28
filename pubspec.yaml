@@ -1,0 +1,64 @@
+name: vine
+description: "A professional SDA Ministry & Organic Farming application."
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.1.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # Icons
+  cupertino_icons: ^1.0.8
+
+  # Professional Media & PDF Handling
+  syncfusion_flutter_pdfviewer: ^33.1.45
+  just_audio: ^0.10.5
+  
+  # Firebase Core & Database
+  firebase_core: ^3.0.0
+  cloud_firestore: ^5.0.0
+  share_plus: ^12.0.1
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+  file_picker: ^10.3.10
+  connectivity_plus: ^7.0.0
+  firebase_storage: ^12.4.10
+  video_player: ^2.11.1
+  chewie: ^1.13.0
+  url_launcher: ^6.3.2
+  firebase_auth: ^5.7.0
+  http: ^1.6.0
+  pdf: ^3.12.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+  flutter_launcher_icons: ^0.14.4
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/icons/Tobeused.png"
+  min_sdk_android: 21 # android min sdk min:16, default:21
+
+flutter:
+  uses-material-design: true
+
+  # Asset management for your photo and book covers
+  assets:
+    - assets/images/
+    - assets/icons/
+    # If you have specific subfolders, list them here:
+    # - assets/music/
+    # - assets/pdfs/
+
+  # Custom fonts can be added here later if you want a specific "religious" serif font
+  # fonts:
+  #   - family: EB_Garamond
+  #     fonts:
+  #       - asset: assets/fonts/EBGaramond-Regular.ttf
