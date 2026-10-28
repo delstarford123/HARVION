@@ -410,7 +410,7 @@ class _BookstoreScreenState extends State<BookstoreScreen> with SingleTickerProv
         deleteIcon: const Icon(Icons.close, size: 14),
         onDeleted: onDeleted,
         visualDensity: VisualDensity.compact,
-        backgroundColor: AppTheme.primaryBlue.withOpacity(0.1),
+        backgroundColor: AppTheme.primaryBlue.withValues(alpha: 0.1),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       ),
     );
@@ -474,7 +474,7 @@ class _BookstoreScreenState extends State<BookstoreScreen> with SingleTickerProv
                           child: Container(
                             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                             decoration: BoxDecoration(
-                              color: AppTheme.primaryGreen.withOpacity(0.1),
+                              color: AppTheme.primaryGreen.withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(6),
                             ),
                             child: Text(

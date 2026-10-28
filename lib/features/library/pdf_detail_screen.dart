@@ -4,8 +4,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../core/theme.dart';
 import '../auth/auth_screen.dart';
 import '../subscription/payment_screen.dart';
-import 'book_model.dart'; // 🚀 Added to understand the Book object
-import 'pdf_viewer_screen.dart'; // 🚀 Added to route to the actual PDF viewer
+import 'book_model.dart';
+import 'pdf_viewer_screen.dart';
+import 'sop_book_reader_screen.dart';
 
 class PdfDetailScreen extends StatefulWidget {
   final String pdfId;
@@ -13,8 +14,7 @@ class PdfDetailScreen extends StatefulWidget {
   final String description; // The Free Preview
   final int price; // 0 means FREE
   final String pdfUrl;
-  final Book
-      bookObject; // 🚀 ADDED THIS: We need the full book object for the viewer!
+  final Book bookObject;
 
   const PdfDetailScreen({
     super.key,
@@ -23,7 +23,7 @@ class PdfDetailScreen extends StatefulWidget {
     required this.description,
     required this.price,
     required this.pdfUrl,
-    required this.bookObject, // 🚀 ADDED THIS
+    required this.bookObject,
   });
 
   @override
@@ -40,7 +40,7 @@ class _PdfDetailScreenState extends State<PdfDetailScreen> {
     _checkPurchaseStatus();
   }
 
-  // 🚀 System remembers if they already paid!
+  // System remembers if they already paid!
   Future<void> _checkPurchaseStatus() async {
     if (widget.price == 0) {
       if (mounted) {
@@ -83,19 +83,18 @@ class _PdfDetailScreenState extends State<PdfDetailScreen> {
     final user = FirebaseAuth.instance.currentUser;
 
     if (user == null) {
-      // 🛑 User wants to buy, but isn't logged in. Force login NOW.
+      // User wants to buy, but isn't logged in. Force login NOW.
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Please login to purchase this guide.")),
       );
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => const AuthScreen()),
-      ).then((_) =>
-          _checkPurchaseStatus()); // Re-check after they return from login
+      ).then((_) => _checkPurchaseStatus()); // Re-check after return
       return;
     }
 
-    // 🚀 ✅ User is logged in. Trigger the Real M-Pesa Payment Screen!
+    // User is logged in. Trigger the Real M-Pesa Payment Screen!
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -105,16 +104,23 @@ class _PdfDetailScreenState extends State<PdfDetailScreen> {
           price: widget.price,
         ),
       ),
-    ).then((_) =>
-        _checkPurchaseStatus()); // 🔄 Re-checks if they successfully paid when returning!
+    ).then((_) => _checkPurchaseStatus()); // Re-checks if they successfully paid
   }
 
   void _openPdf() {
-    // 🚀 We replaced the Snackbar! Now it opens the actual PDF Viewer
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => PdfViewerScreen(book: widget.bookObject),
+      ),
+    );
+  }
+
+  void _openReaderMode() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => SopBookReaderScreen(book: widget.bookObject),
       ),
     );
   }
@@ -169,7 +175,7 @@ class _PdfDetailScreenState extends State<PdfDetailScreen> {
 
                   // FREE PREVIEW SECTION
                   const Text(
-                    "Free Preview / Introduction:",
+                    "Overview & Summary:",
                     style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -189,44 +195,80 @@ class _PdfDetailScreenState extends State<PdfDetailScreen> {
                           fontSize: 15, height: 1.6, color: Colors.black87),
                     ),
                   ),
-                  const SizedBox(height: 40),
+                  const SizedBox(height: 36),
 
-                  // THE ACTION BUTTON (Read or Buy)
-                  SizedBox(
-                    width: double.infinity,
-                    height: 55,
-                    child: _hasPurchased
-                        ? ElevatedButton.icon(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppTheme.primaryGreen,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12)),
-                            ),
-                            onPressed: _openPdf,
-                            icon: const Icon(Icons.picture_as_pdf,
-                                color: Colors.white),
-                            label: const Text("READ FULL PDF",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16)),
-                          )
-                        : ElevatedButton.icon(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppTheme.sacredGold,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12)),
-                            ),
-                            onPressed: _handleUnlockClick,
-                            icon: const Icon(Icons.lock_open,
-                                color: AppTheme.primaryBlue),
-                            label: Text("UNLOCK FOR KSh ${widget.price}",
-                                style: const TextStyle(
-                                    color: AppTheme.primaryBlue,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16)),
+                  // THE ACTION BUTTONS (Reader Mode & Full PDF)
+                  if (_hasPurchased) ...[
+                    SizedBox(
+                      width: double.infinity,
+                      height: 52,
+                      child: ElevatedButton.icon(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppTheme.primaryGreen,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12)),
+                        ),
+                        onPressed: _openReaderMode,
+                        icon: const Icon(Icons.auto_stories,
+                            color: Colors.white),
+                        label: const Text(
+                          "READ INSTANTLY (CHAPTER VIEW)",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
                           ),
-                  ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 50,
+                      child: OutlinedButton.icon(
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: AppTheme.primaryBlue,
+                          side: const BorderSide(
+                              color: AppTheme.primaryBlue, width: 1.5),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12)),
+                        ),
+                        onPressed: _openPdf,
+                        icon: const Icon(Icons.picture_as_pdf,
+                            color: AppTheme.primaryBlue),
+                        label: const Text(
+                          "DOWNLOAD / VIEW FULL PDF",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ] else ...[
+                    SizedBox(
+                      width: double.infinity,
+                      height: 55,
+                      child: ElevatedButton.icon(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppTheme.sacredGold,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12)),
+                        ),
+                        onPressed: _handleUnlockClick,
+                        icon: const Icon(Icons.lock_open,
+                            color: AppTheme.primaryBlue),
+                        label: Text(
+                          "UNLOCK FOR KSh ${widget.price}",
+                          style: const TextStyle(
+                            color: AppTheme.primaryBlue,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ],
               ),
             ),

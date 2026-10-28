@@ -6,10 +6,16 @@ import '../../core/theme.dart';
 import 'book_model.dart';
 import 'pdf_detail_screen.dart';
 import 'kjv_bible_reader_screen.dart';
+import 'services/book_cache_service.dart';
 
-class LibraryScreen extends StatelessWidget {
+class LibraryScreen extends StatefulWidget {
   const LibraryScreen({super.key});
 
+  @override
+  State<LibraryScreen> createState() => _LibraryScreenState();
+}
+
+class _LibraryScreenState extends State<LibraryScreen> {
   static final List<Book> _curatedOpenSourceBooks = [
     Book(
       id: 'sop_steps_to_christ',
@@ -67,6 +73,13 @@ class LibraryScreen extends StatelessWidget {
       price: 0,
     ),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    // Automatically preload and cache SOP books in background
+    BookCacheService().preloadCoreSopBooks(_curatedOpenSourceBooks);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -180,7 +193,7 @@ class LibraryScreen extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -216,7 +229,7 @@ class LibraryScreen extends StatelessWidget {
                   child: Container(
                     width: 70,
                     height: 100,
-                    color: AppTheme.primaryBlue.withOpacity(0.1),
+                    color: AppTheme.primaryBlue.withValues(alpha: 0.1),
                     child: hasCover && cover.startsWith('http')
                         ? Image.network(
                             cover,
@@ -242,7 +255,7 @@ class LibraryScreen extends StatelessWidget {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                         decoration: BoxDecoration(
-                          color: AppTheme.primaryGreen.withOpacity(0.1),
+                          color: AppTheme.primaryGreen.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(4),
                         ),
                         child: Text(

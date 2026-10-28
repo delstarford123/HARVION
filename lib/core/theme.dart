@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 class AppTheme {
@@ -47,7 +46,7 @@ class AppTheme {
       // 🧭 Navigation Bar Styling
       navigationBarTheme: NavigationBarThemeData(
         backgroundColor: Colors.white,
-        indicatorColor: primaryGreen.withOpacity(0.15),
+        indicatorColor: primaryGreen.withValues(alpha: 0.15),
         iconTheme: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.selected)) {
             return const IconThemeData(color: primaryGreen, size: 28);
@@ -75,12 +74,12 @@ class AppTheme {
         ),
       ),
 
-      // 🔘 Button Styling
+      // 🔘 Button Styling - Safe constraints that never cause BoxConstraints infinite width
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: primaryBlue,
           foregroundColor: Colors.white,
-          minimumSize: const Size(double.infinity, 50),
+          minimumSize: const Size(64, 44),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
@@ -99,9 +98,9 @@ class AppTheme {
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(color: Colors.grey.shade300),
         ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: primaryGreen, width: 2),
+        focusedBorder: const OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(12)),
+          borderSide: BorderSide(color: primaryGreen, width: 2),
         ),
       ),
     );

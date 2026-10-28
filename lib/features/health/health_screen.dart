@@ -70,7 +70,7 @@ class HealthScreen extends StatelessWidget {
                               const SizedBox(height: 4),
                               Text(
                                 'Delicious 100% vegan recipes & weekly meal organizer.',
-                                style: TextStyle(color: Colors.white.withOpacity(0.9), fontSize: 12),
+                                style: TextStyle(color: Colors.white.withValues(alpha: 0.9), fontSize: 12),
                               ),
                               const SizedBox(height: 12),
                               ElevatedButton(
@@ -78,12 +78,13 @@ class HealthScreen extends StatelessWidget {
                                   backgroundColor: Colors.white,
                                   foregroundColor: AppTheme.primaryGreen,
                                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                                  visualDensity: VisualDensity.compact,
+                                  minimumSize: const Size(0, 36),
+                                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
                                 ),
                                 onPressed: () {
                                   Navigator.push(context, MaterialPageRoute(builder: (_) => const RecipesScreen()));
                                 },
-                                child: const Text('EXPLORE RECIPES', style: TextStyle(fontWeight: FontWeight.bold)),
+                                child: const Text('EXPLORE RECIPES', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
                               ),
                             ],
                           ),
@@ -136,7 +137,7 @@ class HealthScreen extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: AppTheme.primaryBlue.withOpacity(0.2)),
+                  border: Border.all(color: AppTheme.primaryBlue.withValues(alpha: 0.2)),
                 ),
                 child: Row(
                   children: [
@@ -158,17 +159,20 @@ class HealthScreen extends StatelessWidget {
                         ],
                       ),
                     ),
+                    const SizedBox(width: 8),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppTheme.primaryBlue,
-                        visualDensity: VisualDensity.compact,
+                        foregroundColor: Colors.white,
+                        minimumSize: const Size(0, 36),
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                       ),
                       onPressed: () {
                         final sampleBooks = PhysicalBook.getSampleBooks();
                         final book = sampleBooks.firstWhere((b) => b.id == 'health_01');
                         Navigator.push(context, MaterialPageRoute(builder: (_) => BookDetailScreen(book: book)));
                       },
-                      child: const Text('ORDER', style: TextStyle(fontSize: 11)),
+                      child: const Text('ORDER', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold)),
                     ),
                   ],
                 ),
@@ -194,13 +198,13 @@ class HealthScreen extends StatelessWidget {
       ),
       child: Column(
         children: [
-          const Icon(Icons.favorite_rounded, color: Colors.white, size: 54),
-          const SizedBox(height: 12),
+          const Icon(Icons.spa, color: AppTheme.sacredGold, size: 64),
+          const SizedBox(height: 16),
           const Text(
-            '"Beloved, I wish above all things that thou mayest prosper and be in health, even as thy soul prospereth."',
+            '"Pure air, sunlight, abstemiousness, rest, exercise, proper use of water, trust in divine power—these are the true remedies."',
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: 15,
+              fontSize: 16,
               fontStyle: FontStyle.italic,
               color: Colors.white,
               height: 1.5,
@@ -208,11 +212,11 @@ class HealthScreen extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            '3 John 1:2',
+            'Ministry of Healing, p. 127',
             style: TextStyle(
-              fontSize: 13,
+              fontSize: 14,
               fontWeight: FontWeight.bold,
-              color: AppTheme.sacredGold.withOpacity(0.9),
+              color: AppTheme.sacredGold.withValues(alpha: 0.9),
             ),
           ),
         ],
@@ -271,9 +275,9 @@ class HealthScreen extends StatelessWidget {
                   height: 56,
                   width: 56,
                   decoration: BoxDecoration(
-                    color: item['color'].withOpacity(0.1),
+                    color: item['color'].withValues(alpha: 0.1),
                     shape: BoxShape.circle,
-                    border: Border.all(color: item['color'].withOpacity(0.5), width: 1),
+                    border: Border.all(color: item['color'].withValues(alpha: 0.5), width: 1),
                   ),
                   child: Icon(
                     item['icon'],
@@ -321,7 +325,7 @@ class HealthScreen extends StatelessWidget {
             leading: Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: AppTheme.primaryBlue.withOpacity(0.1),
+                color: AppTheme.primaryBlue.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: const Icon(Icons.medical_information, color: AppTheme.primaryBlue),
