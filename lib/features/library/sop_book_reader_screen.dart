@@ -4,6 +4,7 @@ import '../../core/theme.dart';
 import 'book_model.dart';
 import 'pdf_viewer_screen.dart';
 import 'data/sop_chapters_repository.dart';
+import 'services/online_reader_service.dart';
 
 class SopBookReaderScreen extends StatefulWidget {
   final Book book;
@@ -43,6 +44,14 @@ class _SopBookReaderScreenState extends State<SopBookReaderScreen> {
     }
   }
 
+  void _openOnlineReader() {
+    OnlineReaderService.openOnlineBook(
+      context,
+      widget.book.effectiveOnlineUrl,
+      title: widget.book.title,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final chapter = _allChapters[_selectedChapterIndex];
@@ -79,6 +88,11 @@ class _SopBookReaderScreenState extends State<SopBookReaderScreen> {
         elevation: 0,
         actions: [
           IconButton(
+            tooltip: 'Read Full Book Online (EGW Writings)',
+            icon: const Icon(Icons.public, size: 20),
+            onPressed: _openOnlineReader,
+          ),
+          IconButton(
             tooltip: 'View Full PDF',
             icon: const Icon(Icons.picture_as_pdf, size: 20),
             onPressed: () {
@@ -95,7 +109,9 @@ class _SopBookReaderScreenState extends State<SopBookReaderScreen> {
               Share.share(
                 '📖 ${widget.book.title}\n$title: $subtitle\n\n'
                 '$content\n\n'
-                'Scripture Foundation: $scripture\n— Read on Harvion SDA Ministry App',
+                'Scripture Foundation: $scripture\n'
+                '🌐 Read Online: ${widget.book.effectiveOnlineUrl}\n'
+                '— Read on Harvion SDA Ministry App',
               );
             },
           ),
@@ -151,6 +167,18 @@ class _SopBookReaderScreenState extends State<SopBookReaderScreen> {
                 ],
               ),
             ),
+            ListTile(
+              dense: true,
+              leading: const Icon(Icons.public, color: AppTheme.sacredGold, size: 20),
+              title: const Text('Read Online (EGW Writings)', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
+              subtitle: const Text('Official full digital edition', style: TextStyle(fontSize: 10)),
+              trailing: const Icon(Icons.open_in_new, size: 14),
+              onTap: () {
+                Navigator.pop(context);
+                _openOnlineReader();
+              },
+            ),
+            const Divider(height: 1),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
               child: TextField(
@@ -258,9 +286,10 @@ class _SopBookReaderScreenState extends State<SopBookReaderScreen> {
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
                 color: _isNightMode ? Colors.white : AppTheme.primaryBlue,
-                height: 1.3,
+                height: 1.25,
               ),
             ),
+
             if (subtitle.isNotEmpty) ...[
               const SizedBox(height: 6),
               Text(
@@ -268,15 +297,17 @@ class _SopBookReaderScreenState extends State<SopBookReaderScreen> {
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
-                  color: _isNightMode ? AppTheme.sacredGold : Colors.grey.shade700,
+                  fontStyle: FontStyle.italic,
+                  color: _isNightMode ? Colors.white70 : Colors.grey.shade700,
                 ),
               ),
             ],
+
             const SizedBox(height: 16),
             Divider(color: Colors.grey.withValues(alpha: 0.3)),
             const SizedBox(height: 16),
 
-            // Main Chapter Content
+            // Chapter Content
             SelectableText(
               content,
               style: TextStyle(
@@ -286,17 +317,20 @@ class _SopBookReaderScreenState extends State<SopBookReaderScreen> {
                 letterSpacing: 0.2,
               ),
             ),
+
             const SizedBox(height: 24),
 
-            // Scripture Foundation Anchor
+            // Key Scripture Card
             if (scripture.isNotEmpty)
               Container(
                 width: double.infinity,
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(14),
                 decoration: BoxDecoration(
                   color: cardBg,
-                  borderRadius: BorderRadius.circular(14),
-                  border: Border.all(color: AppTheme.sacredGold.withValues(alpha: 0.4)),
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    color: _isNightMode ? Colors.grey.shade800 : Colors.grey.shade300,
+                  ),
                   boxShadow: [
                     BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 6, offset: const Offset(0, 3)),
                   ],
@@ -327,7 +361,65 @@ class _SopBookReaderScreenState extends State<SopBookReaderScreen> {
                 ),
               ),
 
-            const SizedBox(height: 32),
+            const SizedBox(height: 24),
+
+            // Digital Online Reading Link Banner
+            Container(
+              padding: const EdgeInsets.all(14),
+              decoration: BoxDecoration(
+                color: _isNightMode ? const Color(0xFF252525) : Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: AppTheme.sacredGold.withValues(alpha: 0.5)),
+                boxShadow: [
+                  BoxShadow(color: Colors.black.withValues(alpha: 0.03), blurRadius: 8, offset: const Offset(0, 3)),
+                ],
+              ),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      const Icon(Icons.public, color: AppTheme.sacredGold, size: 22),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Official EGW Writings Online',
+                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: AppTheme.primaryBlue),
+                            ),
+                            Text(
+                              'Read the complete unabridged publication directly on the official platform.',
+                              style: TextStyle(fontSize: 11, color: Colors.grey.shade600),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppTheme.primaryBlue,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(vertical: 11),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                      ),
+                      icon: const Icon(Icons.open_in_browser, size: 18, color: AppTheme.sacredGold),
+                      label: const Text(
+                        'OPEN ONLINE (EGW WRITINGS)',
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+                      ),
+                      onPressed: _openOnlineReader,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 24),
 
             // Navigation Buttons (Previous Chapter / Next Chapter)
             Row(

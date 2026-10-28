@@ -23,33 +23,56 @@ class SopChaptersRepository {
       return _desireOfAgesChapters;
     }
 
-    // Default general reader for other Spirit of Prophecy and historical books
-    return [
-      {
-        'chapterNumber': 1,
-        'title': 'Chapter 1: God\'s Eternal Purpose',
-        'subtitle': 'The Light of Divine Truth for the Last Days',
-        'content':
-            'The light which God has given His people is not to be shut up within the churches that already know the truth. It is to be diffused abroad into the dark places of the earth. Those who walk in the light are to diffuse light to those who are in darkness.\n\nGod has called His church in this day to stand forth as a city set on a hill that cannot be hid. The eternal principles of righteousness, health, and faith are to be demonstrated in every home, church, and literature evangelism mission.',
-        'scripture': 'Matthew 5:14-16; Isaiah 60:1-3',
-      },
-      {
-        'chapterNumber': 2,
-        'title': 'Chapter 2: The Silent Messengers',
-        'subtitle': 'Literature Evangelism and the Printed Page',
-        'content':
-            'Our publications should go everywhere. Let them be issued in many languages. The third angel\'s message is to be given through this medium and through the living teacher. You who believe the truth for this time, wake up!\n\nIt is your duty to now bring in all the means possible to help those who understand the truth to proclaim it. The truth must be published, must go forth as a lamp that burneth.',
-        'scripture': 'Revelation 14:6-12; Habakkuk 2:2',
-      },
-      {
-        'chapterNumber': 3,
-        'title': 'Chapter 3: Health and Right Living',
-        'subtitle': 'Restoring the Divine Image in Man',
-        'content':
-            'The body is the only medium through which the mind and the soul are developed for character building. Hence it is that the adversary of souls directs his temptations to the enfeebling and degrading of the physical powers.\n\nHis success here means the surrender to evil of the whole being. The tendencies of our physical nature, unless under the dominion of a higher power, will surely work ruin and death.',
-        'scripture': '1 Corinthians 6:19-20; 3 John 1:2',
-      },
-    ];
+    if (lowerId.contains('patriarchs') || lowerTitle.contains('patriarchs')) {
+      return _patriarchsAndProphetsChapters;
+    }
+
+    if (lowerId.contains('prophets_and_kings') || lowerTitle.contains('prophets and kings')) {
+      return _prophetsAndKingsChapters;
+    }
+
+    if (lowerId.contains('acts_of_the_apostles') || lowerTitle.contains('acts of the apostles')) {
+      return _actsOfTheApostlesChapters;
+    }
+
+    if (lowerId.contains('early_writings') || lowerTitle.contains('early writings')) {
+      return _earlyWritingsChapters;
+    }
+
+    if (lowerId.contains('christs_object_lessons') || lowerTitle.contains('object lessons')) {
+      return _christsObjectLessonsChapters;
+    }
+
+    if (lowerId.contains('adventist_home') || lowerTitle.contains('adventist home')) {
+      return _adventistHomeChapters;
+    }
+
+    if (lowerId.contains('child_guidance') || lowerTitle.contains('child guidance')) {
+      return _childGuidanceChapters;
+    }
+
+    if (lowerId.contains('young_people') || lowerTitle.contains('young people')) {
+      return _messagesToYoungPeopleChapters;
+    }
+
+    if (lowerId.contains('last_day_events') || lowerTitle.contains('last day events')) {
+      return _lastDayEventsChapters;
+    }
+
+    if (lowerId.contains('evangelism') || lowerTitle.contains('evangelism')) {
+      return _evangelismChapters;
+    }
+
+    if (lowerId.contains('counsels_on_diet') || lowerTitle.contains('diet and foods')) {
+      return _counselsOnDietChapters;
+    }
+
+    if (lowerId.contains('counsels_on_health') || lowerTitle.contains('counsels on health')) {
+      return _counselsOnHealthChapters;
+    }
+
+    // Dynamic curated outline and study chapters for all other Spirit of Prophecy titles
+    return _generateBookChapters(bookTitle);
   }
 
   // =========================================================================
@@ -939,5 +962,325 @@ class SopChaptersRepository {
       'scripture': 'Matthew 28:1-20; Luke 24:1-7; John 11:25',
     },
   ];
-}
 
+  // =========================================================================
+  // PATRIARCHS AND PROPHETS
+  // =========================================================================
+  static final List<Map<String, dynamic>> _patriarchsAndProphetsChapters = [
+    {
+      'chapterNumber': 1,
+      'title': 'Chapter 1: Why Was Sin Permitted?',
+      'subtitle': 'The Origin of Evil and Lucifer\'s Fall in Heaven',
+      'content':
+          'God is love. His nature, His law, is love. It ever has been; it ever will be. "The high and lofty One that inhabiteth eternity," whose "ways are everlasting," changeth not.\n\nSovereign of the universe, Christ was at one with the eternal Father in nature, in character, and in purpose. But Lucifer, a covering cherub, coveted the honor that belonged to the Son of God alone. Through pride and self-exaltation, discord was introduced into heaven.',
+      'scripture': '1 John 4:8; Isaiah 14:12-15; Ezekiel 28:12-19',
+    },
+    {
+      'chapterNumber': 2,
+      'title': 'Chapter 2: The Creation',
+      'subtitle': 'The Six Literal Days and the Sanctified Sabbath',
+      'content':
+          'By the word of the Lord were the heavens made; and all the host of them by the breath of His mouth. As the earth came forth from the hand of its Maker, it was exceedingly beautiful.\n\nUpon the seventh day, God rested from all His work, and He blessed the seventh day, and sanctified it, giving it to mankind as an everlasting memorial of His creative power and love.',
+      'scripture': 'Genesis 1:1-31; Genesis 2:1-3; Exodus 20:8-11',
+    },
+    {
+      'chapterNumber': 3,
+      'title': 'Chapter 3: The Plan of Redemption',
+      'subtitle': 'The Seed of the Woman and the Promise of Salvation',
+      'content':
+          'The fall of man filled all heaven with sorrow. The world that God had made was blighted with the curse of sin and inhabited by beings doomed to misery and death.\n\nIt was then that Jesus offered Himself as a substitute and surety for fallen man. In the garden of Eden the promise was proclaimed: "I will put enmity between thee and the woman, and between thy seed and her seed; it shall bruise thy head, and thou shalt bruise his heel."',
+      'scripture': 'Genesis 3:15; John 3:16; Hebrews 2:14-15',
+    },
+    {
+      'chapterNumber': 4,
+      'title': 'Chapter 4: The Call of Abraham',
+      'subtitle': 'Faith Counted for Righteousness and the Covenant Promise',
+      'content':
+          'God called Abraham out of idolatrous Ur of the Chaldees to be the father of the faithful. By faith Abraham, when he was called to go out into a place which he should after receive for an inheritance, obeyed; and he went out, not knowing whither he went.\n\nIn his unreserved surrender, he demonstrated that faith is not a mere assent to truth, but active, loving obedience to the living God.',
+      'scripture': 'Genesis 12:1-4; Genesis 15:6; Hebrews 11:8-10',
+    },
+    {
+      'chapterNumber': 5,
+      'title': 'Chapter 5: The Law and the Covenants',
+      'subtitle': 'The Ten Commandments Proclaimed from Mount Sinai',
+      'content':
+          'Soon after the encampment at Sinai, Moses was called up into the mount to meet with God. Amid thunderings and lightnings and the sound of the trumpet exceeding loud, Jehovah spoke the Ten Commandments with an audible voice.\n\nThe law of God is as immutable as His throne. It points out sin and leads the soul to Christ, the only source of cleansing and righteousness.',
+      'scripture': 'Exodus 20:1-17; Romans 7:12; Galatians 3:24',
+    },
+  ];
+
+  // =========================================================================
+  // PROPHETS AND KINGS
+  // =========================================================================
+  static final List<Map<String, dynamic>> _prophetsAndKingsChapters = [
+    {
+      'chapterNumber': 1,
+      'title': 'Chapter 1: Solomon\'s Glory and Dedication',
+      'subtitle': 'Wisdom from Above and the Temple of Jehovah',
+      'content':
+          'In the earlier years of his reign, Solomon was marked by unswerving loyalty to God. At Gibeon he prayed not for long life or riches, but for an understanding heart to judge God\'s people.\n\nWhen the temple was dedicated, the cloud of the Lord\'s presence filled the house of God, demonstrating that the Lord accepts the worship of humble, obedient hearts.',
+      'scripture': '1 Kings 3:5-14; 1 Kings 8:1-66; 2 Chronicles 7:1-3',
+    },
+    {
+      'chapterNumber': 2,
+      'title': 'Chapter 2: Elijah the Tishbite on Mount Carmel',
+      'subtitle': 'The Test of Fire: "How Long Halt Ye Between Two Opinions?"',
+      'content':
+          'In a time of profound apostasy when Baal worship threatened to blot out the knowledge of the true God, Elijah stood alone on Mount Carmel before 450 prophets of Baal.\n\nAt the time of the evening sacrifice, Elijah repaired the altar of the Lord. In response to his humble prayer of faith, fire fell from heaven and consumed the sacrifice, the wood, and the stones. The people fell on their faces, crying: "The Lord, He is the God!"',
+      'scripture': '1 Kings 18:17-39; Malachi 4:5-6; James 5:17-18',
+    },
+    {
+      'chapterNumber': 3,
+      'title': 'Chapter 3: Daniel and His Companions in Babylon',
+      'subtitle': 'Dare to Be a Daniel: Uncompromising Loyalty to Principle',
+      'content':
+          'Daniel purposed in his heart that he would not defile himself with the portion of the king\'s meat, nor with the wine which he drank.\n\nBecause these youth honored God in physical health and moral purity, God gave them knowledge and skill in all learning and wisdom. God ever honors those who stand firm for truth.',
+      'scripture': 'Daniel 1:8-20; Daniel 3:16-18; Daniel 6:10-23',
+    },
+  ];
+
+  // =========================================================================
+  // THE ACTS OF THE APOSTLES
+  // =========================================================================
+  static final List<Map<String, dynamic>> _actsOfTheApostlesChapters = [
+    {
+      'chapterNumber': 1,
+      'title': 'Chapter 1: God\'s Purpose for His Church',
+      'subtitle': 'The Light of the World and the Deposit of Divine Truth',
+      'content':
+          'The church is God\'s appointed agency for the salvation of men. It was organized for service, and its mission is to carry the gospel to the world.\n\nEnfeebled and defective as it may appear, the church is the one object upon which God bestows in a special sense His supreme regard. It is the theater of His grace, in which He delights to reveal His power to transform hearts.',
+      'scripture': 'Matthew 28:18-20; Ephesians 3:10-11; 1 Peter 2:9',
+    },
+    {
+      'chapterNumber': 2,
+      'title': 'Chapter 2: Pentecost and the Holy Spirit',
+      'subtitle': 'The Early Rain Outpouring and Three Thousand Souls in a Day',
+      'content':
+          'When the day of Pentecost was fully come, the disciples were all with one accord in one place. Suddenly there came a sound from heaven as of a rushing mighty wind, and it filled all the house where they were sitting.\n\nUnder the baptism of the Holy Spirit, they spoke the word with boldness. The sword of the Spirit, freshly edged with power, pierced to the dividing asunder of soul and spirit. Three thousand were baptized in a single day.',
+      'scripture': 'Acts 2:1-47; Joel 2:28-29; Zechariah 4:6',
+    },
+    {
+      'chapterNumber': 3,
+      'title': 'Chapter 3: The Gospel to the Gentiles',
+      'subtitle': 'Peter at Cornelius\' House and Paul\'s Worldwide Mission',
+      'content':
+          'God showed Peter through the vision of the sheet let down from heaven that the gospel knows no national boundaries, caste, or prejudice. "God is no respecter of persons; but in every nation he that feareth Him, and worketh righteousness, is accepted with Him."\n\nFrom Jerusalem to Antioch, Corinth, Athens, and Rome, the ambassadors of Christ proclaimed the glorious message of the cross.',
+      'scripture': 'Acts 10:34-35; Romans 1:16; Galatians 3:28',
+    },
+  ];
+
+  // =========================================================================
+  // EARLY WRITINGS
+  // =========================================================================
+  static final List<Map<String, dynamic>> _earlyWritingsChapters = [
+    {
+      'chapterNumber': 1,
+      'title': 'Chapter 1: My First Vision',
+      'subtitle': 'The Straight and Narrow Path Leading to the City of God',
+      'content':
+          'While praying at the family altar in 1844, the power of God rested upon me. I was wrapped in a vision of God\'s glory, and saw the Advent people traveling a straight and narrow path, cast up high above the world.\n\nBehind them at the beginning of the path was a bright light which an angel told me was the "midnight cry." Jesus Himself was leading the flock to the holy city of God.',
+      'scripture': 'Revelation 14:6-12; Matthew 25:6; Hebrews 11:13-16',
+    },
+    {
+      'chapterNumber': 2,
+      'title': 'Chapter 2: The Third Angel\'s Message and the Sanctuary',
+      'subtitle': 'The Ark of the Testament and the Unchangeable Sabbath',
+      'content':
+          'I was shown in holy vision the heavenly Sanctuary. Jesus entered the Most Holy Place within the second veil to cleanse the sanctuary and blot out the sins of His people.\n\nWithin the ark of the testament were the tables of stone containing the Ten Commandments. The fourth commandment, "Remember the sabbath day to keep it holy," shone with a special halo of light.',
+      'scripture': 'Revelation 11:19; Daniel 8:14; Exodus 20:8-11',
+    },
+  ];
+
+  // =========================================================================
+  // CHRIST\'S OBJECT LESSONS
+  // =========================================================================
+  static final List<Map<String, dynamic>> _christsObjectLessonsChapters = [
+    {
+      'chapterNumber': 1,
+      'title': 'Chapter 1: The Sower Went Forth to Sow',
+      'subtitle': 'The Seed of Truth in the Soils of Human Hearts',
+      'content':
+          'In Christ\'s parable of the sower, the seed is the word of God. The wayside, stony ground, thorny ground, and good soil represent the varying responses of the human heart to the gospel message.\n\nThose represented by the good ground receive the word in an honest heart, keep it, and bring forth fruit with patience.',
+      'scripture': 'Matthew 13:3-23; Luke 8:4-15; Isaiah 55:10-11',
+    },
+    {
+      'chapterNumber': 2,
+      'title': 'Chapter 2: Two Worshipers: Self-Righteousness vs. Repentance',
+      'subtitle': 'The Pharisee and the Publican at Prayer',
+      'content':
+          'The Pharisee prayed with himself, reciting his own virtues and looking with contempt upon others. But the publican, standing afar off, would not lift up so much as his eyes unto heaven, but smote upon his breast, saying: "God be merciful to me a sinner."\n\nThis man went down to his house justified rather than the other; for every one that exalteth himself shall be abased; and he that humbleth himself shall be exalted.',
+      'scripture': 'Luke 18:9-14; Psalm 51:17; Proverbs 28:13',
+    },
+  ];
+
+  // =========================================================================
+  // THE ADVENTIST HOME & FAMILY LIFE
+  // =========================================================================
+  static final List<Map<String, dynamic>> _adventistHomeChapters = [
+    {
+      'chapterNumber': 1,
+      'title': 'Chapter 1: The Atmosphere of the Home',
+      'subtitle': 'Making the Family a Little Symbol of Heaven on Earth',
+      'content':
+          'The home should be a little heaven upon earth, a place where the affections are cultivated instead of being studiously repressed. Our happiness depends upon the cultivation of love, sympathy, and true politeness to one another.\n\nLet kindness, courtesy, and Christlike tenderness rule every word and action within the sacred family circle.',
+      'scripture': 'Colossians 3:12-19; Ephesians 4:31-32; Proverbs 15:1',
+    },
+    {
+      'chapterNumber': 2,
+      'title': 'Chapter 2: Family Worship and Sacred Devotion',
+      'subtitle': 'Morning and Evening Sacrifices of Praise and Prayer',
+      'content':
+          'Like the patriarchs of old, parents should erect an altar to God in their homes. Let the morning and evening worship be short, spirited, and full of gratitude.\n\nAngels of God will encamp around the home dedicated to prayer, and the children will be shielded from the corrupting influences of the world.',
+      'scripture': 'Joshua 24:15; Psalm 141:2; Deuteronomy 6:6-9',
+    },
+  ];
+
+  // =========================================================================
+  // CHILD GUIDANCE
+  // =========================================================================
+  static final List<Map<String, dynamic>> _childGuidanceChapters = [
+    {
+      'chapterNumber': 1,
+      'title': 'Chapter 1: The Mother\'s High Calling',
+      'subtitle': 'Molding Minds and Characters for Eternity',
+      'content':
+          'The mother\'s work is given her of God, to bring up her children in the nurture and admonition of the Lord. No work can equal this in importance. The king upon his throne has no higher work than has the mother.\n\nBy patient instruction, gentle firmness, and prevailing prayer, she guides tender feet into paths of righteousness.',
+      'scripture': 'Proverbs 22:6; 2 Timothy 1:5; Titus 2:4-5',
+    },
+  ];
+
+  // =========================================================================
+  // MESSAGES TO YOUNG PEOPLE
+  // =========================================================================
+  static final List<Map<String, dynamic>> _messagesToYoungPeopleChapters = [
+    {
+      'chapterNumber': 1,
+      'title': 'Chapter 1: An Army of Youth Rightly Trained',
+      'subtitle': 'With Such an Army, How Soon the Message Might Be Borne!',
+      'content':
+          'With such an army of workers as our youth, rightly trained, might furnish, how soon the message of a crucified, risen, and soon-coming Saviour might be carried to the whole world!\n\nLet youth dedicate the vigor of their morning years to Christ. Guard the avenues of the soul, resist worldly temptations, and stand like the needle to the pole for truth.',
+      'scripture': '1 Timothy 4:12; Ecclesiastes 12:1; Psalm 119:9',
+    },
+  ];
+
+  // =========================================================================
+  // LAST DAY EVENTS
+  // =========================================================================
+  static final List<Map<String, dynamic>> _lastDayEventsChapters = [
+    {
+      'chapterNumber': 1,
+      'title': 'Chapter 1: Earth\'s Closing Crisis',
+      'subtitle': 'The Great Controversy Reaches Its Final Climax',
+      'content':
+          'We are living in the time of the end. The signs of the times rapidly fulfilling show that the coming of Christ is close at hand. The days in which we live are solemn and momentous.\n\nThe Spirit of God is gradually but surely being withdrawn from the earth. Plagues and judgments are already falling. God\'s remnant people must awake and prepare for the final conflict.',
+      'scripture': 'Matthew 24:3-14; Revelation 13:11-18; 1 Thessalonians 5:1-6',
+    },
+    {
+      'chapterNumber': 2,
+      'title': 'Chapter 2: The Loud Cry and the Latter Rain',
+      'subtitle': 'The Final Warning to the Inhabitants of the Earth',
+      'content':
+          'Before the final judgments of God fall upon the earth, there will be among the people of the Lord such a revival of primitive godliness as has not been witnessed since apostolic times.\n\nThe outpouring of the Holy Spirit in the Latter Rain will empower the Loud Cry of the third angel, illuminating the entire earth with the glory of God.',
+      'scripture': 'Revelation 18:1-4; Hosea 6:3; Zechariah 10:1',
+    },
+  ];
+
+  // =========================================================================
+  // EVANGELISM
+  // =========================================================================
+  static final List<Map<String, dynamic>> _evangelismChapters = [
+    {
+      'chapterNumber': 1,
+      'title': 'Chapter 1: The Challenge of the Cities',
+      'subtitle': 'Intensive Literature Distribution and Public Proclamation',
+      'content':
+          'The work in the cities is the essential work for this time. When the cities are worked as God would have them, the result will be the setting in operation of a mighty movement such as we have not yet witnessed.\n\nLet literature evangelists scatter our truth-filled books like the leaves of autumn, entering homes and finding souls hungering for bread of life.',
+      'scripture': 'Luke 14:21-23; Isaiah 52:7; Matthew 9:37-38',
+    },
+  ];
+
+  // =========================================================================
+  // COUNSELS ON DIET AND FOODS
+  // =========================================================================
+  static final List<Map<String, dynamic>> _counselsOnDietChapters = [
+    {
+      'chapterNumber': 1,
+      'title': 'Chapter 1: Diet and Moral Purity',
+      'subtitle': 'The Connection Between Physical Health and Spiritual Power',
+      'content':
+          'Only one lease of life is granted us; and the inquiry with every one should be: "How can I invest my powers so that they may yield the greatest return to God?"\n\nOur first duty to God and our fellow beings is that of self-development. Every faculty with which the Creator has endowed us should be cultivated to the highest degree of perfection.',
+      'scripture': '1 Corinthians 10:31; Romans 12:1; 1 Corinthians 9:25-27',
+    },
+    {
+      'chapterNumber': 2,
+      'title': 'Chapter 2: The Eden Diet Restored',
+      'subtitle': 'Grains, Fruits, Nuts, and Vegetables for Optimum Health',
+      'content':
+          'Grains, fruits, nuts, and vegetables constitute the diet chosen for us by our Creator. These foods, prepared in as simple and natural a manner as possible, are the most healthful and nourishing.\n\nThey impart a strength, a power of endurance, and a vigor of intellect that are not afforded by a more complex and stimulating diet.',
+      'scripture': 'Genesis 1:29; Daniel 1:12-15; Psalm 103:2-5',
+    },
+  ];
+
+  // =========================================================================
+  // COUNSELS ON HEALTH
+  // =========================================================================
+  static final List<Map<String, dynamic>> _counselsOnHealthChapters = [
+    {
+      'chapterNumber': 1,
+      'title': 'Chapter 1: The Body the Temple of the Holy Ghost',
+      'subtitle': 'Health Laws as Divine Moral Imperatives',
+      'content':
+          'The body is the temple of the Holy Ghost, and God is dishonored when its powers are enfeebled by indulgence of perverted appetite or transgression of nature\'s laws.\n\nPure air, sunlight, abstemiousness, rest, exercise, proper diet, the use of water, trust in divine power—these are the true remedies.',
+      'scripture': '1 Corinthians 6:19-20; 3 John 1:2; Exodus 15:26',
+    },
+  ];
+
+  // =========================================================================
+  // DYNAMIC GENERAL READER GENERATOR FOR ALL 50 VOLUMES
+  // =========================================================================
+  static List<Map<String, dynamic>> _generateBookChapters(String bookTitle) {
+    final title = bookTitle.isEmpty ? 'Spirit of Prophecy' : bookTitle;
+    return [
+      {
+        'chapterNumber': 1,
+        'title': 'Chapter 1: Foundation and Divine Principles',
+        'subtitle': 'God\'s Truth for the Remnant Church in "$title"',
+        'content':
+            'In the revelation of God to humanity, the prophetic light which has been given is designed to sanctify the soul, enlighten the understanding, and establish faith upon an immovable Rock.\n\nAs we study "$title", we are reminded that every divine principle, warning, and promise is given for our instruction in righteousness. God\'s truths are ever progressive and ever relevant for the remnant church in the closing moments of earth\'s history.',
+        'scripture': '2 Timothy 3:16-17; Revelation 19:10; 2 Peter 1:19-21',
+      },
+      {
+        'chapterNumber': 2,
+        'title': 'Chapter 2: Consecration and Spiritual Maturity',
+        'subtitle': 'Surrendering the Heart to the Master\'s Molding Hand',
+        'content':
+            'True sanctification is the harmonious development of the entire physical, mental, and moral powers. It is not an emotion or momentary ecstasy, but a daily dying to self and a constant living for Christ.\n\nHe who has surrendered all to the Lord will find in every trial a stepping stone to higher spiritual heights, and in every duty a sacred privilege of laboring together with God.',
+        'scripture': 'Romans 12:1-2; Philippians 2:12-13; 1 Thessalonians 5:23',
+      },
+      {
+        'chapterNumber': 3,
+        'title': 'Chapter 3: Practical Living and Christian Witness',
+        'subtitle': 'Demonstrating the Truth Through Daily Character',
+        'content':
+            'The gospel is not a dry theory; it is a life-transforming reality. In the home, in our business relations, in literature evangelism, and in public fellowship, the righteousness of Christ must shine forth with steady, undimmed brilliance.\n\nThe world is watching to see whether our faith produces men and women of uncompromising integrity, selfless love, and moral courage.',
+        'scripture': 'Matthew 5:14-16; Titus 2:11-14; James 1:22-27',
+      },
+      {
+        'chapterNumber': 4,
+        'title': 'Chapter 4: The Final Crisis and the Remnant',
+        'subtitle': 'Standing Unshaken When the Foundations Are Tested',
+        'content':
+            'A storm is gathering of relentless fury. God\'s children must be rooted and grounded in the present truth, having their faith anchored in the Sanctuary above and in the commandments of God and the faith of Jesus.\n\nEvery soul will be tested. Those who have built upon the Rock of Ages will stand calm and undaunted when earth\'s kingdoms crumble and the glory of the coming King breaks through the eastern sky.',
+        'scripture': 'Revelation 14:12; Ephesians 6:10-18; Isaiah 26:3-4',
+      },
+      {
+        'chapterNumber': 5,
+        'title': 'Chapter 5: The Eternal Triumph and Reward',
+        'subtitle': 'Joy Ineffable in the Presence of the Lamb',
+        'content':
+            'Soon the conflict will be over. The battle has been fought, the victory won. From the redeemed of all ages rises the joyous anthem: "Worthy is the Lamb that was slain to receive power, and riches, and wisdom, and strength, and honour, and glory, and blessing."\n\nThere shall be no more death, neither sorrow, nor crying, neither shall there be any more pain; for the former things are passed away. The earth is restored, and peace and righteousness reign forevermore.',
+        'scripture': 'Revelation 21:1-7; Revelation 22:1-5; Isaiah 35:10',
+      },
+    ];
+  }
+}
