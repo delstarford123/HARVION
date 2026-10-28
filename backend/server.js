@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const path = require("path");
 require("dotenv").config();
 
 const app = express();
@@ -10,13 +11,36 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Serve static assets and uploaded files (HostPinnacle friendly)
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+app.use(express.static(path.join(__dirname, "public")));
+
 // Request Logger
 app.use((req, res, next) => {
   console.log(`[${new Date().toISOString()}] ${req.method} ${req.originalUrl}`);
   next();
 });
 
-// Health check
+// Root Ping Handler (Required by cPanel / Phusion Passenger on HostPinnacle)
+app.get("/", (req, res) => {
+  res.json({
+    status: "online",
+    name: "HARVION SDA Ministry Enterprise API",
+    version: "2.0.0",
+    healthCheck: "/api/health",
+    endpoints: {
+      books: "/api/books",
+      orders: "/api/orders",
+      payments: "/api/payments",
+      colporteurs: "/api/colporteurs",
+      ministry: "/api/ministry",
+    },
+    serverTime: new Date().toISOString(),
+    message: "HARVION Literature Evangelism, Health & Truth Platform is active."
+  });
+});
+
+// Health check endpoint
 app.get("/api/health", (req, res) => {
   res.json({
     status: "online",
@@ -27,7 +51,7 @@ app.get("/api/health", (req, res) => {
   });
 });
 
-// Mount Routes
+// Mount Application Routes
 app.use("/api/books", require("./routes/books"));
 app.use("/api/orders", require("./routes/orders"));
 app.use("/api/payments", require("./routes/payments"));
@@ -45,14 +69,23 @@ app.use((err, req, res, next) => {
   res.status(500).json({ success: false, error: err.message });
 });
 
-if (process.env.NODE_ENV !== "test") {
-  app.listen(PORT, () => {
+if (require.main === module) {
+  const server = app.listen(PORT, () => {
     console.log(`===============================================`);
     console.log(`🌱 HARVION Backend running on http://localhost:${PORT}`);
     console.log(`📦 Firebase Project: ${process.env.FIREBASE_PROJECT_ID || "vine-3e4ab"}`);
+    console.log(`🌐 Ready for HostPinnacle cPanel / Passenger`);
     console.log(`===============================================`);
+  });
+
+  server.on("error", (err) => {
+    if (err.code === "EADDRINUSE") {
+      console.warn(`[Warning] Port ${PORT} in use, trying port ${Number(PORT) + 1}...`);
+      server.listen(Number(PORT) + 1);
+    } else {
+      console.error("Server listen error:", err);
+    }
   });
 }
 
 module.exports = app;
-

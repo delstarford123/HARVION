@@ -225,20 +225,26 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                           color: !_isSoftCopySelected ? AppTheme.primaryBlue : Colors.transparent,
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.menu_book, size: 16, color: !_isSoftCopySelected ? Colors.white : Colors.black87),
-                            const SizedBox(width: 6),
-                            Text(
-                              'Hard Copy (${widget.book.hasHardCopy ? 'Available' : 'Out of Stock'})',
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                                color: !_isSoftCopySelected ? Colors.white : Colors.black87,
-                              ),
+                        child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 4),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.menu_book, size: 16, color: !_isSoftCopySelected ? Colors.white : Colors.black87),
+                                const SizedBox(width: 4),
+                                Text(
+                                  'Hard Copy (${widget.book.hasHardCopy ? 'Available' : 'N/A'})',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
+                                    color: !_isSoftCopySelected ? Colors.white : Colors.black87,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
+                          ),
                         ),
                       ),
                     ),
@@ -257,20 +263,26 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                           color: _isSoftCopySelected ? AppTheme.primaryGreen : Colors.transparent,
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.picture_as_pdf, size: 16, color: _isSoftCopySelected ? Colors.white : Colors.black87),
-                            const SizedBox(width: 6),
-                            Text(
-                              'Soft Copy (${widget.book.hasSoftCopy ? 'Instant' : 'N/A'})',
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                                color: _isSoftCopySelected ? Colors.white : Colors.black87,
-                              ),
+                        child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 4),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.picture_as_pdf, size: 16, color: _isSoftCopySelected ? Colors.white : Colors.black87),
+                                const SizedBox(width: 4),
+                                Text(
+                                  'Soft Copy (${widget.book.hasSoftCopy ? 'Instant' : 'N/A'})',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
+                                    color: _isSoftCopySelected ? Colors.white : Colors.black87,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
+                          ),
                         ),
                       ),
                     ),
@@ -333,39 +345,48 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
             ),
             const SizedBox(height: 16),
 
-            // Price Row
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.baseline,
-              textBaseline: TextBaseline.alphabetic,
+            // Price Row (Safe against small device overflow)
+            Wrap(
+              crossAxisAlignment: WrapCrossAlignment.center,
+              alignment: WrapAlignment.spaceBetween,
+              spacing: 8,
+              runSpacing: 6,
               children: [
-                Text(
-                  'Ksh ${_currentPrice.toInt()}',
-                  style: const TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                    color: AppTheme.primaryGreen,
-                  ),
-                ),
-                if (!_isSoftCopySelected && widget.book.hasDiscount) ...[
-                  const SizedBox(width: 12),
-                  Text(
-                    'Ksh ${widget.book.originalPrice.toInt()}',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.grey.shade500,
-                      decoration: TextDecoration.lineThrough,
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.baseline,
+                  textBaseline: TextBaseline.alphabetic,
+                  children: [
+                    Text(
+                      'Ksh ${_currentPrice.toInt()}',
+                      style: const TextStyle(
+                        fontSize: 26,
+                        fontWeight: FontWeight.bold,
+                        color: AppTheme.primaryGreen,
+                      ),
                     ),
-                  ),
-                ],
-                const Spacer(),
+                    if (!_isSoftCopySelected && widget.book.hasDiscount) ...[
+                      const SizedBox(width: 8),
+                      Text(
+                        'Ksh ${widget.book.originalPrice.toInt()}',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.grey.shade500,
+                          decoration: TextDecoration.lineThrough,
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
                     color: Colors.green.shade50,
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(color: Colors.green.shade200),
                   ),
                   child: Row(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       Icon(Icons.check_circle, size: 14, color: Colors.green.shade700),
                       const SizedBox(width: 4),
@@ -374,7 +395,7 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                         style: TextStyle(
                           color: Colors.green.shade800,
                           fontWeight: FontWeight.bold,
-                          fontSize: 12,
+                          fontSize: 11,
                         ),
                       ),
                     ],
@@ -472,10 +493,10 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    _buildSpecItem('Pages', '${widget.book.pageCount}'),
-                    _buildSpecItem('Format', _isSoftCopySelected ? 'Digital PDF' : _selectedFormat),
-                    _buildSpecItem('Language', _selectedLanguage),
-                    _buildSpecItem('Access', _isSoftCopySelected ? 'Instant' : '1-2 Days'),
+                    Expanded(child: _buildSpecItem('Pages', '${widget.book.pageCount}')),
+                    Expanded(child: _buildSpecItem('Format', _isSoftCopySelected ? 'Digital PDF' : _selectedFormat)),
+                    Expanded(child: _buildSpecItem('Language', _selectedLanguage)),
+                    Expanded(child: _buildSpecItem('Access', _isSoftCopySelected ? 'Instant' : '1-2 Days')),
                   ],
                 ),
               ),
@@ -652,9 +673,16 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
   Widget _buildSpecItem(String label, String value) {
     return Column(
       children: [
-        Text(label, style: TextStyle(fontSize: 11, color: Colors.grey.shade600)),
+        Text(label, style: TextStyle(fontSize: 10, color: Colors.grey.shade600)),
         const SizedBox(height: 4),
-        Text(value, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: AppTheme.primaryBlue)),
+        FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Text(
+            value,
+            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: AppTheme.primaryBlue),
+            maxLines: 1,
+          ),
+        ),
       ],
     );
   }

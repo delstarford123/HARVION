@@ -236,9 +236,9 @@ class FamilyLifeScreen extends StatelessWidget {
             physics: const NeverScrollableScrollPhysics(),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
-              crossAxisSpacing: 14,
-              mainAxisSpacing: 14,
-              childAspectRatio: 1.15,
+              crossAxisSpacing: 12,
+              mainAxisSpacing: 12,
+              childAspectRatio: 0.92,
             ),
             itemCount: pillars.length,
             itemBuilder: (context, index) {
@@ -263,28 +263,28 @@ class FamilyLifeScreen extends StatelessWidget {
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                         colors: [
-                          pillar.color.withOpacity(0.12),
-                          pillar.color.withOpacity(0.04),
+                          pillar.color.withValues(alpha: 0.12),
+                          pillar.color.withValues(alpha: 0.04),
                         ],
                       ),
                     ),
-                    padding: const EdgeInsets.all(12),
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         CircleAvatar(
-                          radius: 24,
-                          backgroundColor: pillar.color.withOpacity(0.15),
-                          child: Icon(pillar.iconData, color: pillar.color, size: 28),
+                          radius: 22,
+                          backgroundColor: pillar.color.withValues(alpha: 0.15),
+                          child: Icon(pillar.iconData, color: pillar.color, size: 24),
                         ),
-                        const SizedBox(height: 10),
+                        const SizedBox(height: 8),
                         Text(
                           pillar.title,
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            fontSize: 13,
+                            fontSize: 12,
                             fontWeight: FontWeight.bold,
-                            color: AppTheme.textPrimary.withOpacity(0.9),
+                            color: AppTheme.textPrimary.withValues(alpha: 0.9),
                           ),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,

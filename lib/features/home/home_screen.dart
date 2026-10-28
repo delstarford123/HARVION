@@ -46,7 +46,7 @@ class HomeScreen extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    _buildSectionTitle('Literature Evangelism Books'),
+                    Expanded(child: _buildSectionTitle('Literature Evangelism Books')),
                     TextButton(
                       onPressed: () {
                         Navigator.push(context, MaterialPageRoute(builder: (_) => const BookstoreScreen()));
@@ -75,19 +75,24 @@ class HomeScreen extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              greeting,
-              style: TextStyle(fontSize: 13, color: Colors.grey.shade600, fontWeight: FontWeight.w500),
-            ),
-            const Text(
-              'Blessed Day in Christ!',
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: AppTheme.primaryBlue),
-            ),
-          ],
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                greeting,
+                style: TextStyle(fontSize: 13, color: Colors.grey.shade600, fontWeight: FontWeight.w500),
+              ),
+              const Text(
+                'Blessed Day in Christ!',
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: AppTheme.primaryBlue),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
+          ),
         ),
+        const SizedBox(width: 8),
         IconButton(
           tooltip: 'Admin & Notifications',
           onPressed: () {
@@ -252,29 +257,32 @@ class HomeScreen extends StatelessWidget {
     return Column(
       children: [
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            _buildActionCard(context, 'Bookstore', Icons.menu_book, AppTheme.primaryBlue, const BookstoreScreen()),
-            _buildActionCard(context, 'Camp Meetings', Icons.campaign, Colors.amber.shade900, const CampMeetingLocationsScreen()),
-            _buildActionCard(context, 'Devotional', Icons.wb_sunny_outlined, Colors.deepOrange, const DevotionalScreen()),
+            Expanded(child: _buildActionCard(context, 'Bookstore', Icons.menu_book, AppTheme.primaryBlue, const BookstoreScreen())),
+            const SizedBox(width: 8),
+            Expanded(child: _buildActionCard(context, 'Camp Meetings', Icons.campaign, Colors.amber.shade900, const CampMeetingLocationsScreen())),
+            const SizedBox(width: 8),
+            Expanded(child: _buildActionCard(context, 'Devotional', Icons.wb_sunny_outlined, Colors.deepOrange, const DevotionalScreen())),
           ],
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: 10),
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            _buildActionCard(context, 'Digital Tracts', Icons.share, Colors.teal, const DigitalTractsScreen()),
-            _buildActionCard(context, 'Family Pillars', Icons.family_restroom, Colors.purple, const FamilyLifeScreen()),
-            _buildActionCard(context, 'Live Sermons', Icons.live_tv, Colors.redAccent, const SermonsScreen()),
+            Expanded(child: _buildActionCard(context, 'Digital Tracts', Icons.share, Colors.teal, const DigitalTractsScreen())),
+            const SizedBox(width: 8),
+            Expanded(child: _buildActionCard(context, 'Family Pillars', Icons.family_restroom, Colors.purple, const FamilyLifeScreen())),
+            const SizedBox(width: 8),
+            Expanded(child: _buildActionCard(context, 'Live Sermons', Icons.live_tv, Colors.redAccent, const SermonsScreen())),
           ],
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: 10),
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            _buildActionCard(context, 'Testimonies', Icons.auto_awesome, Colors.indigo, const TestimoniesScreen()),
-            _buildActionCard(context, 'KJV Bible', Icons.auto_stories, Colors.amber.shade800, const KjvBibleReaderScreen()),
-            _buildActionCard(context, 'SS Lessons (20)', Icons.book, AppTheme.primaryGreen, const SabbathSchoolScreen()),
+            Expanded(child: _buildActionCard(context, 'Testimonies', Icons.auto_awesome, Colors.indigo, const TestimoniesScreen())),
+            const SizedBox(width: 8),
+            Expanded(child: _buildActionCard(context, 'KJV Bible', Icons.auto_stories, Colors.amber.shade800, const KjvBibleReaderScreen())),
+            const SizedBox(width: 8),
+            Expanded(child: _buildActionCard(context, 'SS Lessons (20)', Icons.book, AppTheme.primaryGreen, const SabbathSchoolScreen())),
           ],
         ),
       ],
@@ -288,8 +296,7 @@ class HomeScreen extends StatelessWidget {
         Navigator.push(context, MaterialPageRoute(builder: (_) => destination));
       },
       child: Container(
-        width: 102,
-        padding: const EdgeInsets.symmetric(vertical: 12),
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 4),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
@@ -298,18 +305,20 @@ class HomeScreen extends StatelessWidget {
         child: Column(
           children: [
             Container(
-              padding: const EdgeInsets.all(10),
+              padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: color.withOpacity(0.1),
+                color: color.withValues(alpha: 0.1),
                 shape: BoxShape.circle,
               ),
-              child: Icon(icon, color: color, size: 22),
+              child: Icon(icon, color: color, size: 20),
             ),
             const SizedBox(height: 6),
             Text(
               title,
               textAlign: TextAlign.center,
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 11),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 10),
             ),
           ],
         ),

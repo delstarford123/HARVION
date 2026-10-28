@@ -195,16 +195,20 @@ class SermonsScreen extends StatelessWidget {
                     decoration: const BoxDecoration(color: Colors.red, shape: BoxShape.circle),
                   ),
                   const SizedBox(width: 8),
-                  const Text(
-                    'BROADCASTING LIVE RIGHT NOW',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 12,
-                      color: Colors.red,
-                      letterSpacing: 1.1,
+                  const Expanded(
+                    child: Text(
+                      'BROADCASTING LIVE RIGHT NOW',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 11,
+                        color: Colors.red,
+                        letterSpacing: 0.8,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                  const Spacer(),
+                  const SizedBox(width: 8),
                   Text(
                     '${liveSermons.length} Live',
                     style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.grey.shade700),

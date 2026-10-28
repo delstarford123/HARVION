@@ -473,9 +473,9 @@ class _CreateLiveStreamScreenState extends State<CreateLiveStreamScreen> {
       child: GestureDetector(
         onTap: () => setState(() => _platform = id),
         child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 8),
+          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 4),
           decoration: BoxDecoration(
-            color: isSelected ? color.withOpacity(0.08) : Colors.white,
+            color: isSelected ? color.withValues(alpha: 0.08) : Colors.white,
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
               color: isSelected ? color : Colors.grey.shade300,
@@ -486,14 +486,18 @@ class _CreateLiveStreamScreenState extends State<CreateLiveStreamScreen> {
             children: [
               Icon(icon, color: color, size: 24),
               const SizedBox(height: 6),
-              Text(
-                label,
-                style: TextStyle(
-                  fontSize: 11,
-                  fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
-                  color: isSelected ? color : Colors.black87,
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  label,
+                  style: TextStyle(
+                    fontSize: 11,
+                    fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+                    color: isSelected ? color : Colors.black87,
+                  ),
+                  textAlign: TextAlign.center,
+                  maxLines: 1,
                 ),
-                textAlign: TextAlign.center,
               ),
             ],
           ),

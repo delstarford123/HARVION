@@ -398,12 +398,13 @@ class _CampMeetingLocationsScreenState extends State<CampMeetingLocationsScreen>
                             ],
                             const SizedBox(height: 10),
 
-                            // Format badges
-                            Row(
+                            // Format badges (Wrap to prevent overflow on narrow screens)
+                            Wrap(
+                              spacing: 6,
+                              runSpacing: 4,
                               children: [
                                 if (hasHard)
                                   Container(
-                                    margin: const EdgeInsets.only(right: 6),
                                     padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                                     decoration: BoxDecoration(
                                       color: Colors.blue.shade50,

@@ -189,7 +189,7 @@ class _MainNavigationState extends State<MainNavigation> {
                       border: Border.all(color: AppTheme.sacredGold, width: 2),
                       boxShadow: [
                         BoxShadow(
-                          color: AppTheme.sacredGold.withOpacity(0.3),
+                          color: AppTheme.sacredGold.withValues(alpha: 0.3),
                           blurRadius: 8,
                           spreadRadius: 1,
                         ),
@@ -231,7 +231,7 @@ class _MainNavigationState extends State<MainNavigation> {
                         Text(
                           'Literature Evangelism • Health • Truth',
                           style: TextStyle(
-                            color: Colors.white.withOpacity(0.75),
+                            color: Colors.white.withValues(alpha: 0.75),
                             fontSize: 10,
                           ),
                           maxLines: 1,
