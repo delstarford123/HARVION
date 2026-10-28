@@ -48,3 +48,10 @@ app.*.map.json
 node_modules/
 **/node_modules/
 .env
+
+# Security / Private Keys
+serviceAccountKey.json
+**/serviceAccountKey.json
+*.key.json
+backend/.env
+*.zip
