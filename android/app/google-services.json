@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "631563031278",
+    "project_id": "vine-3e4ab",
+    "storage_bucket": "vine-3e4ab.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:631563031278:android:3d5d3e5181f5569bf399ff",
+        "android_client_info": {
+          "package_name": "com.delstarfordworks.vine"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDWDVzlQKzkyrpzasKCMHAek2LILvhVpks"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
