@@ -1,18 +1,15 @@
 # DO NOT REMOVE. CLOUDLINUX PASSENGER CONFIGURATION BEGIN
 PassengerAppRoot "/home/username/harvion_api"
 PassengerBaseURI "/"
-PassengerNodejs "/home/username/nodevenv/harvion_api/18/bin/node"
+PassengerNodejs "/home/username/nodevenv/harvion_api/20/bin/node"
 PassengerAppType node
 PassengerStartupFile server.js
 # DO NOT REMOVE. CLOUDLINUX PASSENGER CONFIGURATION END
 
-# Apache Rewrite Rules for Harvion API
-<IfModule mod_rewrite.c>
-  RewriteEngine On
-  RewriteBase /
-  RewriteRule ^index\.html$ - [L]
-  RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteCond %{REQUEST_FILENAME} !-d
-  RewriteRule . /server.js [L]
-</IfModule>
+# Disable directory listing
+Options -Indexes
 
+# Apache static caching & compression
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/json
+</IfModule>

@@ -15,49 +15,76 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use(express.static(path.join(__dirname, "public")));
 
-// Request Logger
+// Request Normalization Middleware for cPanel Phusion Passenger & Apache
 app.use((req, res, next) => {
-  console.log(`[${new Date().toISOString()}] ${req.method} ${req.originalUrl}`);
+  let url = req.url;
+
+  // 1. Remove Apache rewrite suffix (/server.js)
+  url = url.replace(/\/server\.js(\?.*)?$/, "$1");
+
+  // 2. Strip known cPanel subfolder application roots if passed in URL
+  const knownPrefixes = [
+    "/harvion_api",
+    "/harvion-api",
+    "/harvion",
+    "/public_html",
+  ];
+  for (const prefix of knownPrefixes) {
+    if (url.startsWith(prefix)) {
+      url = url.substring(prefix.length) || "/";
+      break;
+    }
+  }
+
+  // 3. Normalize empty string or index.php/index.html to root
+  if (url === "" || url === "/index.html" || url === "/index.php") {
+    url = "/";
+  }
+
+  req.url = url || "/";
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.originalUrl} -> normalized: ${req.url}`);
   next();
 });
 
-// Root Route: Serves index.html to web browsers, or JSON to API clients & monitoring
-app.get("/", (req, res) => {
-  const acceptsHtml = req.accepts("html");
-  const acceptsJson = req.headers["accept"] && req.headers["accept"].includes("application/json");
+// ==========================================
+// 🌐 WEB PAGES (Always served to browsers)
+// ==========================================
 
-  if (acceptsHtml && !acceptsJson && !req.xhr) {
-    return res.sendFile(path.join(__dirname, "public", "index.html"));
-  }
-
-  res.json({
-    status: "online",
-    name: "HARVION SDA Ministry Enterprise API",
-    version: "2.0.0",
-    healthCheck: "/api/health",
-    webPages: {
-      home: "/",
-      about: "/about.html",
-    },
-    endpoints: {
-      books: "/api/books",
-      orders: "/api/orders",
-      payments: "/api/payments",
-      colporteurs: "/api/colporteurs",
-      ministry: "/api/ministry",
-    },
-    serverTime: new Date().toISOString(),
-    message: "HARVION Literature Evangelism, Health & Truth Platform is active."
-  });
-});
-
-// About Page Handler
+// About Page Handler (matches /about and /about.html)
 app.get(["/about", "/about.html"], (req, res) => {
   res.sendFile(path.join(__dirname, "public", "about.html"));
 });
 
-// Home Page Handler
-app.get(["/home", "/index.html"], (req, res) => {
+// Home Page Handler (matches /, /home, /index.html, /server.js)
+app.get(["/", "/home", "/index.html", "/server.js"], (req, res) => {
+  // If explicitly requested as JSON without accepting HTML (e.g. backend curl/fetch)
+  const isJsonClient = req.headers["accept"] &&
+      req.headers["accept"].includes("application/json") &&
+      !req.headers["accept"].includes("text/html");
+
+  if (isJsonClient) {
+    return res.json({
+      status: "online",
+      name: "HARVION SDA Ministry Enterprise API",
+      version: "2.0.0",
+      healthCheck: "/api/health",
+      webPages: {
+        home: "/",
+        about: "/about.html",
+      },
+      endpoints: {
+        books: "/api/books",
+        orders: "/api/orders",
+        payments: "/api/payments",
+        colporteurs: "/api/colporteurs",
+        ministry: "/api/ministry",
+      },
+      serverTime: new Date().toISOString(),
+      message: "HARVION Literature Evangelism, Health & Truth Platform is active."
+    });
+  }
+
+  // Default: always serve the rich Home Portal index.html
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
@@ -94,19 +121,40 @@ app.get("/api/health", (req, res) => {
   });
 });
 
-// Mount Application Routes
+// ==========================================
+// 📦 APPLICATION API ROUTES
+// ==========================================
 app.use("/api/books", require("./routes/books"));
 app.use("/api/orders", require("./routes/orders"));
 app.use("/api/payments", require("./routes/payments"));
 app.use("/api/colporteurs", require("./routes/colporteurs"));
 app.use("/api/ministry", require("./routes/ministry"));
 
-// 404 Handler
+// ==========================================
+// 🛡️ 404 FALLBACK HANDLER
+// ==========================================
 app.use((req, res) => {
-  if (req.accepts("html")) {
-    return res.status(404).sendFile(path.join(__dirname, "public", "index.html"));
+  // If a web browser hit an unknown route, render index.html instead of a cold JSON error!
+  if (req.method === "GET" && req.accepts("html")) {
+    return res.sendFile(path.join(__dirname, "public", "index.html"));
   }
-  res.status(404).json({ success: false, message: "Endpoint not found" });
+
+  res.status(404).json({
+    success: false,
+    message: "Endpoint not found",
+    requestedUrl: req.originalUrl,
+    normalizedPath: req.url,
+    availableEndpoints: [
+      "/",
+      "/about.html",
+      "/api/health",
+      "/api/books",
+      "/api/orders",
+      "/api/payments",
+      "/api/colporteurs",
+      "/api/ministry"
+    ]
+  });
 });
 
 // Error Handler
