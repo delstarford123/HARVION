@@ -8,3 +8,4 @@ if current_dir not in sys.path:
 
 # Import the Flask application as 'application' (expected by WSGI / Phusion Passenger)
 from app import app as application
+

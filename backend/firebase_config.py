@@ -47,3 +47,4 @@ except Exception as err:
         db = firestore.client()
     except Exception:
         db = None
+

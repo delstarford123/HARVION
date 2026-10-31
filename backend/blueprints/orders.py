@@ -135,3 +135,4 @@ def update_order_status(order_id):
         return jsonify({"success": True, "message": f"Order status updated to {new_status}."})
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
+

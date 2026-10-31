@@ -150,3 +150,4 @@ def delete_book(book_id):
         return jsonify({"success": True, "message": "Book deleted successfully."})
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
+

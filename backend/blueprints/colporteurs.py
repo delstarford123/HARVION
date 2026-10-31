@@ -114,3 +114,4 @@ def record_customer_lead(code_param):
         return jsonify({"success": True, "message": "Lead recorded successfully.", "id": lead_doc.id}), 201
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
+
