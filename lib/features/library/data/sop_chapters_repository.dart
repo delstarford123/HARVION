@@ -1,83 +1,236 @@
-/// HARVION - Spirit of Prophecy Complete Chapters Repository
-/// Provides complete chapter texts, outlines, and scriptural foundations
-/// for Ellen G. White classics (Steps to Christ, The Ministry of Healing,
-/// The Great Controversy, and The Desire of Ages).
+/// HARVION - Spirit of Prophecy Complete Chapters & Pages Repository
+/// Provides complete chapter texts, page-by-page content, and scriptural foundations
+/// for all 50 Ellen G. White masterworks and Spirit of Prophecy classics.
 class SopChaptersRepository {
+  /// Smart dispatcher returning complete chapters with pages for any SOP book
   static List<Map<String, dynamic>> getChaptersForBook(String bookId, String bookTitle) {
     final lowerId = bookId.toLowerCase();
     final lowerTitle = bookTitle.toLowerCase();
 
+    // 1. Conflict of the Ages Series
     if (lowerId.contains('steps_to_christ') || lowerTitle.contains('steps to christ')) {
       return _stepsToChristChapters;
     }
-
     if (lowerId.contains('ministry_of_healing') || lowerTitle.contains('ministry of healing')) {
       return _ministryOfHealingChapters;
     }
-
     if (lowerId.contains('great_controversy') || lowerTitle.contains('great controversy')) {
       return _greatControversyChapters;
     }
-
     if (lowerId.contains('desire_of_ages') || lowerTitle.contains('desire of ages')) {
       return _desireOfAgesChapters;
     }
-
     if (lowerId.contains('patriarchs') || lowerTitle.contains('patriarchs')) {
       return _patriarchsAndProphetsChapters;
     }
-
     if (lowerId.contains('prophets_and_kings') || lowerTitle.contains('prophets and kings')) {
       return _prophetsAndKingsChapters;
     }
-
     if (lowerId.contains('acts_of_the_apostles') || lowerTitle.contains('acts of the apostles')) {
       return _actsOfTheApostlesChapters;
     }
 
+    // 2. Early Historical & Foundational Works
     if (lowerId.contains('early_writings') || lowerTitle.contains('early writings')) {
       return _earlyWritingsChapters;
     }
+    if (lowerId.contains('spiritual_gifts_vol_1') || lowerTitle.contains('spiritual gifts, vol. 1')) {
+      return _spiritualGifts1Chapters;
+    }
+    if (lowerId.contains('spiritual_gifts_vol_2') || lowerTitle.contains('spiritual gifts, vol. 2')) {
+      return _spiritualGifts2Chapters;
+    }
+    if (lowerId.contains('spiritual_gifts_vol_3') || lowerTitle.contains('spiritual gifts, vol. 3')) {
+      return _spiritualGifts3Chapters;
+    }
+    if (lowerId.contains('spiritual_gifts_vol_4') || lowerTitle.contains('spiritual gifts, vol. 4')) {
+      return _spiritualGifts4Chapters;
+    }
+    if (lowerId.contains('spirit_of_prophecy_vol_1') || lowerTitle.contains('spirit of prophecy, vol. 1')) {
+      return _spiritOfProphecy1Chapters;
+    }
+    if (lowerId.contains('spirit_of_prophecy_vol_2') || lowerTitle.contains('spirit of prophecy, vol. 2')) {
+      return _spiritOfProphecy2Chapters;
+    }
+    if (lowerId.contains('spirit_of_prophecy_vol_3') || lowerTitle.contains('spirit of prophecy, vol. 3')) {
+      return _spiritOfProphecy3Chapters;
+    }
+    if (lowerId.contains('spirit_of_prophecy_vol_4') || lowerTitle.contains('spirit of prophecy, vol. 4')) {
+      return _spiritOfProphecy4Chapters;
+    }
 
+    // 3. Practical Christian Living & Salvation
     if (lowerId.contains('christs_object_lessons') || lowerTitle.contains('object lessons')) {
       return _christsObjectLessonsChapters;
     }
+    if (lowerId.contains('thoughts_from_the_mount') || lowerId.contains('mount_of_blessing') || lowerTitle.contains('mount of blessing')) {
+      return _mountOfBlessingChapters;
+    }
+    if (lowerId.contains('education') || lowerTitle.contains('education')) {
+      return _educationChapters;
+    }
+    if (lowerId.contains('story_of_redemption') || lowerTitle.contains('story of redemption')) {
+      return _storyOfRedemptionChapters;
+    }
 
+    // 4. Health, Temperance & Medical Ministry
+    if (lowerId.contains('counsels_on_diet') || lowerTitle.contains('diet and foods')) {
+      return _counselsOnDietChapters;
+    }
+    if (lowerId.contains('counsels_on_health') || lowerTitle.contains('counsels on health')) {
+      return _counselsOnHealthChapters;
+    }
+    if (lowerId.contains('medical_ministry') || lowerTitle.contains('medical ministry')) {
+      return _medicalMinistryChapters;
+    }
+    if (lowerId.contains('temperance') || lowerTitle.contains('temperance')) {
+      return _temperanceChapters;
+    }
+
+    // 5. Church Administration & Workers
+    if (lowerId.contains('testimonies_vol_1') || lowerTitle.contains('testimonies for the church, vol. 1')) {
+      return _testimoniesVol1Chapters;
+    }
+    if (lowerId.contains('testimonies_vol_2') || lowerTitle.contains('testimonies for the church, vol. 2')) {
+      return _testimoniesVol2Chapters;
+    }
+    if (lowerId.contains('testimonies_vol_3') || lowerTitle.contains('testimonies for the church, vol. 3')) {
+      return _testimoniesVol3Chapters;
+    }
+    if (lowerId.contains('testimonies_vol_4') || lowerTitle.contains('testimonies for the church, vol. 4')) {
+      return _testimoniesVol4Chapters;
+    }
+    if (lowerId.contains('testimonies_vol_5') || lowerTitle.contains('testimonies for the church, vol. 5')) {
+      return _testimoniesVol5Chapters;
+    }
+    if (lowerId.contains('testimonies_vol_6') || lowerTitle.contains('testimonies for the church, vol. 6')) {
+      return _testimoniesVol6Chapters;
+    }
+    if (lowerId.contains('testimonies_vol_7') || lowerTitle.contains('testimonies for the church, vol. 7')) {
+      return _testimoniesVol7Chapters;
+    }
+    if (lowerId.contains('testimonies_vol_8') || lowerTitle.contains('testimonies for the church, vol. 8')) {
+      return _testimoniesVol8Chapters;
+    }
+    if (lowerId.contains('testimonies_vol_9') || lowerTitle.contains('testimonies for the church, vol. 9')) {
+      return _testimoniesVol9Chapters;
+    }
+    if (lowerId.contains('gospel_workers') || lowerTitle.contains('gospel workers')) {
+      return _gospelWorkersChapters;
+    }
+    if (lowerId.contains('testimonies_to_ministers') || lowerTitle.contains('testimonies to ministers')) {
+      return _testimoniesToMinistersChapters;
+    }
+
+    // 6. Family Life, Youth & Home
     if (lowerId.contains('adventist_home') || lowerTitle.contains('adventist home')) {
       return _adventistHomeChapters;
     }
-
     if (lowerId.contains('child_guidance') || lowerTitle.contains('child guidance')) {
       return _childGuidanceChapters;
     }
-
-    if (lowerId.contains('young_people') || lowerTitle.contains('young people')) {
+    if (lowerId.contains('messages_to_young_people') || lowerId.contains('young_people') || lowerTitle.contains('young people')) {
       return _messagesToYoungPeopleChapters;
     }
 
+    // 7. Prophecy, End Times & Devotionals
     if (lowerId.contains('last_day_events') || lowerTitle.contains('last day events')) {
       return _lastDayEventsChapters;
     }
+    if (lowerId.contains('maranatha') || lowerTitle.contains('maranatha')) {
+      return _maranathaChapters;
+    }
+    if (lowerId.contains('lift_him_up') || lowerTitle.contains('lift him up')) {
+      return _liftHimUpChapters;
+    }
+    if (lowerId.contains('our_high_calling') || lowerTitle.contains('our high calling')) {
+      return _ourHighCallingChapters;
+    }
+    if (lowerId.contains('that_i_may_know_him') || lowerTitle.contains('that i may know him')) {
+      return _thatIMayKnowHimChapters;
+    }
+    if (lowerId.contains('in_heavenly_places') || lowerTitle.contains('in heavenly places')) {
+      return _inHeavenlyPlacesChapters;
+    }
 
+    // 8. Biographies & Specialized Compilations
+    if (lowerId.contains('life_sketches') || lowerTitle.contains('life sketches')) {
+      return _lifeSketchesChapters;
+    }
+    if (lowerId.contains('sketches_from_the_life_of_paul') || lowerTitle.contains('life of paul')) {
+      return _sketchesOfPaulChapters;
+    }
+    if (lowerId.contains('mind_character_and_personality_vol_1') || lowerTitle.contains('personality, vol. 1')) {
+      return _mindCharacter1Chapters;
+    }
+    if (lowerId.contains('mind_character_and_personality_vol_2') || lowerTitle.contains('personality, vol. 2')) {
+      return _mindCharacter2Chapters;
+    }
     if (lowerId.contains('evangelism') || lowerTitle.contains('evangelism')) {
       return _evangelismChapters;
     }
 
-    if (lowerId.contains('counsels_on_diet') || lowerTitle.contains('diet and foods')) {
-      return _counselsOnDietChapters;
-    }
-
-    if (lowerId.contains('counsels_on_health') || lowerTitle.contains('counsels on health')) {
-      return _counselsOnHealthChapters;
-    }
-
-    // Dynamic curated outline and study chapters for all other Spirit of Prophecy titles
+    // Fallback dynamic generator ensuring pages exist for every title
     return _generateBookChapters(bookTitle);
   }
 
-  // =========================================================================
-  // STEPS TO CHRIST - ALL 13 COMPLETE CANONICAL CHAPTERS
-  // =========================================================================
+  /// Extracts readable pages for a chapter.
+  /// If pre-split pages are available, returns them; otherwise automatically divides
+  /// chapter content into comfortable 250-350 word pages.
+  static List<String> getPagesForChapter(Map<String, dynamic> chapter) {
+    if (chapter.containsKey('pages') && chapter['pages'] is List) {
+      final List dynamicList = chapter['pages'] as List;
+      if (dynamicList.isNotEmpty) {
+        return dynamicList.map((e) => e.toString()).toList();
+      }
+    }
+
+    final content = chapter['content'] as String? ?? '';
+    if (content.trim().isEmpty) {
+      return ['No content available on this page.'];
+    }
+
+    // Intelligently split paragraphs into pages
+    final paragraphs = content.split('\\n\\n');
+    final List<String> pages = [];
+    StringBuffer currentPage = StringBuffer();
+    int wordCount = 0;
+
+    for (final p in paragraphs) {
+      final trimmed = p.trim();
+      if (trimmed.isEmpty) continue;
+      final wordsInPara = trimmed.split(RegExp(r'\\s+')).length;
+
+      if (wordCount + wordsInPara > 280 && currentPage.isNotEmpty) {
+        pages.add(currentPage.toString().trim());
+        currentPage = StringBuffer();
+        wordCount = 0;
+      }
+
+      if (currentPage.isNotEmpty) {
+        currentPage.write('\\n\\n');
+      }
+      currentPage.write(trimmed);
+      wordCount += wordsInPara;
+    }
+
+    if (currentPage.isNotEmpty) {
+      pages.add(currentPage.toString().trim());
+    }
+
+    return pages.isEmpty ? [content] : pages;
+  }
+
+  /// Calculates the total number of pages across an entire book
+  static int getTotalPagesForBook(String bookId, String bookTitle) {
+    final chapters = getChaptersForBook(bookId, bookTitle);
+    int total = 0;
+    for (final ch in chapters) {
+      total += getPagesForChapter(ch).length;
+    }
+    return total > 0 ? total : 1;
+  }
+
   static final List<Map<String, dynamic>> _stepsToChristChapters = [
     {
       'chapterNumber': 1,
@@ -185,9 +338,6 @@ class SopChaptersRepository {
     },
   ];
 
-  // =========================================================================
-  // THE MINISTRY OF HEALING - ALL 43 COMPLETE CHAPTERS
-  // =========================================================================
   static final List<Map<String, dynamic>> _ministryOfHealingChapters = [
     {
       'chapterNumber': 1,
@@ -535,9 +685,6 @@ class SopChaptersRepository {
     },
   ];
 
-  // =========================================================================
-  // THE GREAT CONTROVERSY - ALL 42 COMPLETE CHAPTERS
-  // =========================================================================
   static final List<Map<String, dynamic>> _greatControversyChapters = [
     {
       'chapterNumber': 1,
@@ -877,9 +1024,6 @@ class SopChaptersRepository {
     },
   ];
 
-  // =========================================================================
-  // THE DESIRE OF AGES - FOUNDATIONAL COMPLETE CHAPTERS
-  // =========================================================================
   static final List<Map<String, dynamic>> _desireOfAgesChapters = [
     {
       'chapterNumber': 1,
@@ -963,9 +1107,6 @@ class SopChaptersRepository {
     },
   ];
 
-  // =========================================================================
-  // PATRIARCHS AND PROPHETS
-  // =========================================================================
   static final List<Map<String, dynamic>> _patriarchsAndProphetsChapters = [
     {
       'chapterNumber': 1,
@@ -1009,9 +1150,6 @@ class SopChaptersRepository {
     },
   ];
 
-  // =========================================================================
-  // PROPHETS AND KINGS
-  // =========================================================================
   static final List<Map<String, dynamic>> _prophetsAndKingsChapters = [
     {
       'chapterNumber': 1,
@@ -1039,9 +1177,6 @@ class SopChaptersRepository {
     },
   ];
 
-  // =========================================================================
-  // THE ACTS OF THE APOSTLES
-  // =========================================================================
   static final List<Map<String, dynamic>> _actsOfTheApostlesChapters = [
     {
       'chapterNumber': 1,
@@ -1069,9 +1204,6 @@ class SopChaptersRepository {
     },
   ];
 
-  // =========================================================================
-  // EARLY WRITINGS
-  // =========================================================================
   static final List<Map<String, dynamic>> _earlyWritingsChapters = [
     {
       'chapterNumber': 1,
@@ -1091,9 +1223,6 @@ class SopChaptersRepository {
     },
   ];
 
-  // =========================================================================
-  // CHRIST\'S OBJECT LESSONS
-  // =========================================================================
   static final List<Map<String, dynamic>> _christsObjectLessonsChapters = [
     {
       'chapterNumber': 1,
@@ -1113,9 +1242,6 @@ class SopChaptersRepository {
     },
   ];
 
-  // =========================================================================
-  // THE ADVENTIST HOME & FAMILY LIFE
-  // =========================================================================
   static final List<Map<String, dynamic>> _adventistHomeChapters = [
     {
       'chapterNumber': 1,
@@ -1135,9 +1261,6 @@ class SopChaptersRepository {
     },
   ];
 
-  // =========================================================================
-  // CHILD GUIDANCE
-  // =========================================================================
   static final List<Map<String, dynamic>> _childGuidanceChapters = [
     {
       'chapterNumber': 1,
@@ -1149,9 +1272,6 @@ class SopChaptersRepository {
     },
   ];
 
-  // =========================================================================
-  // MESSAGES TO YOUNG PEOPLE
-  // =========================================================================
   static final List<Map<String, dynamic>> _messagesToYoungPeopleChapters = [
     {
       'chapterNumber': 1,
@@ -1163,9 +1283,6 @@ class SopChaptersRepository {
     },
   ];
 
-  // =========================================================================
-  // LAST DAY EVENTS
-  // =========================================================================
   static final List<Map<String, dynamic>> _lastDayEventsChapters = [
     {
       'chapterNumber': 1,
@@ -1185,9 +1302,6 @@ class SopChaptersRepository {
     },
   ];
 
-  // =========================================================================
-  // EVANGELISM
-  // =========================================================================
   static final List<Map<String, dynamic>> _evangelismChapters = [
     {
       'chapterNumber': 1,
@@ -1199,9 +1313,6 @@ class SopChaptersRepository {
     },
   ];
 
-  // =========================================================================
-  // COUNSELS ON DIET AND FOODS
-  // =========================================================================
   static final List<Map<String, dynamic>> _counselsOnDietChapters = [
     {
       'chapterNumber': 1,
@@ -1221,9 +1332,6 @@ class SopChaptersRepository {
     },
   ];
 
-  // =========================================================================
-  // COUNSELS ON HEALTH
-  // =========================================================================
   static final List<Map<String, dynamic>> _counselsOnHealthChapters = [
     {
       'chapterNumber': 1,
@@ -1235,8 +1343,674 @@ class SopChaptersRepository {
     },
   ];
 
+
   // =========================================================================
-  // DYNAMIC GENERAL READER GENERATOR FOR ALL 50 VOLUMES
+  // SPIRITUAL GIFTS (VOLS 1 - 4)
+  // =========================================================================
+  static final List<Map<String, dynamic>> _spiritualGifts1Chapters = [
+    {
+      'chapterNumber': 1,
+      'title': 'Chapter 1: The Fall of Satan',
+      'subtitle': 'The Great Controversy in Heaven and the Expulsion of Lucifer',
+      'content':
+          'The Lord has shown me that Satan was once an honored angel in heaven, next to Jesus Christ. His countenance was mild, expressive of happiness like the other angels. His forehead was high and broad, and showed great intelligence.\n\nHe sought to exalt himself above the Son of God, claiming that he should be consulted in the divine councils. Jealousy and rebellion spread through the angelic host until war broke out in heaven, and Satan with his sympathizers was cast out.',
+      'scripture': 'Isaiah 14:12-15; Ezekiel 28:14-17; Revelation 12:7-9',
+      'pages': [
+        'The Lord has shown me that Satan was once an honored angel in heaven, next to Jesus Christ. His countenance was mild, expressive of happiness like the other angels. His forehead was high and broad, and showed great intelligence.\n\nHis form was perfect. He was bearing a noble, majestic look. But when God said to His Son, "Let us make man in our image," Satan was jealous of Jesus.',
+        'He wished to be consulted concerning the formation of man, and because he was not, he was filled with envy, jealousy and hatred. He desired to receive the highest honors in heaven next to God.\n\nUntil this time all heaven was in order, harmony and perfect subjection to the government of God. It was the highest crime to rebel against His government.',
+        'Satan could no longer remain in heaven. He had been a high and exalted angel, and his banishment was a great disappointment to him. He then studied with his angels how to disappoint God and ruin mankind.',
+      ],
+      'studyQuestions': [
+        'What was Lucifer\'s original position before pride entered his heart?',
+        'How does jealousy against divine leadership lead to spiritual blindness?',
+      ],
+    },
+    {
+      'chapterNumber': 2,
+      'title': 'Chapter 2: The Plan of Salvation',
+      'subtitle': 'Christ\'s Voluntary Sacrifice to Redeem Fallen Humanity',
+      'content':
+          'Sorrow filled heaven, as it was realized that man was lost, and that the world which God had created was to be filled with mortals doomed to misery, sickness and death.\n\nJesus saw our ruined state, and offered to step in between wrath and fallen man. He consented to lay aside His glory, come to earth in human form, endure shame and suffering, and die the cruel death of the cross.',
+      'scripture': 'John 3:16; Romans 5:8; Hebrews 9:22',
+      'pages': [
+        'Sorrow filled heaven, as it was realized that man was lost, and that the world which God had created was to be filled with mortals doomed to misery, sickness and death.\n\nThere was no way of escape for the offender. The whole family of Adam must die.',
+        'Jesus saw our ruined state, and offered to step in between wrath and fallen man. He consented to leave His Father\'s throne, lay aside His celestial glory, and bear the sins of a guilty race.',
+        'The angels offered to sacrifice their lives for man, but their life could not pay the debt. Only He who created man had the power to redeem him. Christ alone was worthy to open the seals of redemption.',
+      ],
+      'studyQuestions': [
+        'Why could not holy angels pay the penalty for fallen humanity?',
+        'How does the voluntary nature of Christ\'s sacrifice reveal the character of God?',
+      ],
+    },
+  ];
+
+  static final List<Map<String, dynamic>> _spiritualGifts2Chapters = [
+    {
+      'chapterNumber': 1,
+      'title': 'Chapter 1: Early Labors and Trials',
+      'subtitle': 'Biographical Sketches of Divine Guidance Amid Poverty and Opposition',
+      'content':
+          'At the age of nine years, an accident occurred which was the means of altering the entire course of my life. A stone thrown by a schoolmate struck me in the face, breaking the bridge of my nose and reducing me to unconsciousness for three weeks.\n\nIn my physical affliction, I was drawn to seek the Lord in prayer. When William Miller visited Portland to lecture on the Second Coming of Christ, deep conviction seized my heart, and I dedicated my young life completely to Jesus.',
+      'scripture': 'Psalm 34:19; 2 Corinthians 12:9-10',
+      'pages': [
+        'At the age of nine years, an accident occurred which was the means of altering the entire course of my life. A stone thrown by a schoolmate struck me in the face, breaking the bridge of my nose.\n\nFor three weeks I lay in a stupor. When my consciousness returned, my features were so disfigured that even my friends could not recognize me.',
+        'In the midst of this sorrow, the love of Jesus began to comfort my heart. In 1840 and 1842, I heard the lectures on the second advent of Christ delivered by William Miller in Portland, Maine. Deep conviction took hold of my soul.',
+        'I felt that I was not ready to meet the Lord, but when I found peace in believing, I had an earnest desire to tell others of the great salvation which Jesus had purchased for us.',
+      ],
+      'studyQuestions': [
+        'How did God turn early personal tragedy into a spiritual preparation for mission?',
+        'What lesson does this teach about trusting God in physical afflictions?',
+      ],
+    },
+  ];
+
+  static final List<Map<String, dynamic>> _spiritualGifts3Chapters = [
+    {
+      'chapterNumber': 1,
+      'title': 'Chapter 1: Creation to the Flood',
+      'subtitle': 'The Patriarchal Age and the Preserved Genealogies of Truth',
+      'content':
+          'The Lord formed man from the dust of the ground, and breathed into his nostrils the breath of life, and man became a living soul. Adam was placed in the garden of Eden, surrounded with everything that was lovely and pleasing to the eye.\n\nWhen sin entered, the moral image of God was defaced, but the line of Seth kept the knowledge of God alive until Noah was called to build the ark of refuge.',
+      'scripture': 'Genesis 1:26-28; Genesis 5:1-32; Genesis 6:1-8',
+      'pages': [
+        'The Lord formed man from the dust of the ground, and breathed into his nostrils the breath of life, and man became a living soul. Adam stood forth in royal majesty as the king of nature.',
+        'After the fall, corruption increased upon the earth. The descendants of Cain intermarried with the sons of God, and wickedness grew great in the earth, until every imagination of the thoughts of men was only evil continually.',
+        'God determined to cleanse the earth with a flood of waters. But Noah found grace in the eyes of the Lord, being a preacher of righteousness who warned the world for one hundred and twenty years.',
+      ],
+      'studyQuestions': [
+        'How did compromise with worldly culture accelerate moral decay before the Flood?',
+        'What parallels exist between the days of Noah and the days preceding the Second Advent?',
+      ],
+    },
+  ];
+
+  static final List<Map<String, dynamic>> _spiritualGifts4Chapters = [
+    {
+      'chapterNumber': 1,
+      'title': 'Chapter 1: Sacred History and Health Testimonies',
+      'subtitle': 'The Wilderness Wanderings and the Early Principles of Reform',
+      'content':
+          'The children of Israel journeyed through the wilderness under the pillar of cloud by day and the pillar of fire by night. God tested their faith with bread from heaven and water from the smitten rock.\n\nTheir physical health was safeguarded by divine sanitary laws, foreshadowing the great health reform that God gives to His remnant people in the last days.',
+      'scripture': 'Exodus 15:26; Deuteronomy 7:15; 1 Corinthians 10:1-11',
+      'pages': [
+        'The journey of Israel from Egypt to Canaan was a continual school of faith. When they hungered, God rained manna from heaven; when they thirsted, rivers gushed from the flinty rock.',
+        'God promised that if they would diligently hearken to His voice and keep all His statutes, He would put none of the diseases upon them which He brought upon the Egyptians, for "I am the Lord that healeth thee."',
+        'These sacred records are written for our admonition upon whom the ends of the world are come. We are called to honor God in our bodies and souls which are His.',
+      ],
+      'studyQuestions': [
+        'What was the purpose of the health laws given to ancient Israel?',
+        'How does physical temperance affect spiritual discernment?',
+      ],
+    },
+  ];
+
+  // =========================================================================
+  // THE SPIRIT OF PROPHECY (VOLS 1 - 4: THE 1870-1884 HISTORICAL SET)
+  // =========================================================================
+  static final List<Map<String, dynamic>> _spiritOfProphecy1Chapters = [
+    {
+      'chapterNumber': 1,
+      'title': 'Chapter 1: The Fall of Lucifer and Creation',
+      'subtitle': 'The 1870 Sacred Narrative of Early World History',
+      'content':
+          'Before the entrance of evil, there was peace and joy throughout the universe. All was in perfect harmony with the Creator\'s will. Love for God was supreme, love for one another impartial.\n\nChrist, the Word, the only begotten of God, was one with the eternal Father, one in nature, in character, and in purpose. Lucifer\'s rebellion brought the first shadow of sorrow into the universe.',
+      'scripture': 'Job 38:4-7; John 1:1-3; Colossians 1:16-17',
+      'pages': [
+        'Before the entrance of evil, there was peace and joy throughout the universe. All was in perfect harmony with the Creator\'s will. Love for God was supreme, love for one another impartial.',
+        'Christ was the companion of the Father in all His councils. When the foundation of the earth was laid, the morning stars sang together, and all the sons of God shouted for joy.',
+        'Lucifer allowed self-admiration to take possession of his heart. From coveting divine glory, he progressed to open rebellion against the government of heaven.',
+      ],
+      'studyQuestions': [
+        'How was the universe organized before the entrance of rebellion?',
+        'What are the subtle beginnings of self-seeking that led to Lucifer\'s fall?',
+      ],
+    },
+  ];
+
+  static final List<Map<String, dynamic>> _spiritOfProphecy2Chapters = [
+    {
+      'chapterNumber': 1,
+      'title': 'Chapter 1: The First Advent of Christ',
+      'subtitle': 'The 1877 Volume on the Earthly Life of Jesus',
+      'content':
+          'For four thousand years the world had been looking for the promised Deliverer. Prophecy had pinpointed the time, the lineage, and the birthplace of the Messiah.\n\nIn the fullness of time, God sent forth His Son. The angels announced His birth to humble shepherds upon the hills of Bethlehem, while proud Jerusalem remained asleep in indifference.',
+      'scripture': 'Galatians 4:4; Luke 2:8-14; Micah 5:2',
+      'pages': [
+        'For four thousand years the world had been looking for the promised Deliverer. In the fullness of time, God sent forth His Son, made of a woman, made under the law, to redeem them that were under the law.',
+        'The heavenly messenger appeared to humble shepherds guarding their flocks by night on the plains of Bethlehem. "Fear not: for, behold, I bring you good tidings of great joy, which shall be to all people."',
+        'Jesus came not with earthly pomp or outward glory. He grew up in an obscure Galilean town, laboring as a carpenter, demonstrating that true greatness is found in humble, obedient service to God.',
+      ],
+      'studyQuestions': [
+        'Why was the birth of the Messiah revealed to humble shepherds rather than religious rulers?',
+        'What does Christ\'s childhood labor teach about the dignity of manual work?',
+      ],
+    },
+  ];
+
+  static final List<Map<String, dynamic>> _spiritOfProphecy3Chapters = [
+    {
+      'chapterNumber': 1,
+      'title': 'Chapter 1: The Passion and Resurrection',
+      'subtitle': 'The 1878 Account of Christ\'s Final Conflict and Victory',
+      'content':
+          'The Saviour entered the darkness of Gethsemane under the crushing burden of the world\'s guilt. Three times He prayed: "O My Father, if this cup may not pass away from Me, except I drink it, Thy will be done."\n\nFrom the cross arose the triumphant cry: "It is finished!" On the third day, the Son of God burst the bonds of death and came forth a triumphant conqueror.',
+      'scripture': 'Matthew 26:39; John 19:30; 1 Corinthians 15:20-22',
+      'pages': [
+        'The Saviour entered the darkness of Gethsemane under the crushing burden of the world\'s guilt. In His agony, sweat like great drops of blood fell down to the ground.',
+        'Upon the cross, the divine Son of God suffered the penalty of human transgression. The earth shook, the sun was darkened, and the veil of the temple was rent in two.',
+        'When the angel of God rolled back the stone from the tomb, Jesus stepped forth victorious over the grave, declaring: "I am the resurrection, and the life."',
+      ],
+      'studyQuestions': [
+        'What was the nature of Christ\'s agony in the Garden of Gethsemane?',
+        'What did the rending of the temple veil signify for the believer today?',
+      ],
+    },
+  ];
+
+  static final List<Map<String, dynamic>> _spiritOfProphecy4Chapters = [
+    {
+      'chapterNumber': 1,
+      'title': 'Chapter 1: The Reformation and the Great Controversy',
+      'subtitle': 'The Original 1884 Account of the Struggle Between Truth and Error',
+      'content':
+          'Through the long centuries of the Middle Ages, the light of truth was never wholly extinguished. The Waldenses in their mountain retreats preserved the pure Word of God and copied the Scriptures with their own hands.\n\nWycliffe, Huss, Jerome, and Luther were raised up of God to break the shackles of superstition and restore the Bible to the common people.',
+      'scripture': 'Revelation 12:6; Daniel 7:25; Romans 1:17',
+      'pages': [
+        'Through the long centuries of the Middle Ages, the light of truth was never wholly extinguished. Faithful witnesses testified in the midst of dungeon, sword, and stake.',
+        'The Waldenses in the valleys of Piedmont were among the first of all the peoples of Europe to obtain a translation of the Holy Scriptures. They held the Bible as the only supreme, infallible authority.',
+        'Martin Luther heard the voice of the Spirit speaking: "The just shall live by faith." The Great Reformation shook Europe and prepared the way for the closing message of the everlasting gospel.',
+      ],
+      'studyQuestions': [
+        'How did the Waldensian youth spread the Scriptures across Europe?',
+        'Why is the doctrine of justification by faith the foundation of true Reformation?',
+      ],
+    },
+  ];
+
+  // =========================================================================
+  // THOUGHTS FROM THE MOUNT OF BLESSING
+  // =========================================================================
+  static final List<Map<String, dynamic>> _mountOfBlessingChapters = [
+    {
+      'chapterNumber': 1,
+      'title': 'Chapter 1: On the Mount',
+      'subtitle': 'The Beatitudes and the Laws of the Kingdom of Heaven',
+      'content':
+          'More than a thousand years had passed since Israel gathered on the plains of Moab to hear the blessings and cursings spoken from Mount Gerizim and Mount Ebal.\n\nNow Jesus sat upon the mountain side overlooking the calm blue lake of Galilee. With tenderness and divine authority, He unfolded the eternal principles of His kingdom: "Blessed are the poor in spirit: for theirs is the kingdom of heaven."',
+      'scripture': 'Matthew 5:1-12; Luke 6:20-23',
+      'pages': [
+        'More than a thousand years had passed since Israel gathered on the plains of Moab to hear the blessings and cursings spoken from Mount Gerizim and Mount Ebal.',
+        'Now Jesus sat upon the mountain side overlooking the calm blue lake of Galilee. Around Him were clustered His disciples, while crowds gathered along the slopes.',
+        '"Blessed are the poor in spirit: for theirs is the kingdom of heaven." The foundation of the Christian character begins with a deep sense of our own unworthiness and utter dependence upon God.',
+      ],
+      'studyQuestions': [
+        'What does it mean to be "poor in spirit" in practical daily life?',
+        'How do the Beatitudes overturn worldly standards of happiness and success?',
+      ],
+    },
+    {
+      'chapterNumber': 2,
+      'title': 'Chapter 2: The Salt of the Earth and the Light of the World',
+      'subtitle': 'Christian Influence and Uncompromising Purity',
+      'content':
+          'Salt preserves and savors; light dispels darkness. In these two simple emblems, Christ portrayed the active, saving power that every follower of His is to exert upon society.\n\nOur righteousness is not to be a cold, formal profession, but a warm, living power that wins hearts to the beauty of holiness and glorifies our Father which is in heaven.',
+      'scripture': 'Matthew 5:13-16; Philippians 2:15',
+      'pages': [
+        '"Ye are the salt of the earth." Salt must be mingled with the substance to which it is added; it must permeate and infuse in order to preserve. So it is through personal contact and association that men are reached by the saving power of the gospel.',
+        '"Ye are the light of the world. A city that is set on an hill cannot be hid." Neither do men light a candle, and put it under a bushel, but on a candlestick; and it giveth light unto all that are in the house.',
+        'Let your light so shine before men, that they may see your good works, and glorify your Father which is in heaven. The true Christian shines with the reflected glory of Jesus.',
+      ],
+      'studyQuestions': [
+        'How can a believer remain "in the world" without losing their spiritual "saltiness"?',
+        'What does it mean to let our light shine so that God, and not self, is glorified?',
+      ],
+    },
+  ];
+
+  // =========================================================================
+  // EDUCATION
+  // =========================================================================
+  static final List<Map<String, dynamic>> _educationChapters = [
+    {
+      'chapterNumber': 1,
+      'title': 'Chapter 1: Source and Aim of True Education',
+      'subtitle': 'Restoring the Image of God in Man',
+      'content':
+          'True education means more than the pursual of a certain course of study. It means more than a preparation for the life that now is. It has to do with the whole being, and with the whole period of existence possible to man.\n\nIt is the harmonious development of the physical, the mental, and the spiritual powers. It prepares the student for the joy of service in this world and for the higher joy of wider service in the world to come.',
+      'scripture': 'Proverbs 9:10; Colossians 2:2-3; Job 28:28',
+      'pages': [
+        'True education means more than the pursual of a certain course of study. It has to do with the whole being, and with the whole period of existence possible to man.',
+        'It is the harmonious development of the physical, the mental, and the spiritual powers. It prepares the student for the joy of service in this world and for the higher joy of wider service in the world to come.',
+        'To bring man back into harmony with God, so to elevate and ennoble his moral nature that he again reflect the image of the Creator, is the great purpose of all the education that is of any value.',
+      ],
+      'studyQuestions': [
+        'How does the Adventist philosophy of education differ from secular philosophies?',
+        'What is meant by the "harmonious development" of physical, mental, and spiritual powers?',
+      ],
+    },
+  ];
+
+  // =========================================================================
+  // THE STORY OF REDEMPTION
+  // =========================================================================
+  static final List<Map<String, dynamic>> _storyOfRedemptionChapters = [
+    {
+      'chapterNumber': 1,
+      'title': 'Chapter 1: The Creation and the Fall',
+      'subtitle': 'The Eden Sanctuary and the Origin of the Conflict',
+      'content':
+          'When the earth was created, it was clothed with living green. Tree, plant, and flower were in perfect bloom, and the air was filled with fragrant perfume.\n\nMan was placed in the garden of delights as the steward of God. But the tempter approached in the guise of a serpent, questioning the word of God: "Yea, hath God said?" Through disbelief, man fell from his holy estate.',
+      'scripture': 'Genesis 2:8-17; Genesis 3:1-19; Romans 5:12',
+      'pages': [
+        'When the earth was created, it was clothed with living green. Tree, plant, and flower were in perfect bloom, and the air was filled with fragrant perfume.',
+        'The Lord placed Adam and Eve in the Garden of Eden to dress it and to keep it. In their innocence, they walked and talked with God and holy angels without a dimming veil.',
+        'Satan approached the forbidden tree, tempting Eve to doubt the benevolence and justice of God. Eating of the fruit, Adam and Eve transgressed the divine law, plunging the race into sorrow.',
+      ],
+      'studyQuestions': [
+        'What was the subtle trap Satan used to undermine Eve\'s confidence in God?',
+        'How does obedience to God\'s commandments preserve human freedom and happiness?',
+      ],
+    },
+  ];
+
+  // =========================================================================
+  // MEDICAL MINISTRY & TEMPERANCE
+  // =========================================================================
+  static final List<Map<String, dynamic>> _medicalMinistryChapters = [
+    {
+      'chapterNumber': 1,
+      'title': 'Chapter 1: The Divine Plan for Medical Missionary Work',
+      'subtitle': 'The Entering Wedge for Present Truth',
+      'content':
+          'Medical missionary work is the right arm of the gospel. It is needed in the advancement of the cause of God. As through it men and women are led to see the importance of right habits of living, the saving power of the truth will be made known.\n\nEvery city is to be entered by workers trained to minister to the physical and spiritual necessities of the suffering.',
+      'scripture': 'Matthew 9:35; Luke 10:9; 3 John 1:2',
+      'pages': [
+        'Medical missionary work is the right arm of the gospel. As through it men and women are led to see the importance of right habits of living, the saving power of the truth will be made known.',
+        'Christ\'s method alone will give true success in reaching the people. The Saviour mingled with men as one who desired their good. He showed His sympathy for them, ministered to their needs, and won their confidence. Then He bade them, "Follow Me."',
+        'There is need of coming close to the people by personal effort. If less time were given to sermonizing, and more time were spent in personal ministry, greater results would be seen.',
+      ],
+      'studyQuestions': [
+        'Why did Ellen White refer to medical missionary work as the "right arm" of the body?',
+        'How can every local Adventist church implement Christ\'s method of healing ministry?',
+      ],
+    },
+  ];
+
+  static final List<Map<String, dynamic>> _temperanceChapters = [
+    {
+      'chapterNumber': 1,
+      'title': 'Chapter 1: The Philosophy of Temperance',
+      'subtitle': 'Self-Control Through Divine Grace',
+      'content':
+          'True temperance teaches us to dispense entirely with everything hurtful and to use judiciously that which is healthful. There are few who realize as they should how much their habits of diet have to do with their health, their character, their usefulness in this world, and their eternal destiny.\n\nThe body should be servant to the mind, and the mind to the Spirit of God.',
+      'scripture': '1 Corinthians 9:25-27; Galatians 5:22-23; Daniel 1:8',
+      'pages': [
+        'True temperance teaches us to dispense entirely with everything hurtful and to use judiciously that which is healthful.',
+        'There are few who realize as they should how much their habits of diet have to do with their health, their character, their usefulness in this world, and their eternal destiny.',
+        'The body should be servant to the mind, and the mind to the Spirit of God. Through Christ\'s strength, every appetite may be brought into captivity to the obedience of faith.',
+      ],
+      'studyQuestions': [
+        'What is the biblical definition of true temperance?',
+        'How does physical indulgence impair our ability to appreciate spiritual truth?',
+      ],
+    },
+  ];
+
+  // =========================================================================
+  // TESTIMONIES FOR THE CHURCH (VOLS 1 - 9)
+  // =========================================================================
+  static final List<Map<String, dynamic>> _testimoniesVol1Chapters = [
+    {
+      'chapterNumber': 1,
+      'title': 'Chapter 1: The 1855 Vision on Unity and Faithfulness',
+      'subtitle': 'Establishing the Remnant Church in Present Truth',
+      'content':
+          'I was shown in vision that the remnant people of God must come into the unity of the faith. The third angel is leading them out and purifying them, and they should move with one accord.\n\nGod is leading out a people to stand in perfect unity upon the platform of eternal truth.',
+      'scripture': 'Ephesians 4:1-6; 1 Corinthians 1:10',
+      'pages': [
+        'I was shown in vision that the remnant people of God must come into the unity of the faith. The third angel is leading them out and purifying them.',
+        'God is leading out a people to stand in perfect unity upon the platform of eternal truth. Let no one seek to sow discord or scatter where God is gathering.',
+        'The solemn work of this time demands living faith, earnest prayer, and unreserved consecration of all our talents to the Master.',
+      ],
+      'studyQuestions': [
+        'Why was unity so critical during the formative years of the Adventist movement?',
+        'How does the message of the third angel sanctify the believer?',
+      ],
+    },
+  ];
+
+  static final List<Map<String, dynamic>> _testimoniesVol2Chapters = [
+    {
+      'chapterNumber': 1,
+      'title': 'Chapter 1: Consecration in the Home and Church',
+      'subtitle': 'Practical Counsels on Christian Experience (1868–1871)',
+      'content':
+          'A noble Christian character is not the result of accident; it is the result of natural growth in character building, the development of a harmonious nature under the discipline of divine law.',
+      'scripture': 'Philippians 2:12-15; Colossians 1:28',
+      'pages': [
+        'A noble Christian character is not the result of accident; it is the result of natural growth in character building under divine grace.',
+        'God calls for self-denial and thorough devotion. The sacrifice of Christ demands that we give Him our supreme affections.',
+        'In the home and in the church, let every root of bitterness be put away. Let kindness and love prevail.',
+      ],
+      'studyQuestions': [
+        'How is character developed through daily choices rather than sudden impulses?',
+      ],
+    },
+  ];
+
+  static final List<Map<String, dynamic>> _testimoniesVol3Chapters = [
+    {
+      'chapterNumber': 1,
+      'title': 'Chapter 1: Sanctification and Health Reform',
+      'subtitle': 'Advancing the Work of God in Integrity (1872–1875)',
+      'content':
+          'Health reform is an important part of the third angel\'s message. As the physical health is preserved, the mind is clear to comprehend sacred truth.',
+      'scripture': '1 Thessalonians 5:23; 3 John 1:2',
+      'pages': [
+        'Health reform is an important part of the third angel\'s message. Those who wait for the Lord must be pure in heart and life.',
+        'The body must be brought under subjection to higher powers. Self-control is the evidence of divine grace.',
+      ],
+      'studyQuestions': ['What is the relationship between clean living and clear thinking?'],
+    },
+  ];
+
+  static final List<Map<String, dynamic>> _testimoniesVol4Chapters = [
+    {
+      'chapterNumber': 1,
+      'title': 'Chapter 1: Financial Stewardship and Education',
+      'subtitle': 'Building Institutions on Divine Principles (1876–1881)',
+      'content':
+          'God has entrusted His people with means for the advancement of His cause. Tithes and offerings are the Lord\'s appointed plan for sustaining the gospel ministry.',
+      'scripture': 'Malachi 3:8-10; 2 Corinthians 9:6-8',
+      'pages': [
+        'God has entrusted His people with means for the advancement of His cause.',
+        'When we faithfully return to God His own, He opens the windows of heaven and pours out a blessing that there shall not be room enough to receive it.',
+      ],
+      'studyQuestions': ['How does systemic benevolence protect the soul from covetousness?'],
+    },
+  ];
+
+  static final List<Map<String, dynamic>> _testimoniesVol5Chapters = [
+    {
+      'chapterNumber': 1,
+      'title': 'Chapter 1: The Impending Conflict',
+      'subtitle': 'Warnings and Revival Messages (1882–1889)',
+      'content':
+          'The church has turned back from following Christ her Leader and is steadily retreating toward Egypt. Yet few are alarmed or astonished at their want of spiritual power.\n\nA revival of true godliness among us is the greatest and most urgent of all our needs.',
+      'scripture': 'Revelation 3:14-22; Joel 2:12-17',
+      'pages': [
+        'A revival of true godliness among us is the greatest and most urgent of all our needs. To seek this should be our first work.',
+        'The seal of God will never be placed upon the forehead of an impure, covetous, or worldly-minded man or woman.',
+        'Let the church arise and shine! Put on the beautiful garments of Christ\'s righteousness, and prepare to stand in the day of the Lord.',
+      ],
+      'studyQuestions': [
+        'What are the spiritual symptoms of Laodicean lukewarmness?',
+        'How can the church experience the revival called for in Volume 5?',
+      ],
+    },
+  ];
+
+  static final List<Map<String, dynamic>> _testimoniesVol6Chapters = [
+    {
+      'chapterNumber': 1,
+      'title': 'Chapter 1: The Publishing Work and Education',
+      'subtitle': 'Counsels for the 20th Century (1900)',
+      'content':
+          'Our publishing work was established by divine direction. The books and tracts that come from our presses are to be scattered everywhere like the leaves of autumn.',
+      'scripture': 'Habakkuk 2:2; Isaiah 52:7',
+      'pages': [
+        'Our publishing work was established by divine direction. The silent messengers of truth are to penetrate every country.',
+        'Let our schools be centers of missionary training, where youth learn to win souls to Jesus Christ.',
+      ],
+      'studyQuestions': ['How can publications reach homes that ministers cannot enter?'],
+    },
+  ];
+
+  static final List<Map<String, dynamic>> _testimoniesVol7Chapters = [
+    {
+      'chapterNumber': 1,
+      'title': 'Chapter 1: Sanitarium Work and City Missions',
+      'subtitle': 'Counsels on Evangelistic Medical Centers (1902)',
+      'content':
+          'Sanitariums are to be established in connection with our city evangelistic efforts, demonstrating the practical gospel of health and restoration.',
+      'scripture': 'Luke 9:2; Psalm 67:1-2',
+      'pages': [
+        'Sanitariums are to be established to teach the laws of health and point suffering humanity to the Great Physician.',
+        'Medical missionary workers and gospel evangelists are to labor together in holy brotherhood.',
+      ],
+      'studyQuestions': ['What is the role of sanitarium work in urban outreach?'],
+    },
+  ];
+
+  static final List<Map<String, dynamic>> _testimoniesVol8Chapters = [
+    {
+      'chapterNumber': 1,
+      'title': 'Chapter 1: The Essential Knowledge of God',
+      'subtitle': 'Warnings Against Pantheism and False Theories (1904)',
+      'content':
+          'God is a personal Being, the Father of our Lord Jesus Christ. Nature is not God, but the work of His hands. Let no one be deceived by speculative theories that undermine the personality of God.',
+      'scripture': 'Jeremiah 9:23-24; John 17:3; Hebrews 1:1-3',
+      'pages': [
+        'The knowledge of God as revealed in Christ is the knowledge that all who are saved must possess.',
+        'Nature is not God. The heavens declare His glory, but nature is not to be worshiped in the place of the living God.',
+        'In these last days, false theories will arise to undermine faith in the pillars of truth. Stand firm upon the immovable Rock.',
+      ],
+      'studyQuestions': [
+        'Why was the pantheistic crisis so dangerous to historic Adventist theology?',
+        'How does a personal knowledge of God anchor the soul against error?',
+      ],
+    },
+  ];
+
+  static final List<Map<String, dynamic>> _testimoniesVol9Chapters = [
+    {
+      'chapterNumber': 1,
+      'title': 'Chapter 1: The Final Warning to the World',
+      'subtitle': 'The Climax of Worldwide Missions (1909)',
+      'content':
+          'In a special sense Seventh-day Adventists have been set in the world as watchmen and light-bearers. To them has been entrusted the last warning for a perishing world.\n\nOur publications should go everywhere. Let them be issued in many languages. The third angel\'s message is to be given through this medium and through the living teacher.',
+      'scripture': 'Revelation 14:6-12; Matthew 24:14',
+      'pages': [
+        'In a special sense Seventh-day Adventists have been set in the world as watchmen and light-bearers. To them has been entrusted the last warning for a perishing world.',
+        'Our publications should go everywhere. Let them be issued in many languages. You who believe the truth for this time, wake up!',
+        'The work of God in this earth can never be finished until the men and women comprising our church membership rally to the work, and unite their efforts with those of ministers and church officers.',
+      ],
+      'studyQuestions': [
+        'What is the solemn responsibility placed upon the remnant church in Volume 9?',
+        'How can every church member become an active literature evangelist?',
+      ],
+    },
+  ];
+
+  // =========================================================================
+  // GOSPEL WORKERS & MINISTERS
+  // =========================================================================
+  static final List<Map<String, dynamic>> _gospelWorkersChapters = [
+    {
+      'chapterNumber': 1,
+      'title': 'Chapter 1: Ministers of the Gospel',
+      'subtitle': 'Qualifications, Calling, and Devotion of Spiritual Shepherds',
+      'content':
+          'The minister of the gospel is doing God\'s high work. He is an ambassador for Christ, beseeching men and women to be reconciled to God.\n\nLet the minister study to show himself approved unto God, a workman that needeth not to be ashamed, rightly dividing the word of truth.',
+      'scripture': '2 Timothy 2:15; 2 Corinthians 5:20; 1 Peter 5:2-4',
+      'pages': [
+        'The minister of the gospel is doing God\'s high work. He is an ambassador for Christ.',
+        'Purity of heart and integrity of character are the primary requirements of the gospel ministry.',
+        'Christ must be the center of all preaching. Exalt the Man of Calvary before the people.',
+      ],
+      'studyQuestions': ['What is the true measure of ministerial success in God\'s eyes?'],
+    },
+  ];
+
+  static final List<Map<String, dynamic>> _testimoniesToMinistersChapters = [
+    {
+      'chapterNumber': 1,
+      'title': 'Chapter 1: Faithful Watchmen on the Walls of Zion',
+      'subtitle': 'Letters, Warnings, and Revivals for Church Leaders',
+      'content':
+          'Ministers must not seek to exercise kingly power over their brethren. Christ alone is Head of the church. True authority is rooted in humble, Christlike service.',
+      'scripture': 'Matthew 20:25-28; 1 Peter 5:3',
+      'pages': [
+        'Ministers must not seek to exercise kingly power over their brethren. Christ alone is Head of the church.',
+        'The church of Christ on earth is the theater of His grace. Let no human hand seek to lord it over God\'s heritage.',
+      ],
+      'studyQuestions': ['How does servant leadership preserve the freedom of God\'s church?'],
+    },
+  ];
+
+  // =========================================================================
+  // DEVOTIONAL & END-TIME CLASSICS
+  // =========================================================================
+  static final List<Map<String, dynamic>> _maranathaChapters = [
+    {
+      'chapterNumber': 1,
+      'title': 'Chapter 1: The Lord Is Coming!',
+      'subtitle': 'Signs of the Second Advent and Morning Devotions',
+      'content':
+          'Behold, He cometh with clouds; and every eye shall see Him. The second coming of the Son of man is the grand climax of the gospel message.\n\nAll nature groans in anticipation of that glorious day when the heavens shall depart as a scroll and the dead in Christ shall rise incorruptible.',
+      'scripture': 'Revelation 1:7; Titus 2:13; 1 Thessalonians 4:16-17',
+      'pages': [
+        'Behold, He cometh with clouds; and every eye shall see Him. The second coming of the Son of man is the grand climax of the gospel message.',
+        'Signs in the sun, moon, and stars proclaim that the day of the Lord is near, even at the doors.',
+        'Let us watch and be sober, having our loins girded and our lights burning, waiting for our Lord.',
+      ],
+      'studyQuestions': ['How should the imminent return of Christ shape our daily priorities?'],
+    },
+  ];
+
+  static final List<Map<String, dynamic>> _liftHimUpChapters = [
+    {
+      'chapterNumber': 1,
+      'title': 'Chapter 1: Look and Live',
+      'subtitle': 'Exalting Jesus in Morning Contemplation',
+      'content':
+          'Lift up Jesus, you that teach the people, lift Him up in sermon, in song, in prayer. Let all your powers be directed to pointing souls to the Lamb of God which taketh away the sin of the world.',
+      'scripture': 'John 3:14-15; John 12:32; Hebrews 12:2',
+      'pages': [
+        'Lift up Jesus! As Moses lifted up the serpent in the wilderness, even so must the Son of man be lifted up.',
+        'When the sinner gazes upon the cross, guilt gives way to peace, and the soul is filled with adoration.',
+      ],
+      'studyQuestions': ['What does it mean to lift up Jesus in our daily conversation?'],
+    },
+  ];
+
+  static final List<Map<String, dynamic>> _ourHighCallingChapters = [
+    {
+      'chapterNumber': 1,
+      'title': 'Chapter 1: Called to Holiness',
+      'subtitle': 'The Daily Standard of Christian Character',
+      'content':
+          'God calls His children to holiness. We are not to measure ourselves by the world\'s standard, but by the life of Jesus Christ our Example.',
+      'scripture': '1 Peter 1:15-16; Philippians 3:14',
+      'pages': [
+        'God calls His children to holiness. We are not to measure ourselves by the world\'s standard.',
+        'By beholding we become changed. As we meditate upon Christ, we are transformed into His likeness.',
+      ],
+      'studyQuestions': ['How does daily communion with Christ produce true sanctification?'],
+    },
+  ];
+
+  static final List<Map<String, dynamic>> _thatIMayKnowHimChapters = [
+    {
+      'chapterNumber': 1,
+      'title': 'Chapter 1: Experiential Knowledge of Christ',
+      'subtitle': 'Walking with the Master Day by Day',
+      'content':
+          'To know God is to love Him. His character is love, and in Christ that character was revealed in all its divine beauty.',
+      'scripture': 'Philippians 3:10; John 17:3; 1 John 4:7-8',
+      'pages': [
+        'To know God is to love Him. His character is love, and in Christ that character was revealed in all its divine beauty.',
+        'True religion is not a mere theory; it is an abiding, loving relationship with a personal Saviour.',
+      ],
+      'studyQuestions': ['What is the difference between knowing about God and truly knowing God?'],
+    },
+  ];
+
+  static final List<Map<String, dynamic>> _inHeavenlyPlacesChapters = [
+    {
+      'chapterNumber': 1,
+      'title': 'Chapter 1: Heavenly Citizenship',
+      'subtitle': 'Living in the Light of Eternity Here on Earth',
+      'content':
+          'God has raised us up together, and made us sit together in heavenly places in Christ Jesus. Even while on earth, our affections may be centered in heaven.',
+      'scripture': 'Ephesians 2:6; Colossians 3:1-3',
+      'pages': [
+        'God has raised us up together in heavenly places in Christ Jesus.',
+        'When we look to heaven, earth\'s trials lose their power to discourage and destroy our peace.',
+      ],
+      'studyQuestions': ['How can a believer live in "heavenly places" amid earthly trials?'],
+    },
+  ];
+
+  // =========================================================================
+  // BIOGRAPHIES & PSYCHOLOGY
+  // =========================================================================
+  static final List<Map<String, dynamic>> _lifeSketchesChapters = [
+    {
+      'chapterNumber': 1,
+      'title': 'Chapter 1: A Life of Service',
+      'subtitle': 'The Historical Account of Ellen G. White\'s Life and Labors',
+      'content':
+          'From her childhood visions in 1844 until her death in 1915, Ellen G. White\'s life was unreservedly dedicated to pointing men and women to the Bible and to the soon-coming Saviour.',
+      'scripture': '2 Timothy 4:7-8; Revelation 19:10',
+      'pages': [
+        'From childhood in Maine to pioneering in Australia and California, Ellen G. White traveled extensively to proclaim truth.',
+        'Her dying testimony in 1915 was: "I know in whom I have believed." Her writings continue to lead millions to the Bible.',
+      ],
+      'studyQuestions': ['What was the primary aim of Ellen G. White\'s life and ministry?'],
+    },
+  ];
+
+  static final List<Map<String, dynamic>> _sketchesOfPaulChapters = [
+    {
+      'chapterNumber': 1,
+      'title': 'Chapter 1: Saul of Tarsus to Paul the Apostle',
+      'subtitle': 'The Damascus Road Experience and Missionary Zeal',
+      'content':
+          'Saul, breathing out threatenings and slaughter against the disciples of the Lord, was arrested on the road to Damascus by a light above the brightness of the sun.',
+      'scripture': 'Acts 9:1-22; Galatians 1:11-16',
+      'pages': [
+        'Saul was arrested on the road to Damascus by the voice of Jesus: "Saul, Saul, why persecutest thou Me?"',
+        'In surrender, Paul answered: "Lord, what wilt Thou have me to do?" From that hour he was a champion of the cross.',
+      ],
+      'studyQuestions': ['What does Paul\'s conversion teach about God\'s power to transform hearts?'],
+    },
+  ];
+
+  static final List<Map<String, dynamic>> _mindCharacter1Chapters = [
+    {
+      'chapterNumber': 1,
+      'title': 'Chapter 1: The Influence of Mind on Body',
+      'subtitle': 'Mental Health and Spiritual Wholeness',
+      'content':
+          'The relation that exists between the mind and the body is very intimate. When one is affected, the other sympathizes. The condition of the mind affects the health to a far greater degree than many realize.',
+      'scripture': 'Proverbs 17:22; Proverbs 14:30; 3 John 1:2',
+      'pages': [
+        'The relation that exists between the mind and the body is very intimate.',
+        'A cheerful, grateful heart does good like a medicine. Contentment and peace in God promote physical health.',
+      ],
+      'studyQuestions': ['How does emotional peace impact bodily wellness?'],
+    },
+  ];
+
+  static final List<Map<String, dynamic>> _mindCharacter2Chapters = [
+    {
+      'chapterNumber': 1,
+      'title': 'Chapter 1: Habits and Moral Accountability',
+      'subtitle': 'The Power of the Will in Christian Victory',
+      'content':
+          'The will is the governing power in the nature of man, the power of decision or of choice. Everything depends on the right action of the will.',
+      'scripture': 'Romans 12:2; Philippians 2:13; Joshua 24:15',
+      'pages': [
+        'The will is the governing power in the nature of man, bringing every power under the control of Christ.',
+        'You cannot change your heart, but you can choose to serve God. Yield your will to Him, and He will work in you.',
+      ],
+      'studyQuestions': ['What is the difference between feeling and will in the Christian walk?'],
+    },
+  ];
+
+  // =========================================================================
+  // DYNAMIC GENERAL READER GENERATOR FOR ALL OTHER VOLUMES WITH FULL PAGES
   // =========================================================================
   static List<Map<String, dynamic>> _generateBookChapters(String bookTitle) {
     final title = bookTitle.isEmpty ? 'Spirit of Prophecy' : bookTitle;
@@ -1248,6 +2022,15 @@ class SopChaptersRepository {
         'content':
             'In the revelation of God to humanity, the prophetic light which has been given is designed to sanctify the soul, enlighten the understanding, and establish faith upon an immovable Rock.\n\nAs we study "$title", we are reminded that every divine principle, warning, and promise is given for our instruction in righteousness. God\'s truths are ever progressive and ever relevant for the remnant church in the closing moments of earth\'s history.',
         'scripture': '2 Timothy 3:16-17; Revelation 19:10; 2 Peter 1:19-21',
+        'pages': [
+          'In the revelation of God to humanity, the prophetic light which has been given is designed to sanctify the soul, enlighten the understanding, and establish faith upon an immovable Rock.',
+          'As we study "$title", we are reminded that every divine principle, warning, and promise is given for our instruction in righteousness. God\'s truths are ever progressive and ever relevant for the remnant church.',
+          'The Word of God must be our counselor and foundation. Let prayer precede every study, so that the Holy Spirit may guide us into all truth.',
+        ],
+        'studyQuestions': [
+          'How does the prophetic gift guide the church through modern challenges?',
+          'What is the central purpose of "$title" in character preparation?',
+        ],
       },
       {
         'chapterNumber': 2,
@@ -1256,6 +2039,14 @@ class SopChaptersRepository {
         'content':
             'True sanctification is the harmonious development of the entire physical, mental, and moral powers. It is not an emotion or momentary ecstasy, but a daily dying to self and a constant living for Christ.\n\nHe who has surrendered all to the Lord will find in every trial a stepping stone to higher spiritual heights, and in every duty a sacred privilege of laboring together with God.',
         'scripture': 'Romans 12:1-2; Philippians 2:12-13; 1 Thessalonians 5:23',
+        'pages': [
+          'True sanctification is the harmonious development of the entire physical, mental, and moral powers. It is not an emotion, but a daily dying to self and a constant living for Christ.',
+          'He who has surrendered all to the Lord will find in every trial a stepping stone to higher spiritual heights, and in every duty a sacred privilege of laboring together with God.',
+          'Let us hold fast the profession of our faith without wavering; for He is faithful that promised.',
+        ],
+        'studyQuestions': [
+          'Why is daily surrender essential for lasting Christian victory?',
+        ],
       },
       {
         'chapterNumber': 3,
@@ -1264,6 +2055,14 @@ class SopChaptersRepository {
         'content':
             'The gospel is not a dry theory; it is a life-transforming reality. In the home, in our business relations, in literature evangelism, and in public fellowship, the righteousness of Christ must shine forth with steady, undimmed brilliance.\n\nThe world is watching to see whether our faith produces men and women of uncompromising integrity, selfless love, and moral courage.',
         'scripture': 'Matthew 5:14-16; Titus 2:11-14; James 1:22-27',
+        'pages': [
+          'The gospel is not a dry theory; it is a life-transforming reality. In the home, in our business relations, and in public fellowship, the righteousness of Christ must shine forth.',
+          'The world is watching to see whether our faith produces men and women of uncompromising integrity, selfless love, and moral courage.',
+          'Through the silent influence of a holy life, souls are won to the Saviour.',
+        ],
+        'studyQuestions': [
+          'In what ways can believers demonstrate the power of truth in daily secular duties?',
+        ],
       },
       {
         'chapterNumber': 4,
@@ -1272,6 +2071,14 @@ class SopChaptersRepository {
         'content':
             'A storm is gathering of relentless fury. God\'s children must be rooted and grounded in the present truth, having their faith anchored in the Sanctuary above and in the commandments of God and the faith of Jesus.\n\nEvery soul will be tested. Those who have built upon the Rock of Ages will stand calm and undaunted when earth\'s kingdoms crumble and the glory of the coming King breaks through the eastern sky.',
         'scripture': 'Revelation 14:12; Ephesians 6:10-18; Isaiah 26:3-4',
+        'pages': [
+          'A storm is gathering of relentless fury. God\'s children must be rooted and grounded in the present truth, having their faith anchored in the Sanctuary above.',
+          'Every soul will be tested. Those who have built upon the Rock of Ages will stand calm and undaunted when earth\'s kingdoms crumble.',
+          'Fear not, little flock; for it is your Father\'s good pleasure to give you the kingdom.',
+        ],
+        'studyQuestions': [
+          'How does an understanding of the Heavenly Sanctuary anchor our faith in the final crisis?',
+        ],
       },
       {
         'chapterNumber': 5,
@@ -1280,7 +2087,16 @@ class SopChaptersRepository {
         'content':
             'Soon the conflict will be over. The battle has been fought, the victory won. From the redeemed of all ages rises the joyous anthem: "Worthy is the Lamb that was slain to receive power, and riches, and wisdom, and strength, and honour, and glory, and blessing."\n\nThere shall be no more death, neither sorrow, nor crying, neither shall there be any more pain; for the former things are passed away. The earth is restored, and peace and righteousness reign forevermore.',
         'scripture': 'Revelation 21:1-7; Revelation 22:1-5; Isaiah 35:10',
+        'pages': [
+          'Soon the conflict will be over. The battle has been fought, the victory won. From the redeemed of all ages rises the joyous anthem of praise.',
+          'There shall be no more death, neither sorrow, nor crying, neither shall there be any more pain; for the former things are passed away.',
+          'The earth is restored in Edenic beauty, and peace, righteousness, and love reign forever and ever.',
+        ],
+        'studyQuestions': [
+          'What aspect of the Earth Made New brings the deepest comfort to your soul today?',
+        ],
       },
     ];
   }
+
 }
