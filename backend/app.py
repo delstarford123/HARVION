@@ -8,10 +8,20 @@ load_dotenv()
 # Initialize Flask App
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 PUBLIC_DIR = os.path.join(BASE_DIR, "public")
-UPLOADS_DIR = os.path.join(BASE_DIR, "uploads")
 
-os.makedirs(UPLOADS_DIR, exist_ok=True)
-os.makedirs(PUBLIC_DIR, exist_ok=True)
+# On Vercel / Serverless, local filesystem is read-only except /tmp
+IS_SERVERLESS = bool(os.getenv("VERCEL") or os.getenv("AWS_LAMBDA_FUNCTION_NAME"))
+if IS_SERVERLESS:
+    UPLOADS_DIR = os.path.join("/tmp", "uploads")
+else:
+    UPLOADS_DIR = os.path.join(BASE_DIR, "uploads")
+
+try:
+    os.makedirs(UPLOADS_DIR, exist_ok=True)
+    if not IS_SERVERLESS:
+        os.makedirs(PUBLIC_DIR, exist_ok=True)
+except Exception:
+    pass
 
 app = Flask(__name__, static_folder="public", static_url_path="")
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "harvion_sda_ministry_secret_key_2026")
