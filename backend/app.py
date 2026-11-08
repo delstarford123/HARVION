@@ -26,6 +26,17 @@ except Exception:
 app = Flask(__name__, static_folder="public", static_url_path="", template_folder="templates")
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "harvion_sda_ministry_secret_key_2026")
 
+# Configure Jinja to look in both backend/templates and root templates directory
+try:
+    from jinja2 import ChoiceLoader, FileSystemLoader
+    app.jinja_loader = ChoiceLoader([
+        FileSystemLoader(os.path.join(BASE_DIR, "templates")),
+        FileSystemLoader(os.path.join(os.path.dirname(BASE_DIR), "templates")),
+        FileSystemLoader(PUBLIC_DIR),
+    ])
+except Exception as je:
+    print(f"[Jinja Loader Info]: {je}")
+
 # ==========================================
 # 🚀 WSGI PATH NORMALIZATION MIDDLEWARE
 # ==========================================
@@ -154,6 +165,20 @@ def support():
         support_path = os.path.join(PUBLIC_DIR, "support.html")
         if os.path.exists(support_path):
             return send_file(support_path)
+        return send_file(os.path.join(PUBLIC_DIR, "index.html"))
+
+
+@app.route("/books", methods=["GET"])
+@app.route("/books.html", methods=["GET"])
+@app.route("/library", methods=["GET"])
+@app.route("/library.html", methods=["GET"])
+def books_library():
+    try:
+        return render_template("books.html")
+    except Exception:
+        books_path = os.path.join(PUBLIC_DIR, "books.html")
+        if os.path.exists(books_path):
+            return send_file(books_path)
         return send_file(os.path.join(PUBLIC_DIR, "index.html"))
 
 # ==========================================

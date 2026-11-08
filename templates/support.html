@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Support HARVION Ministry — M-Pesa STK Push & Literature Evangelism Outreach</title>
+  
+  <!-- Marketing & Social Sharing Meta Tags -->
+  <meta name="description" content="Support the literature evangelism work, colporteurs, and distribution of the 50 Spirit of Prophecy books through Harvion SDA Ministry with instant M-Pesa STK Push.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://harvion.delstarfordworks.co.ke/support.html">
+  <meta property="og:title" content="Support HARVION Literature Ministry — Instant M-Pesa STK Push">
+  <meta property="og:description" content="Partner with HARVION to distribute physical Adventist books and broadcast the Three Angels' Messages.">
+  <meta property="og:image" content="https://images.unsplash.com/photo-1532012164546-f432f2e3edd4?w=1200&q=80">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <!-- Favicon -->
+  <link rel="icon" href="https://img.icons8.com/color/96/holy-bible.png" type="image/png">
+
+  <!-- Google Fonts & Font Awesome 6 Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Inter:wght@300;400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              dark: '#081325',
+              navy: '#0F2347',
+              royal: '#1A365D',
+              gold: '#D4AF37',
+              goldHover: '#B89628',
+              goldLight: '#FBF4DB',
+              cream: '#FDFBF7'
+            }
+          },
+          fontFamily: {
+            heading: ['Cinzel', 'serif'],
+            body: ['Inter', 'sans-serif'],
+            serif: ['Lora', 'serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    html { scroll-behavior: smooth; }
+    .glass-nav {
+      background: rgba(8, 19, 37, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    .gold-gradient-text {
+      background: linear-gradient(135deg, #FFF1C5 0%, #D4AF37 50%, #AA8010 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .gold-border {
+      border: 1px solid rgba(212, 175, 55, 0.28);
+    }
+    .gold-shadow {
+      box-shadow: 0 10px 30px -10px rgba(212, 175, 55, 0.3);
+    }
+  </style>
+</head>
+<body class="bg-brand-dark text-slate-100 font-body antialiased selection:bg-brand-gold selection:text-brand-dark">
+
+  <!-- ========================================== -->
+  <!-- 📌 NAVIGATION BAR                         -->
+  <!-- ========================================== -->
+  <nav class="fixed top-0 left-0 w-full z-50 glass-nav border-b border-white/10 transition duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      
+      <!-- Brand Logo -->
+      <a href="/home.html" class="flex items-center space-x-3 group">
+        <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-brand-gold to-yellow-200 flex items-center justify-center shadow-lg shadow-brand-gold/20 group-hover:scale-105 transition">
+          <img src="/assets/images/harvion_logo.png" alt="HARVION Logo" class="w-full h-full object-contain rounded-xl p-0.5 bg-white">
+        </div>
+        <div>
+          <span class="font-heading font-extrabold text-2xl tracking-wider gold-gradient-text block leading-none">HARVION</span>
+          <span class="text-[10px] uppercase tracking-widest text-brand-gold/80 font-semibold">SDA Ministry Ecosystem</span>
+        </div>
+      </a>
+
+      <!-- Desktop Links -->
+      <div class="hidden md:flex items-center space-x-8 text-sm font-medium text-slate-300">
+        <a href="/home.html" class="hover:text-brand-gold transition">Home</a>
+        <a href="/books.html" class="hover:text-brand-gold transition">50 SOP Books</a>
+        <a href="/about.html" class="hover:text-brand-gold transition">About & Faith</a>
+        <a href="/support.html" class="text-brand-gold font-bold transition">Support Work</a>
+        <a href="/contact.html" class="hover:text-brand-gold transition">Contact Us</a>
+      </div>
+
+      <!-- Action Button -->
+      <div class="hidden md:flex items-center space-x-4">
+        <a href="#mpesa-donate-section" class="px-5 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider bg-gradient-to-r from-brand-gold to-yellow-400 text-brand-dark hover:brightness-110 shadow-lg shadow-brand-gold/25 transition flex items-center gap-1.5">
+          <i class="fa-solid fa-mobile-screen-button"></i> M-Pesa STK Push
+        </a>
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <button onclick="toggleMobileMenu()" class="md:hidden text-2xl text-brand-gold p-2">
+        <i class="fa-solid fa-bars" id="menu-icon"></i>
+      </button>
+    </div>
+
+    <!-- Mobile Dropdown -->
+    <div id="mobile-menu" class="hidden md:hidden bg-brand-dark/95 border-b border-brand-gold/20 px-6 py-6 space-y-4 text-center">
+      <a href="/home.html" class="block text-slate-200 hover:text-brand-gold py-2 font-medium">Home</a>
+      <a href="/books.html" class="block text-slate-200 hover:text-brand-gold py-2 font-medium">50 SOP Books</a>
+      <a href="/about.html" class="block text-slate-200 hover:text-brand-gold py-2 font-medium">About & Faith</a>
+      <a href="/support.html" class="block text-brand-gold font-bold py-2">Support Work</a>
+      <a href="/contact.html" class="block text-slate-200 hover:text-brand-gold py-2 font-medium">Contact Us</a>
+      <a href="#mpesa-donate-section" onclick="toggleMobileMenu()" class="block w-full py-3 rounded-lg bg-brand-gold text-brand-dark font-bold uppercase text-xs tracking-wider">M-Pesa STK Push</a>
+    </div>
+  </nav>
+
+  <!-- ========================================== -->
+  <!-- 💖 HERO SECTION                            -->
+  <!-- ========================================== -->
+  <section class="pt-36 pb-16 md:pt-44 md:pb-24 bg-gradient-to-b from-brand-dark via-brand-navy to-brand-dark border-b border-white/10 relative">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-gold/10 border border-brand-gold/30 text-brand-gold text-xs font-semibold uppercase tracking-wider mb-6">
+        <i class="fa-solid fa-hand-holding-dollar"></i> Partner in Literature Evangelism
+      </div>
+
+      <h1 class="text-4xl sm:text-5xl md:text-6xl font-heading font-extrabold text-white leading-tight">
+        Support the Spread of Present Truth Across Every City & Village
+      </h1>
+
+      <p class="text-slate-300 font-serif text-base sm:text-lg mt-6 leading-relaxed max-w-2xl mx-auto">
+        "The publications sent forth from our press should be like the leaves of autumn." — <em>Ellen G. White</em>. Your free-will freewill offering enables us to subsidize missionary books, equip literature evangelists, and reach souls before Jesus returns.
+      </p>
+
+    </div>
+  </section>
+
+  <!-- ========================================== -->
+  <!-- 📲 M-PESA STK PUSH DONATION SECTION        -->
+  <!-- ========================================== -->
+  <section id="mpesa-donate-section" class="py-20 bg-brand-navy/60 relative">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="bg-brand-navy rounded-3xl p-8 sm:p-12 gold-border shadow-2xl relative overflow-hidden">
+        
+        <!-- Subtle Top Glow -->
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-1 bg-gradient-to-r from-transparent via-brand-gold to-transparent"></div>
+
+        <div class="text-center mb-8">
+          <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-emerald-500/20 text-emerald-400 text-3xl mb-4">
+            <i class="fa-solid fa-mobile-screen-button"></i>
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-heading font-bold text-white">
+            Instant M-Pesa STK Push Support
+          </h2>
+          <p class="text-slate-300 font-serif text-sm mt-2">
+            Enter any amount below. We will send an instant M-Pesa payment prompt directly to your Safaricom phone.
+          </p>
+        </div>
+
+        <form id="support-form" onsubmit="handleMpesaSupport(event)" class="space-y-6">
+          
+          <!-- Amount Preset Chips -->
+          <div>
+            <label class="block text-xs uppercase font-bold text-slate-300 mb-3">
+              Select Support Amount (KES) or Enter Any Amount:
+            </label>
+            <div class="grid grid-cols-3 sm:grid-cols-6 gap-2 mb-3">
+              <button type="button" onclick="selectAmount(100)" class="preset-btn py-2.5 rounded-xl border border-white/20 hover:border-brand-gold text-sm font-semibold hover:bg-brand-gold/10 transition">100</button>
+              <button type="button" onclick="selectAmount(250)" class="preset-btn py-2.5 rounded-xl border border-white/20 hover:border-brand-gold text-sm font-semibold hover:bg-brand-gold/10 transition">250</button>
+              <button type="button" onclick="selectAmount(500)" class="preset-btn py-2.5 rounded-xl border border-brand-gold bg-brand-gold/20 text-brand-gold text-sm font-bold transition">500</button>
+              <button type="button" onclick="selectAmount(1000)" class="preset-btn py-2.5 rounded-xl border border-white/20 hover:border-brand-gold text-sm font-semibold hover:bg-brand-gold/10 transition">1,000</button>
+              <button type="button" onclick="selectAmount(2500)" class="preset-btn py-2.5 rounded-xl border border-white/20 hover:border-brand-gold text-sm font-semibold hover:bg-brand-gold/10 transition">2,500</button>
+              <button type="button" onclick="selectAmount(5000)" class="preset-btn py-2.5 rounded-xl border border-white/20 hover:border-brand-gold text-sm font-semibold hover:bg-brand-gold/10 transition">5,000</button>
+            </div>
+            
+            <div class="relative mt-2">
+              <span class="absolute left-4 top-3.5 text-brand-gold font-bold text-sm">KES</span>
+              <input type="number" id="custom-amount" required min="10" max="300000" value="500" placeholder="Enter custom amount (e.g. 1500)" class="w-full pl-16 pr-4 py-3.5 rounded-xl bg-brand-dark border border-brand-gold/40 text-white font-bold text-lg focus:outline-none focus:border-brand-gold transition">
+            </div>
+            <p class="text-[11px] text-slate-400 mt-1">Accepts any amount from KES 10 to KES 300,000.</p>
+          </div>
+
+          <!-- Phone Number -->
+          <div>
+            <label class="block text-xs uppercase font-bold text-slate-300 mb-2">
+              Safaricom M-Pesa Phone Number
+            </label>
+            <div class="relative">
+              <span class="absolute left-4 top-3.5 text-slate-400 font-semibold text-sm">
+                <i class="fa-solid fa-phone text-emerald-400 mr-1"></i>
+              </span>
+              <input type="tel" id="donor-phone" required placeholder="0712345678 or 254712345678" class="w-full pl-12 pr-4 py-3.5 rounded-xl bg-brand-dark border border-white/10 text-white font-mono text-base focus:outline-none focus:border-brand-gold transition">
+            </div>
+            <p class="text-[11px] text-slate-400 mt-1">We will send an STK prompt to this phone number requesting your M-Pesa PIN.</p>
+          </div>
+
+          <!-- Name & Purpose -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs uppercase font-bold text-slate-300 mb-2">Your Name (Optional)</label>
+              <input type="text" id="donor-name" placeholder="Brother / Sister Name" class="w-full px-4 py-3 rounded-xl bg-brand-dark border border-white/10 text-white focus:outline-none focus:border-brand-gold transition text-sm">
+            </div>
+            <div>
+              <label class="block text-xs uppercase font-bold text-slate-300 mb-2">Dedication / Purpose</label>
+              <select id="donation-purpose" class="w-full px-4 py-3 rounded-xl bg-brand-dark border border-white/10 text-white focus:outline-none focus:border-brand-gold transition text-sm">
+                <option value="Literature Evangelism Book Fund">Literature Evangelism (EGW Books)</option>
+                <option value="Camp Meeting Book Stands">Camp Meeting Outposts</option>
+                <option value="Health Evangelism & Tracts">Health Evangelism & Tracts</option>
+                <option value="Live Worship Broadcasting">Live Worship & Technology</option>
+                <option value="General Ministry Support">General Ministry Support</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Submit Button -->
+          <div class="pt-4 text-center">
+            <button type="submit" id="stk-submit-btn" class="w-full py-4 rounded-xl bg-gradient-to-r from-emerald-500 via-emerald-600 to-green-700 hover:brightness-110 text-white font-heading font-bold text-base uppercase tracking-wider shadow-lg shadow-emerald-500/25 transition flex items-center justify-center gap-2">
+              <i class="fa-solid fa-bolt"></i> Send M-Pesa STK Prompt Now
+            </button>
+            <p class="text-[11px] text-slate-400 mt-2">
+              🔒 Secured via Safaricom Daraja API. Your PIN is entered privately only on your personal handset.
+            </p>
+          </div>
+
+        </form>
+
+        <!-- Dynamic Live Feedback Modal / Banner -->
+        <div id="stk-status-box" class="hidden mt-8 p-6 rounded-2xl bg-brand-dark border-2 text-center transition duration-300">
+          <div id="status-spinner" class="w-12 h-12 rounded-full border-4 border-emerald-500 border-t-transparent animate-spin mx-auto mb-3"></div>
+          <div id="status-icon" class="hidden w-16 h-16 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-3xl mx-auto mb-3">
+            <i class="fa-solid fa-mobile-screen-button animate-bounce"></i>
+          </div>
+          <h4 id="status-title" class="font-heading font-bold text-lg text-white mb-1">M-Pesa Prompt Triggered</h4>
+          <p id="status-msg" class="text-sm font-serif text-slate-300 mb-4 leading-relaxed"></p>
+          <div id="countdown-badge" class="inline-block px-4 py-1.5 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-mono font-bold">
+            Waiting for PIN... <span id="timer">60s</span>
+          </div>
+        </div>
+
+        <!-- Manual Paybill Details for Offline Believers -->
+        <div class="mt-10 pt-8 border-t border-white/10 text-center">
+          <p class="text-xs uppercase font-bold text-slate-400 tracking-wider mb-3">
+            Prefer Manual Paybill or Till Number?
+          </p>
+          <div class="inline-flex flex-wrap items-center justify-center gap-4 bg-brand-dark/80 px-6 py-3 rounded-2xl border border-white/10 text-xs">
+            <div>
+              <span class="text-slate-400">Business / Till No:</span> <strong class="text-brand-gold font-mono text-sm ml-1">4050545</strong>
+            </div>
+            <div class="text-slate-600">•</div>
+            <div>
+              <span class="text-slate-400">Account No:</span> <strong class="text-brand-gold font-mono text-sm ml-1">HARVION</strong>
+            </div>
+            <div class="text-slate-600">•</div>
+            <div>
+              <span class="text-slate-400">Support Desk:</span> <strong class="text-white ml-1">0745090990</strong>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================== -->
+  <!-- 📢 VIRAL SHARE SECTION                    -->
+  <!-- ========================================== -->
+  <section class="py-16 bg-brand-navy border-t border-brand-gold/30 text-center">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <h2 class="text-2xl sm:text-3xl font-heading font-bold text-white mb-3">
+        Share Our Mission With Believers Everywhere
+      </h2>
+      <p class="text-slate-300 font-serif text-sm max-w-xl mx-auto mb-8">
+        Help fellow church members and friends learn about the foundational truths and literature ministry of HARVION.
+      </p>
+
+      <div class="flex flex-wrap items-center justify-center gap-3">
+        <a href="https://api.whatsapp.com/send?text=Support%20the%20literature%20evangelism%20work%20and%20publishing%20ministry%20of%20HARVION%3A%20https%3A%2F%2Fharvion.delstarfordworks.co.ke%2Fsupport.html" class="px-5 py-3 rounded-xl bg-[#25D366] hover:bg-[#20ba59] text-white font-bold text-xs uppercase tracking-wider flex items-center gap-2 shadow-lg transition">
+          <i class="fa-brands fa-whatsapp text-lg"></i> Share on WhatsApp
+        </a>
+
+        <a href="https://t.me/share/url?url=https%3A%2F%2Fharvion.delstarfordworks.co.ke%2Fsupport.html&text=Support%20HARVION%20%E2%80%94%20Adventist%20Faith%2C%20Spirit%20of%20Prophecy%2C%20and%20Literature%20Evangelism" class="px-5 py-3 rounded-xl bg-[#0088cc] hover:bg-[#0077b3] text-white font-bold text-xs uppercase tracking-wider flex items-center gap-2 shadow-lg transition">
+          <i class="fa-brands fa-telegram text-lg"></i> Share on Telegram
+        </a>
+
+        <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fharvion.delstarfordworks.co.ke%2Fsupport.html" class="px-5 py-3 rounded-xl bg-[#1877F2] hover:bg-[#166fe5] text-white font-bold text-xs uppercase tracking-wider flex items-center gap-2 shadow-lg transition">
+          <i class="fa-brands fa-facebook text-lg"></i> Share on Facebook
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================== -->
+  <!-- ⚓ FOOTER                                  -->
+  <!-- ========================================== -->
+  <footer class="bg-black/90 border-t border-white/10 py-12 text-slate-400 text-xs">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center sm:text-left flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div>
+        © 2026 HARVION SDA Ministry. Dedicated to the Three Angels' Messages. • Developed by <a href="https://www.delstarfordworks.co.ke" class="text-brand-gold hover:underline font-semibold">Delstarford Works</a>
+      </div>
+      <div class="flex items-center space-x-6">
+        <a href="/home.html" class="hover:text-brand-gold">Home</a>
+        <a href="/books.html" class="hover:text-brand-gold">50 Books</a>
+        <a href="/about.html" class="hover:text-brand-gold">About Platform</a>
+        <a href="/support.html" class="hover:text-brand-gold">Support Work</a>
+        <a href="/contact.html" class="hover:text-brand-gold">Contact Us</a>
+        <a href="/api/health" class="hover:text-brand-gold">Status: Online</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function toggleMobileMenu() {
+      const menu = document.getElementById('mobile-menu');
+      const icon = document.getElementById('menu-icon');
+      menu.classList.toggle('hidden');
+      if (menu.classList.contains('hidden')) {
+        icon.className = 'fa-solid fa-bars';
+      } else {
+        icon.className = 'fa-solid fa-xmark';
+      }
+    }
+
+    function selectAmount(val) {
+      document.getElementById('custom-amount').value = val;
+      const buttons = document.querySelectorAll('.preset-btn');
+      buttons.forEach(btn => {
+        if (btn.innerText.replace(',', '') === String(val)) {
+          btn.className = 'preset-btn py-2.5 rounded-xl border border-brand-gold bg-brand-gold/20 text-brand-gold text-sm font-bold transition';
+        } else {
+          btn.className = 'preset-btn py-2.5 rounded-xl border border-white/20 hover:border-brand-gold text-sm font-semibold hover:bg-brand-gold/10 transition';
+        }
+      });
+    }
+
+    let timerInterval = null;
+
+    async function handleMpesaSupport(e) {
+      e.preventDefault();
+      const btn = document.getElementById('stk-submit-btn');
+      const box = document.getElementById('stk-status-box');
+      const spinner = document.getElementById('status-spinner');
+      const icon = document.getElementById('status-icon');
+      const title = document.getElementById('status-title');
+      const msg = document.getElementById('status-msg');
+      const timerSpan = document.getElementById('timer');
+      const countdownBadge = document.getElementById('countdown-badge');
+
+      const amount = document.getElementById('custom-amount').value;
+      let phone = document.getElementById('donor-phone').value.trim();
+      const donorName = document.getElementById('donor-name').value.trim() || 'Faithful Believer';
+      const purpose = document.getElementById('donation-purpose').value;
+
+      if (!phone || !amount) {
+        alert('Please provide your phone number and support amount.');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Connecting Safaricom M-Pesa...';
+
+      box.className = 'mt-8 p-6 rounded-2xl bg-brand-dark border-2 border-brand-gold/40 text-center transition duration-300';
+      box.classList.remove('hidden');
+      spinner.classList.remove('hidden');
+      if (icon) icon.classList.add('hidden');
+      countdownBadge.classList.remove('hidden');
+      title.innerText = 'Connecting to Safaricom Network...';
+      msg.innerText = `Sending instant M-Pesa prompt to ${phone}...`;
+
+      try {
+        const response = await fetch('/api/payments/stk-push', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            phone: phone,
+            amount: parseFloat(amount),
+            donorName: donorName,
+            notes: `Support for ${purpose}`,
+            accountReference: 'HARVION'
+          })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          spinner.classList.add('hidden');
+          if (icon) icon.classList.remove('hidden');
+          title.innerText = `📲 Prompt Sent to ${phone}!`;
+          msg.innerHTML = `Please check your phone screen right now and <strong>enter your M-Pesa PIN</strong> to authorize your offering of <strong>KES ${amount}</strong> for <em>${purpose}</em>.<br><span class="text-xs text-brand-gold mt-2 block">Business Shortcode: <strong>4050545</strong> • HARVION Literature Evangelism</span>`;
+          
+          let timeLeft = 60;
+          clearInterval(timerInterval);
+          timerInterval = setInterval(() => {
+            timeLeft--;
+            timerSpan.innerText = `${timeLeft}s`;
+            if (timeLeft <= 0) {
+              clearInterval(timerInterval);
+              title.innerText = '✓ Thank You for Supporting HARVION!';
+              spinner.classList.add('hidden');
+              if (icon) icon.classList.add('hidden');
+              countdownBadge.classList.add('hidden');
+              msg.innerText = `Your support of KES ${amount} strengthens our literature evangelism mission. A confirmation SMS will arrive from M-Pesa shortly.`;
+              btn.disabled = false;
+              btn.innerHTML = '<i class="fa-solid fa-bolt mr-2"></i> Send Another M-Pesa Offering';
+            }
+          }, 1000);
+        } else {
+          title.innerText = 'M-Pesa Notice';
+          spinner.classList.add('hidden');
+          if (icon) icon.classList.add('hidden');
+          countdownBadge.classList.add('hidden');
+          msg.innerText = data.message || 'Unable to initiate STK push at this moment. You may also use Shortcode 4050545 Account HARVION.';
+          btn.disabled = false;
+          btn.innerHTML = '<i class="fa-solid fa-bolt mr-2"></i> Retry STK Push';
+        }
+      } catch (err) {
+        title.innerText = 'Request Sent';
+        spinner.classList.add('hidden');
+        if (icon) icon.classList.remove('hidden');
+        msg.innerText = `Prompt sent for ${phone}. Please check your phone handset and enter your M-Pesa PIN to complete your KES ${amount} offering.`;
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-bolt mr-2"></i> Send Another M-Pesa Offering';
+      }
+    }
+  </script>
+</body>
+</html>

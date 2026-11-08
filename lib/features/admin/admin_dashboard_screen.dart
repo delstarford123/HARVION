@@ -211,7 +211,13 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
           children: [
             Icon(Icons.admin_panel_settings, color: AppTheme.sacredGold),
             SizedBox(width: 8),
-            Text('HARVION Executive Control Center', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+            Expanded(
+              child: Text(
+                'HARVION Executive Control Center',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
           ],
         ),
         backgroundColor: AppTheme.primaryBlue,
@@ -520,16 +526,22 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Row(
-                      children: [
-                        Icon(Icons.volunteer_activism, color: Colors.pink, size: 20),
-                        SizedBox(width: 6),
-                        Text(
-                          'Ministry Support & Offerings',
-                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: AppTheme.primaryBlue),
-                        ),
-                      ],
+                    const Expanded(
+                      child: Row(
+                        children: [
+                          Icon(Icons.volunteer_activism, color: Colors.pink, size: 20),
+                          SizedBox(width: 6),
+                          Expanded(
+                            child: Text(
+                              'Ministry Support & Offerings',
+                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: AppTheme.primaryBlue),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
+                    const SizedBox(width: 8),
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                       decoration: BoxDecoration(
@@ -537,7 +549,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(
-                        'Ksh ${totalDonations.toStringAsFixed(0)} Total Given',
+                        'Ksh ${totalDonations.toStringAsFixed(0)} Total',
                         style: const TextStyle(color: AppTheme.primaryGreen, fontWeight: FontWeight.bold, fontSize: 12),
                       ),
                     ),
@@ -620,10 +632,14 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
-                  'All Customer Book Orders',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: AppTheme.primaryBlue),
+                const Expanded(
+                  child: Text(
+                    'All Customer Book Orders',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: AppTheme.primaryBlue),
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
+                const SizedBox(width: 8),
                 Text('${docs.length} Records', style: TextStyle(color: Colors.grey.shade600, fontSize: 12)),
               ],
             ),
@@ -733,6 +749,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
                               child: DropdownButtonFormField<OrderStatus>(
                                 initialValue: order.status,
                                 isDense: true,
+                                isExpanded: true,
                                 decoration: InputDecoration(
                                   contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
                                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
@@ -1001,7 +1018,9 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
                           ),
                         ),
                         const SizedBox(width: 8),
-                        Text('Platform: $platform', style: const TextStyle(fontSize: 11, color: Colors.grey)),
+                        Flexible(
+                          child: Text('Platform: $platform', style: const TextStyle(fontSize: 11, color: Colors.grey), overflow: TextOverflow.ellipsis),
+                        ),
                         const Spacer(),
                         if (isActive)
                           ElevatedButton.icon(
@@ -1269,13 +1288,23 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
-          Row(
-            children: [
-              Icon(isOk ? Icons.check_circle : Icons.error, color: isOk ? Colors.green : Colors.red, size: 14),
-              const SizedBox(width: 4),
-              Text(value, style: TextStyle(fontSize: 12, color: Colors.grey.shade700)),
-            ],
+          Expanded(
+            flex: 2,
+            child: Text(label, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600), overflow: TextOverflow.ellipsis),
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            flex: 3,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Icon(isOk ? Icons.check_circle : Icons.error, color: isOk ? Colors.green : Colors.red, size: 14),
+                const SizedBox(width: 4),
+                Flexible(
+                  child: Text(value, style: TextStyle(fontSize: 12, color: Colors.grey.shade700), overflow: TextOverflow.ellipsis),
+                ),
+              ],
+            ),
           ),
         ],
       ),
