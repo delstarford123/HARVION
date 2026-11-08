@@ -86,29 +86,33 @@ class _MainNavigationState extends State<MainNavigation> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        titleSpacing: 8,
         title: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              width: 32,
-              height: 32,
+              width: 28,
+              height: 28,
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: AppTheme.sacredGold.withValues(alpha: 0.8), width: 1.5),
+                borderRadius: BorderRadius.circular(7),
+                border: Border.all(color: AppTheme.sacredGold.withValues(alpha: 0.8), width: 1.2),
               ),
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(7),
+                borderRadius: BorderRadius.circular(6),
                 child: Image.asset(
                   'assets/images/harvion_logo.png',
                   fit: BoxFit.cover,
                 ),
               ),
             ),
-            const SizedBox(width: 10),
-            const Text(
-              'HARVION',
-              style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 1.2),
+            const SizedBox(width: 8),
+            const Flexible(
+              child: Text(
+                'HARVION',
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 1.0, fontSize: 18),
+              ),
             ),
           ],
         ),
