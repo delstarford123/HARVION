@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/physical_book_model.dart';
 import '../models/cart_item_model.dart';
 import '../models/order_model.dart';
@@ -6,9 +7,7 @@ import '../models/order_model.dart';
 class CartService extends ChangeNotifier {
   static final CartService _instance = CartService._internal();
   factory CartService() => _instance;
-  CartService._internal() {
-    _initSampleOrders();
-  }
+  CartService._internal();
 
   final List<CartItem> _items = [];
   final List<BookstoreOrder> _orders = [];
@@ -19,9 +18,9 @@ class CartService extends ChangeNotifier {
   List<CartItem> get items => List.unmodifiable(_items);
   List<BookstoreOrder> get orders => List.unmodifiable(_orders);
   String? get appliedPromoCode => _appliedPromoCode;
-  int get itemCount => _items.fold(0, (sum, item) => sum + item.quantity);
+  int get itemCount => _items.fold(0, (total, item) => total + item.quantity);
 
-  double get subtotal => _items.fold(0.0, (sum, item) => sum + item.totalPrice);
+  double get subtotal => _items.fold(0.0, (total, item) => total + item.totalPrice);
   double get discountAmount => subtotal * _discountPercentage;
   double get deliveryFee => _items.isEmpty ? 0.0 : 250.0; // Standard local delivery
   double get totalAmount => (subtotal - discountAmount + deliveryFee).clamp(0.0, double.infinity);
@@ -83,14 +82,19 @@ class CartService extends ChangeNotifier {
     notifyListeners();
   }
 
-  BookstoreOrder createOrder({
+  Future<BookstoreOrder> createOrder({
     required String customerName,
     required String customerPhone,
     required String deliveryMethod,
     required String deliveryAddress,
     required String paymentMethod,
-  }) {
-    final orderId = 'VIN-${DateTime.now().millisecondsSinceEpoch.toString().substring(7)}';
+    String? deliveryTown,
+    String? sdaChurchDepot,
+  }) async {
+    final orderId = 'HV-${DateTime.now().millisecondsSinceEpoch.toString().substring(5)}';
+    final now = DateTime.now();
+    final estimated = now.add(const Duration(days: 2));
+
     final newOrder = BookstoreOrder(
       orderId: orderId,
       items: List.from(_items),
@@ -103,57 +107,56 @@ class CartService extends ChangeNotifier {
       deliveryMethod: deliveryMethod,
       deliveryAddress: deliveryAddress,
       paymentMethod: paymentMethod,
-      paymentStatus: paymentMethod == 'Cash on Delivery / Church Pickup' ? 'Pending' : 'Paid',
+      paymentStatus: paymentMethod.contains('Cash') ? 'Pending Payment' : 'Paid (M-Pesa)',
       status: OrderStatus.confirmed,
-      orderDate: DateTime.now(),
-      estimatedDelivery: DateTime.now().add(const Duration(days: 2)),
+      orderDate: now,
+      estimatedDelivery: estimated,
       colporteurCode: _appliedPromoCode,
       deliveryRiderName: 'Brother Daniel (SDA Courier)',
-      deliveryRiderPhone: '+254 712 345 678',
+      deliveryRiderPhone: '+254 745 090 990',
     );
+
+    // 1. Save to Firebase Firestore collection 'orders'
+    try {
+      final orderMap = newOrder.toJson();
+      if (deliveryTown != null) orderMap['deliveryTown'] = deliveryTown;
+      if (sdaChurchDepot != null) orderMap['sdaChurchDepot'] = sdaChurchDepot;
+
+      await FirebaseFirestore.instance.collection('orders').doc(orderId).set(orderMap);
+
+      // 2. Decrement stock counts in Firestore for each physical book
+      for (final item in _items) {
+        if (item.book.id.isNotEmpty) {
+          FirebaseFirestore.instance
+              .collection('bookstore_items')
+              .doc(item.book.id)
+              .update({'stockCount': FieldValue.increment(-item.quantity)})
+              .catchError((_) {});
+        }
+      }
+
+      // 3. Trigger Real-Time Admin Notification
+      try {
+        await FirebaseFirestore.instance.collection('admin_notifications').add({
+          'type': 'new_order',
+          'title': 'New Book Order: $orderId',
+          'message': '$customerName ordered ${_items.length} book(s) - Ksh ${totalAmount.toStringAsFixed(0)} ($deliveryMethod)',
+          'orderId': orderId,
+          'customerPhone': customerPhone,
+          'deliveryLocation': deliveryAddress,
+          'totalAmount': totalAmount,
+          'createdAt': FieldValue.serverTimestamp(),
+          'read': false,
+        });
+      } catch (_) {}
+    } catch (e) {
+      debugPrint('Firestore order save error (proceeding offline): $e');
+    }
 
     _orders.insert(0, newOrder);
     clearCart();
     notifyListeners();
     return newOrder;
-  }
-
-  void _initSampleOrders() {
-    final sampleBooks = PhysicalBook.getSampleBooks();
-    _orders.add(
-      BookstoreOrder(
-        orderId: 'VIN-89342',
-        items: [
-          CartItem(
-            book: sampleBooks[0],
-            quantity: 1,
-            selectedFormat: 'Hardcover',
-            selectedLanguage: 'English',
-          ),
-          CartItem(
-            book: sampleBooks[2],
-            quantity: 2,
-            selectedFormat: 'Pocket Size',
-            selectedLanguage: 'Kiswahili',
-          ),
-        ],
-        subtotal: 1550.0,
-        deliveryFee: 200.0,
-        discount: 155.0,
-        totalAmount: 1595.0,
-        customerName: 'Alfredo Onuko',
-        customerPhone: '0745090990',
-        deliveryMethod: 'Nairobi Central SDA Church Depot',
-        deliveryAddress: 'Maxwell Adventist Book Centre Pickup',
-        paymentMethod: 'M-Pesa (Mobile Money)',
-        status: OrderStatus.inTransit,
-        orderDate: DateTime.now().subtract(const Duration(days: 1)),
-        estimatedDelivery: DateTime.now().add(const Duration(hours: 4)),
-        colporteurCode: 'COLP-ALFREDO10',
-        deliveryRiderName: 'Brother Daniel (SDA Courier)',
-        deliveryRiderPhone: '0712345678',
-      ),
-    );
   }
 }
 

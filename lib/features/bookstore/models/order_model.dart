@@ -85,6 +85,49 @@ class BookstoreOrder {
     }
   }
 
+  factory BookstoreOrder.fromJson(Map<String, dynamic> json, [String? docId]) {
+    OrderStatus parseStatus(String? val) {
+      if (val == null) return OrderStatus.confirmed;
+      final clean = val.toLowerCase();
+      if (clean.contains('transit')) return OrderStatus.inTransit;
+      if (clean.contains('dispatch')) return OrderStatus.dispatched;
+      if (clean.contains('process') || clean.contains('pack')) return OrderStatus.processing;
+      if (clean.contains('deliver')) return OrderStatus.delivered;
+      if (clean.contains('cancel')) return OrderStatus.cancelled;
+      return OrderStatus.confirmed;
+    }
+
+    DateTime parseDate(dynamic d) {
+      if (d is Timestamp) return d.toDate();
+      if (d is String) return DateTime.tryParse(d) ?? DateTime.now();
+      return DateTime.now();
+    }
+
+    final rawItems = json['items'] as List? ?? [];
+    final parsedItems = rawItems.map((i) => CartItem.fromJson(Map<String, dynamic>.from(i as Map))).toList();
+
+    return BookstoreOrder(
+      orderId: json['orderId'] as String? ?? docId ?? 'ORD-UNKNOWN',
+      items: parsedItems,
+      subtotal: (json['subtotal'] as num? ?? 0.0).toDouble(),
+      deliveryFee: (json['deliveryFee'] as num? ?? 0.0).toDouble(),
+      discount: (json['discount'] as num? ?? 0.0).toDouble(),
+      totalAmount: (json['totalAmount'] as num? ?? 0.0).toDouble(),
+      customerName: json['customerName'] as String? ?? 'Adventist Believer',
+      customerPhone: json['customerPhone'] as String? ?? '',
+      deliveryMethod: json['deliveryMethod'] as String? ?? 'Depot Pickup',
+      deliveryAddress: json['deliveryAddress'] as String? ?? '',
+      paymentMethod: json['paymentMethod'] as String? ?? 'M-Pesa',
+      paymentStatus: json['paymentStatus'] as String? ?? 'Paid',
+      status: parseStatus(json['status'] as String?),
+      orderDate: parseDate(json['orderDate']),
+      estimatedDelivery: parseDate(json['estimatedDelivery']),
+      colporteurCode: json['colporteurCode'] as String?,
+      deliveryRiderName: json['deliveryRiderName'] as String?,
+      deliveryRiderPhone: json['deliveryRiderPhone'] as String?,
+    );
+  }
+
   Map<String, dynamic> toJson() {
     return {
       'orderId': orderId,

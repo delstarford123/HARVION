@@ -30,6 +30,10 @@ class _AdminBookEditorScreenState extends State<AdminBookEditorScreen> {
   late TextEditingController _pageCountController;
   late TextEditingController _isbnController;
   late TextEditingController _commissionNoteController;
+  late TextEditingController _stockCountController;
+  late TextEditingController _weightGramsController;
+  late TextEditingController _distributionHubController;
+  late TextEditingController _publisherController;
 
   late String _selectedCategory;
   late String _selectedLanguage;
@@ -62,6 +66,10 @@ class _AdminBookEditorScreenState extends State<AdminBookEditorScreen> {
     _pageCountController = TextEditingController(text: b != null ? b.pageCount.toString() : '350');
     _isbnController = TextEditingController(text: b?.isbn ?? '978-1-58325-102-1');
     _commissionNoteController = TextEditingController(text: b?.colporteurCommissionNote ?? 'Earn 25% commission');
+    _stockCountController = TextEditingController(text: b != null ? b.stockCount.toString() : '25');
+    _weightGramsController = TextEditingController(text: b != null ? b.weightGrams.toString() : '500');
+    _distributionHubController = TextEditingController(text: b?.distributionHub ?? 'Maxwell Adventist Book Centre, Nairobi');
+    _publisherController = TextEditingController(text: b?.publisher ?? 'Pacific Press / Africa Herald');
 
     _selectedCategory = b?.category ?? AppConstants.bookstoreCategories.first;
     _selectedLanguage = b?.language ?? 'English';
@@ -86,6 +94,10 @@ class _AdminBookEditorScreenState extends State<AdminBookEditorScreen> {
     _pageCountController.dispose();
     _isbnController.dispose();
     _commissionNoteController.dispose();
+    _stockCountController.dispose();
+    _weightGramsController.dispose();
+    _distributionHubController.dispose();
+    _publisherController.dispose();
     super.dispose();
   }
 
@@ -180,6 +192,10 @@ class _AdminBookEditorScreenState extends State<AdminBookEditorScreen> {
         'isbn': _isbnController.text.trim(),
         'isFeatured': _isFeatured,
         'colporteurCommissionNote': _commissionNoteController.text.trim(),
+        'stockCount': int.tryParse(_stockCountController.text.trim()) ?? 25,
+        'weightGrams': int.tryParse(_weightGramsController.text.trim()) ?? 500,
+        'distributionHub': _distributionHubController.text.trim(),
+        'publisher': _publisherController.text.trim(),
         'hasHardCopy': _hasHardCopy,
         'hasSoftCopy': _hasSoftCopy,
         'softCopyPrice': _hasSoftCopy ? double.tryParse(_softCopyPriceController.text.trim()) : null,
@@ -361,6 +377,49 @@ class _AdminBookEditorScreenState extends State<AdminBookEditorScreen> {
               TextFormField(
                 controller: _commissionNoteController,
                 decoration: const InputDecoration(labelText: 'Colporteur Commission Note (e.g. Earn Ksh 200 per copy)'),
+              ),
+              const SizedBox(height: 12),
+
+              // Physical Stock & Shipping Weight
+              Row(
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      controller: _stockCountController,
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(labelText: 'Physical Copies in Stock *', prefixIcon: Icon(Icons.inventory, size: 20)),
+                      validator: (val) => val == null || val.trim().isEmpty ? 'Required' : null,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: TextFormField(
+                      controller: _weightGramsController,
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(labelText: 'Weight (Grams)', prefixIcon: Icon(Icons.scale, size: 20)),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+
+              // Distribution Hub & Publisher
+              Row(
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      controller: _distributionHubController,
+                      decoration: const InputDecoration(labelText: 'Primary SDA Distribution Hub', prefixIcon: Icon(Icons.location_on, size: 20)),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: TextFormField(
+                      controller: _publisherController,
+                      decoration: const InputDecoration(labelText: 'Publisher (e.g. Pacific Press)', prefixIcon: Icon(Icons.business, size: 20)),
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(height: 12),
               Row(

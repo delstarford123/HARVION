@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../core/theme.dart';
 import 'models/order_model.dart';
 
@@ -17,17 +18,27 @@ class OrderTrackingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppTheme.backgroundLight,
-      appBar: AppBar(
-        title: Text('Order #${order.orderId}', style: const TextStyle(fontWeight: FontWeight.bold)),
-        backgroundColor: AppTheme.primaryBlue,
-        foregroundColor: Colors.white,
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+    return StreamBuilder<DocumentSnapshot>(
+      stream: FirebaseFirestore.instance.collection('orders').doc(order.orderId).snapshots(),
+      builder: (context, snapshot) {
+        BookstoreOrder liveOrder = order;
+        if (snapshot.hasData && snapshot.data != null && snapshot.data!.exists && snapshot.data!.data() != null) {
+          try {
+            liveOrder = BookstoreOrder.fromJson(snapshot.data!.data() as Map<String, dynamic>, snapshot.data!.id);
+          } catch (_) {}
+        }
+
+        return Scaffold(
+          backgroundColor: AppTheme.backgroundLight,
+          appBar: AppBar(
+            title: Text('Order #${liveOrder.orderId}', style: const TextStyle(fontWeight: FontWeight.bold)),
+            backgroundColor: AppTheme.primaryBlue,
+            foregroundColor: Colors.white,
+          ),
+          body: SingleChildScrollView(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Status Header Banner
             Container(
@@ -61,24 +72,24 @@ class OrderTrackingScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Text(
-                          order.paymentStatus.toUpperCase(),
+                          liveOrder.paymentStatus.toUpperCase(),
                           style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 11),
                         ),
                       ),
                       Text(
-                        'ID: ${order.orderId}',
+                        'ID: ${liveOrder.orderId}',
                         style: const TextStyle(color: Colors.white70, fontSize: 12),
                       ),
                     ],
                   ),
                   const SizedBox(height: 12),
                   Text(
-                    order.statusDisplay,
+                    liveOrder.statusDisplay,
                     style: const TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 6),
                   Text(
-                    'Destination: ${order.deliveryAddress}',
+                    'Destination: ${liveOrder.deliveryAddress}',
                     style: TextStyle(color: Colors.white.withOpacity(0.9), fontSize: 13),
                   ),
                 ],
@@ -104,44 +115,44 @@ class OrderTrackingScreen extends StatelessWidget {
                       stepNumber: 1,
                       title: 'Order Confirmed',
                       subtitle: 'Received at Adventist Publishing depot',
-                      isCompleted: order.statusStepIndex >= 0,
-                      isCurrent: order.statusStepIndex == 0,
+                      isCompleted: liveOrder.statusStepIndex >= 0,
+                      isCurrent: liveOrder.statusStepIndex == 0,
                     ),
-                    _buildStepConnector(order.statusStepIndex >= 1),
+                    _buildStepConnector(liveOrder.statusStepIndex >= 1),
                     _buildStepRow(
                       context,
                       stepNumber: 2,
                       title: 'Packing & Literature Preparation',
                       subtitle: 'Books inspected, blessed, and boxed',
-                      isCompleted: order.statusStepIndex >= 1,
-                      isCurrent: order.statusStepIndex == 1,
+                      isCompleted: liveOrder.statusStepIndex >= 1,
+                      isCurrent: liveOrder.statusStepIndex == 1,
                     ),
-                    _buildStepConnector(order.statusStepIndex >= 2),
+                    _buildStepConnector(liveOrder.statusStepIndex >= 2),
                     _buildStepRow(
                       context,
                       stepNumber: 3,
                       title: 'Dispatched from Central Warehouse',
                       subtitle: 'Handed to courier / church distribution runner',
-                      isCompleted: order.statusStepIndex >= 2,
-                      isCurrent: order.statusStepIndex == 2,
+                      isCompleted: liveOrder.statusStepIndex >= 2,
+                      isCurrent: liveOrder.statusStepIndex == 2,
                     ),
-                    _buildStepConnector(order.statusStepIndex >= 3),
+                    _buildStepConnector(liveOrder.statusStepIndex >= 3),
                     _buildStepRow(
                       context,
                       stepNumber: 4,
                       title: 'In Transit / En Route',
                       subtitle: 'Courier on route to destination',
-                      isCompleted: order.statusStepIndex >= 3,
-                      isCurrent: order.statusStepIndex == 3,
+                      isCompleted: liveOrder.statusStepIndex >= 3,
+                      isCurrent: liveOrder.statusStepIndex == 3,
                     ),
-                    _buildStepConnector(order.statusStepIndex >= 4),
+                    _buildStepConnector(liveOrder.statusStepIndex >= 4),
                     _buildStepRow(
                       context,
                       stepNumber: 5,
                       title: 'Delivered / Ready for Pickup',
                       subtitle: 'Available at doorstep or church book center',
-                      isCompleted: order.statusStepIndex >= 4,
-                      isCurrent: order.statusStepIndex == 4,
+                      isCompleted: liveOrder.statusStepIndex >= 4,
+                      isCurrent: liveOrder.statusStepIndex == 4,
                     ),
                   ],
                 ),
@@ -150,7 +161,7 @@ class OrderTrackingScreen extends StatelessWidget {
             const SizedBox(height: 24),
 
             // Courier / Church Contact Card
-            if (order.deliveryRiderName != null) ...[
+            if (liveOrder.deliveryRiderName != null) ...[
               Card(
                 elevation: 1,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
@@ -173,22 +184,22 @@ class OrderTrackingScreen extends StatelessWidget {
                               style: TextStyle(fontSize: 12, color: Colors.grey),
                             ),
                             Text(
-                              order.deliveryRiderName!,
+                              liveOrder.deliveryRiderName!,
                               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
                             ),
-                            if (order.deliveryRiderPhone != null)
+                            if (liveOrder.deliveryRiderPhone != null)
                               Text(
-                                order.deliveryRiderPhone!,
+                                liveOrder.deliveryRiderPhone!,
                                 style: TextStyle(fontSize: 12, color: Colors.grey.shade700),
                               ),
                           ],
                         ),
                       ),
-                      if (order.deliveryRiderPhone != null)
+                      if (liveOrder.deliveryRiderPhone != null)
                         IconButton.filled(
                           style: IconButton.styleFrom(backgroundColor: AppTheme.primaryGreen),
                           icon: const Icon(Icons.phone, color: Colors.white, size: 20),
-                          onPressed: () => _makeCall(order.deliveryRiderPhone!),
+                          onPressed: () => _makeCall(liveOrder.deliveryRiderPhone!),
                         ),
                     ],
                   ),
@@ -210,7 +221,7 @@ class OrderTrackingScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(16),
                 child: Column(
                   children: [
-                    ...order.items.map((item) {
+                    ...liveOrder.items.map((item) {
                       return Padding(
                         padding: const EdgeInsets.symmetric(vertical: 6),
                         child: Row(
@@ -238,7 +249,7 @@ class OrderTrackingScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         const Text('Total Paid', style: TextStyle(fontWeight: FontWeight.bold)),
-                        Text('Ksh ${order.totalAmount.toInt()}',
+                        Text('Ksh ${liveOrder.totalAmount.toInt()}',
                             style: const TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 16, color: AppTheme.primaryGreen)),
                       ],
@@ -268,6 +279,8 @@ class OrderTrackingScreen extends StatelessWidget {
         ),
       ),
     );
+  },
+);
   }
 
   Widget _buildStepRow(

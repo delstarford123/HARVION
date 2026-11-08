@@ -132,6 +132,30 @@ def about():
             return send_file(about_path)
         return send_file(os.path.join(PUBLIC_DIR, "index.html"))
 
+
+@app.route("/contact", methods=["GET"])
+@app.route("/contact.html", methods=["GET"])
+def contact():
+    try:
+        return render_template("contact.html")
+    except Exception:
+        contact_path = os.path.join(PUBLIC_DIR, "contact.html")
+        if os.path.exists(contact_path):
+            return send_file(contact_path)
+        return send_file(os.path.join(PUBLIC_DIR, "index.html"))
+
+
+@app.route("/support", methods=["GET"])
+@app.route("/support.html", methods=["GET"])
+def support():
+    try:
+        return render_template("support.html")
+    except Exception:
+        support_path = os.path.join(PUBLIC_DIR, "support.html")
+        if os.path.exists(support_path):
+            return send_file(support_path)
+        return send_file(os.path.join(PUBLIC_DIR, "index.html"))
+
 # ==========================================
 # ⚡ API DISCOVERY & HEALTH CHECK
 # ==========================================
@@ -145,6 +169,8 @@ def api_discovery():
         "webPages": {
             "home": "/",
             "about": "/about.html",
+            "support": "/support.html",
+            "contact": "/contact.html",
         },
         "endpoints": {
             "books": "/api/books",
@@ -204,6 +230,8 @@ def not_found(e):
         "availableEndpoints": [
             "/",
             "/about.html",
+            "/support.html",
+            "/contact.html",
             "/api/health",
             "/api/books",
             "/api/orders",

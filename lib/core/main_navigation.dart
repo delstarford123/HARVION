@@ -35,6 +35,8 @@ import '../features/admin/admin_dashboard_screen.dart';
 import '../features/testimonies/testimonies_screen.dart';
 import '../features/library/kjv_bible_reader_screen.dart';
 import '../features/sermons/create_livestream_screen.dart';
+import '../features/notifications/notification_center_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MainNavigation extends StatefulWidget {
   const MainNavigation({super.key});
@@ -145,6 +147,63 @@ class _MainNavigationState extends State<MainNavigation> {
                           style: const TextStyle(
                             color: Colors.black,
                             fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
+              );
+            },
+          ),
+
+          // 🔔 Real-Time Live Worship & Notification Bell
+          StreamBuilder<QuerySnapshot>(
+            stream: FirebaseFirestore.instance
+                .collection('live_announcements')
+                .where('isActive', isEqualTo: true)
+                .snapshots(),
+            builder: (context, snapshot) {
+              final int liveCount = snapshot.hasData ? snapshot.data!.docs.length : 0;
+
+              return Stack(
+                alignment: Alignment.center,
+                children: [
+                  IconButton(
+                    tooltip: 'Live Worship & Notifications',
+                    icon: Icon(
+                      liveCount > 0 ? Icons.notifications_active : Icons.notifications_outlined,
+                      color: liveCount > 0 ? AppTheme.sacredGold : Colors.white,
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => const NotificationCenterScreen()),
+                      );
+                    },
+                  ),
+                  if (liveCount > 0)
+                    Positioned(
+                      right: 6,
+                      top: 6,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: Colors.red,
+                          borderRadius: BorderRadius.circular(10),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.red.withValues(alpha: 0.6),
+                              blurRadius: 6,
+                              spreadRadius: 1,
+                            ),
+                          ],
+                        ),
+                        child: const Text(
+                          'LIVE',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 8,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -297,6 +356,8 @@ class _MainNavigationState extends State<MainNavigation> {
                 destination: const TestimoniesScreen()),
             _buildDrawerItem(Icons.podcasts, 'Sermons & Audio Media', -1,
                 destination: const SermonsScreen()),
+            _buildDrawerItem(Icons.notifications_active, '🔔 Live Worship & Notifications', -1,
+                destination: const NotificationCenterScreen()),
             _buildDrawerItem(Icons.live_tv, '🔴 Start Live Stream / Broadcast', -1,
                 destination: const CreateLiveStreamScreen()),
             _buildDrawerItem(Icons.library_books, 'Free SOP Library (PDFs)', -1,

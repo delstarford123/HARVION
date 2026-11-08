@@ -292,14 +292,25 @@ class _BookstoreScreenState extends State<BookstoreScreen> with SingleTickerProv
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance.collection('bookstore_items').snapshots(),
         builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CircularProgressIndicator(color: AppTheme.primaryGreen),
+                  SizedBox(height: 12),
+                  Text('Loading Literature Evangelism Books...', style: TextStyle(color: Colors.grey)),
+                ],
+              ),
+            );
+          }
+
           List<PhysicalBook> allBooks = [];
 
           if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
             allBooks = snapshot.data!.docs.map((doc) {
               return PhysicalBook.fromJson(doc.data() as Map<String, dynamic>, doc.id);
             }).toList();
-          } else {
-            allBooks = PhysicalBook.getSampleBooks();
           }
 
           return Column(

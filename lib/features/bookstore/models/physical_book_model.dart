@@ -24,6 +24,10 @@ class PhysicalBook {
   final String? sellerName;
   final String? sellerPhone;
   final String? sellerId;
+  final int stockCount;
+  final int weightGrams;
+  final String? distributionHub;
+  final String? publisher;
 
   PhysicalBook({
     required this.id,
@@ -33,7 +37,7 @@ class PhysicalBook {
     required this.description,
     required this.price,
     this.originalPrice = 0.0,
-    this.format = 'Paperback',
+    this.format = 'Hardcover',
     this.language = 'English',
     this.coverImageUrl = '',
     this.previewImages = const [],
@@ -51,6 +55,10 @@ class PhysicalBook {
     this.sellerName,
     this.sellerPhone,
     this.sellerId,
+    this.stockCount = 25,
+    this.weightGrams = 500,
+    this.distributionHub,
+    this.publisher,
   });
 
   bool get hasDiscount => originalPrice > price;
@@ -61,6 +69,8 @@ class PhysicalBook {
       previews = List<String>.from(json['previewImages'] as List);
     }
 
+    final stock = json['stockCount'] as int? ?? 25;
+
     return PhysicalBook(
       id: documentId,
       title: json['title'] as String? ?? 'Untitled Book',
@@ -69,11 +79,11 @@ class PhysicalBook {
       description: json['description'] as String? ?? '',
       price: (json['price'] ?? 0).toDouble(),
       originalPrice: (json['originalPrice'] ?? 0).toDouble(),
-      format: json['format'] as String? ?? 'Paperback',
+      format: json['format'] as String? ?? 'Hardcover',
       language: json['language'] as String? ?? 'English',
       coverImageUrl: json['coverImageUrl'] as String? ?? '',
       previewImages: previews,
-      inStock: json['inStock'] as bool? ?? true,
+      inStock: (json['inStock'] as bool? ?? true) && stock > 0,
       pageCount: json['pageCount'] as int? ?? 300,
       rating: (json['rating'] ?? 5.0).toDouble(),
       isbn: json['isbn'] as String? ?? '',
@@ -87,6 +97,10 @@ class PhysicalBook {
       sellerName: json['sellerName'] as String?,
       sellerPhone: json['sellerPhone'] as String?,
       sellerId: json['sellerId'] as String?,
+      stockCount: stock,
+      weightGrams: json['weightGrams'] as int? ?? 500,
+      distributionHub: json['distributionHub'] as String?,
+      publisher: json['publisher'] as String?,
     );
   }
 
@@ -116,169 +130,14 @@ class PhysicalBook {
       'sellerName': sellerName,
       'sellerPhone': sellerPhone,
       'sellerId': sellerId,
+      'stockCount': stockCount,
+      'weightGrams': weightGrams,
+      'distributionHub': distributionHub,
+      'publisher': publisher,
     };
   }
 
   static List<PhysicalBook> getSampleBooks() {
-    return [
-      PhysicalBook(
-        id: 'sop_01',
-        title: 'The Great Controversy',
-        author: 'Ellen G. White',
-        category: 'Spirit of Prophecy',
-        description:
-            'Traces the conflict between Christ and Satan from the destruction of Jerusalem through the Reformation to the close of Earth\'s history and the Earth made new. An essential book for our times.',
-        price: 850.0,
-        originalPrice: 1100.0,
-        format: 'Hardcover & Soft Copy',
-        hasHardCopy: true,
-        hasSoftCopy: true,
-        softCopyPrice: 350.0,
-        softCopyUrl: 'https://m.egwwritings.org/en/book/132/toc',
-        language: 'English',
-        inStock: true,
-        pageCount: 720,
-        rating: 5.0,
-        isbn: '978-1-58325-102-1',
-        isFeatured: true,
-        colporteurCommissionNote: 'Earn Ksh 200 per copy sold',
-        coverImageUrl: 'https://storage.googleapis.com/vine-3e4ab.firebasestorage.app/books/great_controversy.jpg',
-      ),
-      PhysicalBook(
-        id: 'sop_02',
-        title: 'The Desire of Ages',
-        author: 'Ellen G. White',
-        category: 'Spirit of Prophecy',
-        description:
-            'A devotional masterpiece presenting the life and ministry of Jesus Christ. Recognized globally as one of the most poignant spiritual biographies of Christ ever written.',
-        price: 950.0,
-        originalPrice: 1200.0,
-        format: 'Hardcover & Soft Copy',
-        hasHardCopy: true,
-        hasSoftCopy: true,
-        softCopyPrice: 350.0,
-        softCopyUrl: 'https://m.egwwritings.org/en/book/130/toc',
-        language: 'English',
-        inStock: true,
-        pageCount: 860,
-        rating: 5.0,
-        isbn: '978-0-8163-1815-5',
-        isFeatured: true,
-        colporteurCommissionNote: 'Earn Ksh 250 per copy sold',
-        coverImageUrl: 'https://storage.googleapis.com/vine-3e4ab.firebasestorage.app/books/desire_of_ages.jpg',
-      ),
-      PhysicalBook(
-        id: 'sop_03',
-        title: 'Steps to Christ (Hatua Kwa Kristo)',
-        author: 'Ellen G. White',
-        category: 'Spirit of Prophecy',
-        description:
-            'The classic handbook on how to experience true conversion, peace of heart, and daily walking with God. Pocket-sized and accessible in Kiswahili and English.',
-        price: 350.0,
-        originalPrice: 450.0,
-        format: 'Pocket Size & Soft Copy',
-        hasHardCopy: true,
-        hasSoftCopy: true,
-        softCopyPrice: 150.0,
-        softCopyUrl: 'https://m.egwwritings.org/en/book/108/toc',
-        language: 'English',
-        inStock: true,
-        pageCount: 160,
-        rating: 4.9,
-        isbn: '978-0-8280-0112-9',
-        isFeatured: true,
-        colporteurCommissionNote: 'Earn Ksh 100 per copy sold',
-        coverImageUrl: 'https://storage.googleapis.com/vine-3e4ab.firebasestorage.app/books/steps_to_christ.jpg',
-      ),
-      PhysicalBook(
-        id: 'sop_04',
-        title: 'The Ministry of Healing',
-        author: 'Ellen G. White',
-        category: 'Health & Temperance',
-        description:
-            'Comprehensive guidance on medical missionary work, the 8 natural laws of health, plant-based living, and how Jesus healed the sick in body and soul.',
-        price: 750.0,
-        originalPrice: 900.0,
-        format: 'Paperback & Soft Copy',
-        hasHardCopy: true,
-        hasSoftCopy: true,
-        softCopyPrice: 300.0,
-        softCopyUrl: 'https://m.egwwritings.org/en/book/135/toc',
-        language: 'English',
-        inStock: true,
-        pageCount: 540,
-        rating: 4.9,
-        isbn: '978-0-8280-0435-9',
-        isFeatured: true,
-        colporteurCommissionNote: 'Earn Ksh 180 per copy sold',
-        coverImageUrl: 'https://storage.googleapis.com/vine-3e4ab.firebasestorage.app/books/ministry_of_healing.jpg',
-      ),
-      PhysicalBook(
-        id: 'sop_05',
-        title: 'The Adventist Home',
-        author: 'Ellen G. White',
-        category: 'Christian Living & Family',
-        description:
-            'Heavenly counsel on marriage, parenting, home atmosphere, courtship, and creating a little heaven on earth within your family circle.',
-        price: 700.0,
-        originalPrice: 850.0,
-        format: 'Paperback & Soft Copy',
-        hasHardCopy: true,
-        hasSoftCopy: true,
-        softCopyPrice: 280.0,
-        softCopyUrl: 'https://m.egwwritings.org/en/book/128/toc',
-        language: 'English',
-        inStock: true,
-        pageCount: 560,
-        rating: 5.0,
-        isbn: '978-0-8280-0034-4',
-        isFeatured: false,
-        colporteurCommissionNote: 'Earn Ksh 170 per copy sold',
-        coverImageUrl: 'https://storage.googleapis.com/vine-3e4ab.firebasestorage.app/books/adventist_home.jpg',
-      ),
-      PhysicalBook(
-        id: 'sop_06',
-        title: 'Daniel and the Revelation',
-        author: 'Uriah Smith',
-        category: 'Evangelism & Prophecy',
-        description:
-            'Verse-by-verse exposition of the prophetic books of Daniel and Revelation, explaining sanctuary truth, prophetic timelines, and the Three Angels\' Messages.',
-        price: 1100.0,
-        originalPrice: 1400.0,
-        format: 'Hardcover',
-        hasHardCopy: true,
-        hasSoftCopy: false,
-        language: 'English',
-        inStock: true,
-        pageCount: 880,
-        rating: 4.9,
-        isbn: '978-1-87895-120-2',
-        isFeatured: true,
-        colporteurCommissionNote: 'Earn Ksh 280 per copy sold',
-        coverImageUrl: 'https://storage.googleapis.com/vine-3e4ab.firebasestorage.app/books/daniel_revelation.jpg',
-      ),
-      PhysicalBook(
-        id: 'farm_01',
-        title: 'Edenic Stewardship & Country Living',
-        author: 'Alfredo Onuko',
-        category: 'Farming & Country Living',
-        description:
-            'Practical guide on organic farming, restoring degraded soil, water conservation, and establishing self-supporting country outposts for ministry.',
-        price: 600.0,
-        originalPrice: 750.0,
-        format: 'Paperback & Soft Copy',
-        hasHardCopy: true,
-        hasSoftCopy: true,
-        softCopyPrice: 250.0,
-        language: 'English',
-        inStock: true,
-        pageCount: 220,
-        rating: 5.0,
-        isbn: '978-9966-123-45-0',
-        isFeatured: true,
-        colporteurCommissionNote: 'Earn Ksh 150 per copy sold',
-        coverImageUrl: 'https://storage.googleapis.com/vine-3e4ab.firebasestorage.app/books/edenic_stewardship.jpg',
-      ),
-    ];
+    return [];
   }
 }

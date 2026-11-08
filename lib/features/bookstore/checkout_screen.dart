@@ -66,19 +66,18 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
     setState(() => _isProcessing = true);
 
-    // Simulate processing payment / order creation
-    await Future.delayed(const Duration(seconds: 2));
-
     final deliveryAddress = _selectedDeliveryMethod == 'Direct Doorstep Delivery (Rider)'
         ? _addressController.text.trim()
         : 'Pickup at $_selectedHub';
 
-    final order = cartService.createOrder(
+    final order = await cartService.createOrder(
       customerName: _nameController.text.trim(),
       customerPhone: _phoneController.text.trim(),
       deliveryMethod: _selectedDeliveryMethod,
       deliveryAddress: deliveryAddress,
       paymentMethod: _selectedPaymentMethod,
+      sdaChurchDepot: _selectedDeliveryMethod != 'Direct Doorstep Delivery (Rider)' ? _selectedHub : null,
+      deliveryTown: _addressController.text.trim(),
     );
 
     if (mounted) {

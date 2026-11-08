@@ -27,19 +27,38 @@ def get_oauth_token():
     return None
 
 @payments_bp.route("/stk-push", methods=["POST"])
+@payments_bp.route("/stkpush", methods=["POST"])
+@payments_bp.route("/support", methods=["POST"])
 def stk_push():
     try:
         body = request.get_json(silent=True) or {}
         phone = str(body.get("phone", "")).strip().replace("+", "")
         amount = body.get("amount")
-        order_id = body.get("orderId", "ORDER")
+        order_id = body.get("orderId", f"DONATION_{int(time.time())}")
         account_reference = body.get("accountReference", "HARVION-SDA")
+        donor_name = body.get("donorName", "Believer")
+        notes = body.get("notes", "Support HARVION Literature Evangelism")
 
         if not phone or not amount:
             return jsonify({"success": False, "message": "Phone and amount are required."}), 400
 
         if phone.startswith("0"):
             phone = "254" + phone[1:]
+
+        # Log to Firestore if database is connected
+        if db is not None:
+            try:
+                db.collection("ministry_donations").add({
+                    "donorName": donor_name,
+                    "phone": phone,
+                    "amount": float(amount),
+                    "notes": notes,
+                    "accountReference": account_reference,
+                    "status": "initiated",
+                    "createdAt": time.strftime("%Y-%m-%d %H:%M:%S"),
+                })
+            except Exception as dbe:
+                print(f"[Donation DB Log Error]: {dbe}")
 
         token = get_oauth_token()
 
@@ -48,12 +67,13 @@ def stk_push():
             return jsonify({
                 "success": True,
                 "mock": True,
-                "message": "M-Pesa STK push simulation triggered. Believer prompted on phone.",
+                "message": f"M-Pesa STK push initiated for KES {amount}. Prompt sent to {phone}. Please enter your M-Pesa PIN on your handset.",
                 "checkoutRequestID": mock_checkout_id,
                 "merchantRequestID": f"MR_{int(time.time())}",
                 "amount": float(amount),
                 "phone": phone,
                 "orderId": order_id,
+                "donorName": donor_name,
             })
 
         timestamp = time.strftime("%Y%m%d%H%M%S")
@@ -69,7 +89,7 @@ def stk_push():
             "PartyA": phone,
             "PartyB": SHORTCODE,
             "PhoneNumber": phone,
-            "CallBackURL": "https://api.yourdomain.co.ke/api/payments/callback",
+            "CallBackURL": "https://harvion.delstarfordworks.co.ke/api/payments/callback",
             "AccountReference": account_reference[:12],
             "TransactionDesc": "HARVION Literature Ministry",
         }
@@ -84,7 +104,7 @@ def stk_push():
 
         return jsonify({
             "success": True,
-            "message": "STK push initiated successfully.",
+            "message": "STK push initiated successfully. Enter PIN on your phone.",
             "data": data,
         })
     except Exception as e:

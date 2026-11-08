@@ -1,0 +1,11 @@
+.vercel
+.env*
+*.zip
+node_modules
+__pycache__
+*.pyc
+uploads/
+package-lock.json
+harvion-backend-deploy.zip
+harvion-flask-backend-deploy.zip
+*.md
