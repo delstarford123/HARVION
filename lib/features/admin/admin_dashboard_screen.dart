@@ -253,145 +253,358 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
   Widget _buildOrdersAndRevenueTab() {
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance
-          .collection('orders')
-          .orderBy('orderDate', descending: true)
+          .collection('ministry_donations')
+          .orderBy('createdAt', descending: true)
           .snapshots(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator(color: AppTheme.primaryGreen));
+      builder: (context, donationSnap) {
+        final donationDocs = donationSnap.hasData ? donationSnap.data!.docs : [];
+        double totalDonations = 0.0;
+        for (var d in donationDocs) {
+          final dData = d.data() as Map<String, dynamic>;
+          totalDonations += (dData['amount'] as num? ?? 0.0).toDouble();
         }
 
-        final docs = snapshot.hasData ? snapshot.data!.docs : [];
-        double totalRevenue = 0.0;
-        int pendingOrdersCount = 0;
-        int deliveredCount = 0;
-        Map<String, int> regionCounts = {};
+        return StreamBuilder<QuerySnapshot>(
+          stream: FirebaseFirestore.instance
+              .collection('orders')
+              .orderBy('orderDate', descending: true)
+              .snapshots(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting && !snapshot.hasData) {
+              return const Center(child: CircularProgressIndicator(color: AppTheme.primaryGreen));
+            }
 
-        for (var doc in docs) {
-          final data = doc.data() as Map<String, dynamic>;
-          final amount = (data['totalAmount'] as num? ?? 0.0).toDouble();
-          final status = (data['status'] as String? ?? '').toLowerCase();
-          final paymentStatus = (data['paymentStatus'] as String? ?? '').toLowerCase();
-          final hub = data['sdaChurchDepot'] as String? ?? data['deliveryAddress'] as String? ?? 'Nairobi';
+            final docs = snapshot.hasData ? snapshot.data!.docs : [];
+            double totalRevenue = 0.0;
+            int pendingOrdersCount = 0;
+            int deliveredCount = 0;
+            Map<String, int> regionCounts = {};
 
-          // Extract region/town keyword
-          String region = 'Nairobi';
-          if (hub.contains('Maxwell')) region = 'Maxwell Adventist Centre';
-          else if (hub.contains('Kisumu')) region = 'Kisumu Central';
-          else if (hub.contains('Mombasa')) region = 'Mombasa Central';
-          else if (hub.contains('Nakuru')) region = 'Nakuru Station';
-          else if (hub.contains('Rider') || hub.contains('Doorstep')) region = 'Direct Doorstep Rider';
-          else region = 'SDA Church Depot';
+            for (var doc in docs) {
+              final data = doc.data() as Map<String, dynamic>;
+              final amount = (data['totalAmount'] as num? ?? 0.0).toDouble();
+              final status = (data['status'] as String? ?? '').toLowerCase();
+              final paymentStatus = (data['paymentStatus'] as String? ?? '').toLowerCase();
+              final hub = data['sdaChurchDepot'] as String? ?? data['deliveryAddress'] as String? ?? 'Nairobi';
 
-          regionCounts[region] = (regionCounts[region] ?? 0) + 1;
+              // Extract region/town keyword
+              String region = 'Nairobi';
+              if (hub.contains('Maxwell')) {
+                region = 'Maxwell Adventist Centre';
+              } else if (hub.contains('Kisumu')) {
+                region = 'Kisumu Central';
+              } else if (hub.contains('Mombasa')) {
+                region = 'Mombasa Central';
+              } else if (hub.contains('Nakuru')) {
+                region = 'Nakuru Station';
+              } else if (hub.contains('Rider') || hub.contains('Doorstep')) {
+                region = 'Direct Doorstep Rider';
+              } else {
+                region = 'SDA Church Depot';
+              }
 
-          if (paymentStatus.contains('paid') || status.contains('deliver') || status.contains('dispatch')) {
-            totalRevenue += amount;
-          }
-          if (status.contains('pending') || status.contains('confirm')) {
-            pendingOrdersCount++;
-          }
-          if (status.contains('deliver')) {
-            deliveredCount++;
-          }
-        }
+              regionCounts[region] = (regionCounts[region] ?? 0) + 1;
 
-        return ListView(
-          padding: const EdgeInsets.all(16),
-          children: [
-            // Revenue Metric Cards Row
-            Row(
+              if (paymentStatus.contains('paid') || status.contains('deliver') || status.contains('dispatch')) {
+                totalRevenue += amount;
+              }
+              if (status.contains('pending') || status.contains('confirm')) {
+                pendingOrdersCount++;
+              }
+              if (status.contains('deliver')) {
+                deliveredCount++;
+              }
+            }
+
+            final combinedTotal = totalRevenue + totalDonations;
+
+            return ListView(
+              padding: const EdgeInsets.all(16),
               children: [
-                Expanded(
-                  child: _buildMetricCard(
-                    title: 'Gross Revenue (KES)',
-                    value: 'Ksh ${totalRevenue.toStringAsFixed(0)}',
-                    icon: Icons.payments,
-                    color: AppTheme.primaryGreen,
+                // 🌟 Combined Total Ministry Funds Banner
+                Container(
+                  padding: const EdgeInsets.all(18),
+                  margin: const EdgeInsets.only(bottom: 16),
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      colors: [AppTheme.primaryBlue, Color(0xFF0D3B66)],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppTheme.primaryBlue.withValues(alpha: 0.25),
+                        blurRadius: 10,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
                   ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: _buildMetricCard(
-                    title: 'Total Orders',
-                    value: '${docs.length}',
-                    icon: Icons.receipt_long,
-                    color: AppTheme.primaryBlue,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 12),
-            Row(
-              children: [
-                Expanded(
-                  child: _buildMetricCard(
-                    title: 'Pending Dispatch',
-                    value: '$pendingOrdersCount',
-                    icon: Icons.pending_actions,
-                    color: Colors.orange.shade800,
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: _buildMetricCard(
-                    title: 'Safely Delivered',
-                    value: '$deliveredCount',
-                    icon: Icons.check_circle_outline,
-                    color: Colors.teal,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
-
-            // Where Books Were Sold Breakdown
-            if (regionCounts.isNotEmpty) ...[
-              const Text(
-                'Where Books Were Sold & Dispatched',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: AppTheme.primaryBlue),
-              ),
-              const SizedBox(height: 8),
-              Card(
-                elevation: 1,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-                child: Padding(
-                  padding: const EdgeInsets.all(14),
-                  child: Column(
-                    children: regionCounts.entries.map((entry) {
-                      final pct = docs.isNotEmpty ? (entry.value / docs.length) : 0.0;
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 6),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            const Row(
                               children: [
-                                Text(entry.key, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
-                                Text('${entry.value} orders (${(pct * 100).toStringAsFixed(0)}%)',
-                                    style: const TextStyle(color: AppTheme.primaryGreen, fontWeight: FontWeight.bold, fontSize: 12)),
+                                Icon(Icons.volunteer_activism, color: AppTheme.sacredGold, size: 18),
+                                SizedBox(width: 6),
+                                Text(
+                                  'TOTAL KINGDOM FUNDS COLLECTED',
+                                  style: TextStyle(
+                                    color: Colors.white70,
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.bold,
+                                    letterSpacing: 0.8,
+                                  ),
+                                ),
                               ],
                             ),
-                            const SizedBox(height: 4),
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(4),
-                              child: LinearProgressIndicator(
-                                value: pct,
-                                minHeight: 6,
-                                backgroundColor: Colors.grey.shade200,
-                                valueColor: const AlwaysStoppedAnimation(AppTheme.primaryGreen),
+                            const SizedBox(height: 6),
+                            Text(
+                              'Ksh ${combinedTotal.toStringAsFixed(0)}',
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 26,
+                                fontWeight: FontWeight.w900,
+                                letterSpacing: 0.5,
                               ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              'Book Sales: Ksh ${totalRevenue.toStringAsFixed(0)}  •  Support: Ksh ${totalDonations.toStringAsFixed(0)}',
+                              style: const TextStyle(color: Colors.white70, fontSize: 11),
                             ),
                           ],
                         ),
-                      );
-                    }).toList(),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: AppTheme.sacredGold.withValues(alpha: 0.2),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: AppTheme.sacredGold.withValues(alpha: 0.4)),
+                        ),
+                        child: Column(
+                          children: [
+                            const Text(
+                              'TOTAL GIVEN',
+                              style: TextStyle(color: AppTheme.sacredGold, fontSize: 10, fontWeight: FontWeight.bold),
+                            ),
+                            Text(
+                              '${donationDocs.length} Offerings',
+                              style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ),
-              const SizedBox(height: 20),
-            ],
+
+                // Revenue Metric Cards Row 1: Book Sales vs Ministry Support
+                Row(
+                  children: [
+                    Expanded(
+                      child: _buildMetricCard(
+                        title: 'Book Sales (KES)',
+                        value: 'Ksh ${totalRevenue.toStringAsFixed(0)}',
+                        icon: Icons.payments,
+                        color: AppTheme.primaryGreen,
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: _buildMetricCard(
+                        title: 'Ministry Support (KES)',
+                        value: 'Ksh ${totalDonations.toStringAsFixed(0)}',
+                        icon: Icons.favorite,
+                        color: Colors.pink.shade700,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                Row(
+                  children: [
+                    Expanded(
+                      child: _buildMetricCard(
+                        title: 'Total Orders',
+                        value: '${docs.length}',
+                        icon: Icons.receipt_long,
+                        color: AppTheme.primaryBlue,
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: _buildMetricCard(
+                        title: 'Delivered',
+                        value: '$deliveredCount',
+                        icon: Icons.local_shipping,
+                        color: AppTheme.primaryGreen,
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: _buildMetricCard(
+                        title: 'Pending Dispatch',
+                        value: '$pendingOrdersCount',
+                        icon: Icons.pending_actions,
+                        color: Colors.orange.shade800,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 20),
+
+                // Where Books Were Sold Breakdown
+                if (regionCounts.isNotEmpty) ...[
+                  const Text(
+                    'Where Books Were Sold & Dispatched',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: AppTheme.primaryBlue),
+                  ),
+                  const SizedBox(height: 8),
+                  Card(
+                    elevation: 1,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                    child: Padding(
+                      padding: const EdgeInsets.all(14),
+                      child: Column(
+                        children: regionCounts.entries.map((entry) {
+                          final pct = docs.isNotEmpty ? (entry.value / docs.length) : 0.0;
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 6),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(entry.key, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+                                    Text('${entry.value} orders (${(pct * 100).toStringAsFixed(0)}%)',
+                                        style: const TextStyle(color: AppTheme.primaryGreen, fontWeight: FontWeight.bold, fontSize: 12)),
+                                  ],
+                                ),
+                                const SizedBox(height: 4),
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(4),
+                                  child: LinearProgressIndicator(
+                                    value: pct,
+                                    minHeight: 6,
+                                    backgroundColor: Colors.grey.shade200,
+                                    valueColor: const AlwaysStoppedAnimation(AppTheme.primaryGreen),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                ],
+
+                // 💖 Real-time Ministry Support & Offerings (M-Pesa STK Push)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Row(
+                      children: [
+                        Icon(Icons.volunteer_activism, color: Colors.pink, size: 20),
+                        SizedBox(width: 6),
+                        Text(
+                          'Ministry Support & Offerings',
+                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: AppTheme.primaryBlue),
+                        ),
+                      ],
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: AppTheme.primaryGreen.withValues(alpha: 0.15),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        'Ksh ${totalDonations.toStringAsFixed(0)} Total Given',
+                        style: const TextStyle(color: AppTheme.primaryGreen, fontWeight: FontWeight.bold, fontSize: 12),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+
+                if (donationDocs.isEmpty)
+                  Card(
+                    elevation: 1,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                    child: const Padding(
+                      padding: EdgeInsets.all(20),
+                      child: Center(
+                        child: Text(
+                          'No support offerings recorded yet. Believers can give on the Harvion Support page.',
+                          style: TextStyle(color: Colors.grey, fontSize: 12),
+                        ),
+                      ),
+                    ),
+                  )
+                else
+                  ...donationDocs.map((doc) {
+                    final dData = doc.data() as Map<String, dynamic>;
+                    final donor = dData['donorName'] as String? ?? 'Faithful Believer';
+                    final phone = dData['phone'] as String? ?? '';
+                    final amount = (dData['amount'] as num? ?? 0.0).toDouble();
+                    final notes = dData['notes'] as String? ?? 'Support HARVION Ministry';
+                    final createdAt = dData['createdAt'] as String? ?? '';
+                    final status = dData['status'] as String? ?? 'initiated';
+
+                    return Card(
+                      margin: const EdgeInsets.only(bottom: 10),
+                      elevation: 1,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      child: ListTile(
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
+                        leading: CircleAvatar(
+                          backgroundColor: Colors.pink.shade50,
+                          child: const Icon(Icons.favorite, color: Colors.pink, size: 20),
+                        ),
+                        title: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(donor, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+                            Text('+ Ksh ${amount.toStringAsFixed(0)}',
+                                style: const TextStyle(fontWeight: FontWeight.w900, color: AppTheme.primaryGreen, fontSize: 15)),
+                          ],
+                        ),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(height: 2),
+                            Text('$notes • $phone', style: TextStyle(color: Colors.grey.shade700, fontSize: 11)),
+                            const SizedBox(height: 2),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(createdAt, style: TextStyle(color: Colors.grey.shade500, fontSize: 10)),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                  decoration: BoxDecoration(
+                                    color: Colors.teal.withValues(alpha: 0.15),
+                                    borderRadius: BorderRadius.circular(6),
+                                  ),
+                                  child: Text(status.toUpperCase(),
+                                      style: const TextStyle(color: Colors.teal, fontSize: 9, fontWeight: FontWeight.bold)),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  }),
+                const SizedBox(height: 24),
 
             // Real-time Orders Feed Header
             Row(
@@ -534,7 +747,9 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
         );
       },
     );
-  }
+  },
+);
+}
 
   // ==========================================
   // TAB 2: 📚 HARDCOPY BOOK CATALOG & STOCK
