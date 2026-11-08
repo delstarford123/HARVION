@@ -1,2 +1,5 @@
 .vercel
 .env*
+*.zip
+node_modules
+__pycache__
