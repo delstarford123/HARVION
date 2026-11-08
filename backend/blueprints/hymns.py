@@ -145,3 +145,4 @@ def update_or_create_hymn(number: int = None):
         })
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 400
+

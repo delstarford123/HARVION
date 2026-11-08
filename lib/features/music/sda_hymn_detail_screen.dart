@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:share_plus/share_plus.dart';
 import '../../core/theme.dart';
-import '../../core/services/sda_voice_narration_service.dart';
-import '../../core/widgets/sda_voice_audio_player_bar.dart';
 import 'sda_hymn_model.dart';
 
 class SdaHymnDetailScreen extends StatefulWidget {
@@ -16,150 +15,184 @@ class SdaHymnDetailScreen extends StatefulWidget {
 }
 
 class _SdaHymnDetailScreenState extends State<SdaHymnDetailScreen> {
-  int _activeSegmentIndex = -1;
-  late final List<String> _narrationSegments;
+  late final AudioPlayer _audioPlayer;
+
+  bool _isLoading = true;
+  bool _hasError = false;
+  double _playbackSpeed = 1.0;
+  bool _isLooping = false;
+  double _lyricsFontSize = 17.0;
 
   @override
   void initState() {
     super.initState();
-    _prepareNarrationSegments();
+    _audioPlayer = AudioPlayer();
+    _initPianoAudio();
   }
 
-  void _prepareNarrationSegments() {
-    _narrationSegments = [];
-    for (int i = 0; i < widget.hymn.stanzas.length; i++) {
-      _narrationSegments.add('Stanza ${i + 1}. ${widget.hymn.stanzas[i]}');
-      if (widget.hymn.chorus.isNotEmpty) {
-        _narrationSegments.add('Chorus. ${widget.hymn.chorus}');
+  Future<void> _initPianoAudio() async {
+    try {
+      setState(() {
+        _isLoading = true;
+        _hasError = false;
+      });
+
+      // Load piano accompaniment track
+      final url = (widget.hymn.audioUrl != null && widget.hymn.audioUrl!.isNotEmpty)
+          ? widget.hymn.audioUrl!
+          : 'https://archive.org/download/sda-hymnal-instrumental/${widget.hymn.number.toString().padLeft(3, '0')}.mp3';
+      await _audioPlayer.setUrl(url);
+
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      debugPrint('[SDA Hymnal Piano Error] Failed to load audio: $e');
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+          _hasError = true;
+        });
       }
     }
   }
 
-  void _startHymnNarration({int startIndex = 0}) {
-    SdaVoiceNarrationService.instance.speakQueue(
-      segments: _narrationSegments,
-      title: 'Hymn ${widget.hymn.number}: ${widget.hymn.title}',
-      startIndex: startIndex,
-      onIndexChanged: (idx) {
-        if (mounted) setState(() => _activeSegmentIndex = idx);
-      },
-      onComplete: () {
-        if (mounted) setState(() => _activeSegmentIndex = -1);
-      },
-    );
-  }
-
-  void _stopHymnNarration() {
-    SdaVoiceNarrationService.instance.stop();
-    setState(() => _activeSegmentIndex = -1);
-  }
-
   @override
   void dispose() {
-    // Only stop if currently narrating this hymn
-    if (SdaVoiceNarrationService.instance.currentTitle.contains('Hymn ${widget.hymn.number}')) {
-      SdaVoiceNarrationService.instance.stop();
-    }
+    _audioPlayer.dispose();
     super.dispose();
+  }
+
+  void _togglePlayPause() {
+    if (_hasError) {
+      _initPianoAudio();
+      return;
+    }
+    if (_audioPlayer.playing) {
+      _audioPlayer.pause();
+    } else {
+      _audioPlayer.play();
+    }
+  }
+
+  void _replayAudio() {
+    _audioPlayer.seek(Duration.zero);
+    _audioPlayer.play();
+  }
+
+  void _setSpeed(double speed) {
+    setState(() => _playbackSpeed = speed);
+    _audioPlayer.setSpeed(speed);
+  }
+
+  void _toggleLoop() {
+    setState(() => _isLooping = !_isLooping);
+    _audioPlayer.setLoopMode(_isLooping ? LoopMode.one : LoopMode.off);
+  }
+
+  String _formatDuration(Duration? d) {
+    if (d == null) return '0:00';
+    final minutes = d.inMinutes;
+    final seconds = d.inSeconds % 60;
+    return '$minutes:${seconds.toString().padLeft(2, '0')}';
   }
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: SdaVoiceNarrationService.instance,
-      builder: (context, _) {
-        final isVoiceActive = SdaVoiceNarrationService.instance.isPlaying ||
-            SdaVoiceNarrationService.instance.isPaused;
-
-        return Scaffold(
-          backgroundColor: AppTheme.backgroundLight,
-          appBar: AppBar(
-            backgroundColor: AppTheme.primaryBlue,
-            foregroundColor: Colors.white,
-            elevation: 0,
-            title: Text(
-              'Hymn #${widget.hymn.number}',
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-            ),
-            actions: [
-              IconButton(
-                tooltip: 'Copy Lyrics',
-                icon: const Icon(Icons.copy_rounded),
-                onPressed: () {
-                  Clipboard.setData(ClipboardData(
-                    text: 'SDA Hymnal #${widget.hymn.number} - ${widget.hymn.title}\n\n${widget.hymn.fullLyrics}',
-                  ));
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Hymn lyrics copied to clipboard!'),
-                      duration: Duration(seconds: 2),
-                    ),
-                  );
-                },
-              ),
-              IconButton(
-                tooltip: 'Share Hymn',
-                icon: const Icon(Icons.share_rounded),
-                onPressed: () {
-                  Share.share(
-                    '📖 SDA Hymn #${widget.hymn.number}: "${widget.hymn.title}"\n\n'
-                    '${widget.hymn.fullLyrics}\n\n'
-                    '— Sourced from HARVION SDA Ministry App & Hymnal',
-                  );
-                },
-              ),
-            ],
+    return Scaffold(
+      backgroundColor: AppTheme.backgroundLight,
+      appBar: AppBar(
+        backgroundColor: AppTheme.primaryBlue,
+        foregroundColor: Colors.white,
+        elevation: 0,
+        title: Text(
+          'Hymn #${widget.hymn.number}',
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+        ),
+        actions: [
+          IconButton(
+            tooltip: 'Lyrics Size (A- / A+)',
+            icon: const Icon(Icons.format_size_rounded),
+            onPressed: () {
+              setState(() {
+                _lyricsFontSize = _lyricsFontSize >= 24 ? 15.0 : _lyricsFontSize + 2.0;
+              });
+            },
           ),
-          bottomNavigationBar: isVoiceActive
-              ? SdaVoiceAudioPlayerBar(
-                  onClose: _stopHymnNarration,
-                )
-              : null,
-          body: SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(16, 16, 16, 80),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                // Hymn Header Card
-                _buildHeaderCard(isVoiceActive),
-                const SizedBox(height: 20),
-
-                // Sing / Voice Action Banner
-                _buildVoiceActionBanner(isVoiceActive),
-                const SizedBox(height: 24),
-
-                // Section Divider
-                Row(
-                  children: [
-                    const Expanded(child: Divider(color: Colors.black12)),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 12),
-                      child: Text(
-                        'HYMN LYRICS & STANZAS',
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: 1.2,
-                          color: Colors.grey.shade600,
-                        ),
-                      ),
-                    ),
-                    const Expanded(child: Divider(color: Colors.black12)),
-                  ],
+          IconButton(
+            tooltip: 'Copy Lyrics',
+            icon: const Icon(Icons.copy_rounded),
+            onPressed: () {
+              Clipboard.setData(ClipboardData(
+                text: 'SDA Hymnal #${widget.hymn.number} - ${widget.hymn.title}\n\n${widget.hymn.fullLyrics}',
+              ));
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Hymn lyrics copied to clipboard!'),
+                  duration: Duration(seconds: 2),
                 ),
-                const SizedBox(height: 16),
+              );
+            },
+          ),
+          IconButton(
+            tooltip: 'Share Hymn',
+            icon: const Icon(Icons.share_rounded),
+            onPressed: () {
+              Share.share(
+                '📖 SDA Hymn #${widget.hymn.number}: "${widget.hymn.title}"\n\n'
+                '${widget.hymn.fullLyrics}\n\n'
+                '— Sourced from HARVION SDA Ministry App & Hymnal',
+              );
+            },
+          ),
+        ],
+      ),
+      bottomNavigationBar: _buildStickyPianoPlayerBar(),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.fromLTRB(16, 16, 16, 120),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            // Hymn Header Card
+            _buildHeaderCard(),
+            const SizedBox(height: 16),
 
-                // Stanzas and Chorus
-                _buildLyricsContent(),
+            // Piano Accompaniment Status Banner
+            _buildPianoFeatureCard(),
+            const SizedBox(height: 20),
+
+            // Section Divider
+            Row(
+              children: [
+                const Expanded(child: Divider(color: Colors.black12)),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  child: Text(
+                    'SACRED LYRICS & STANZAS',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 1.2,
+                      color: Colors.grey.shade600,
+                    ),
+                  ),
+                ),
+                const Expanded(child: Divider(color: Colors.black12)),
               ],
             ),
-          ),
-        );
-      },
+            const SizedBox(height: 16),
+
+            // Stanzas and Chorus
+            _buildLyricsContent(),
+          ],
+        ),
+      ),
     );
   }
 
-  Widget _buildHeaderCard(bool isVoiceActive) {
+  Widget _buildHeaderCard() {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -249,18 +282,13 @@ class _SdaHymnDetailScreenState extends State<SdaHymnDetailScreen> {
     );
   }
 
-  Widget _buildVoiceActionBanner(bool isVoiceActive) {
-    final isPlaying = SdaVoiceNarrationService.instance.isPlaying;
-
+  Widget _buildPianoFeatureCard() {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: isVoiceActive ? AppTheme.sacredGold : Colors.black12,
-          width: isVoiceActive ? 2 : 1,
-        ),
+        border: Border.all(color: AppTheme.sacredGold.withValues(alpha: 0.5), width: 1.5),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.04),
@@ -272,102 +300,313 @@ class _SdaHymnDetailScreenState extends State<SdaHymnDetailScreen> {
       child: Row(
         children: [
           Container(
-            width: 52,
-            height: 52,
+            width: 48,
+            height: 48,
             decoration: BoxDecoration(
-              color: (isPlaying ? AppTheme.sacredGold : AppTheme.primaryBlue).withValues(alpha: 0.12),
-              shape: BoxShape.circle,
+              color: AppTheme.sacredGold.withValues(alpha: 0.15),
+              borderRadius: BorderRadius.circular(12),
             ),
-            child: Icon(
-              isPlaying ? Icons.record_voice_over : Icons.volume_up_rounded,
-              color: isPlaying ? AppTheme.sacredGold : AppTheme.primaryBlue,
-              size: 28,
-            ),
+            child: const Icon(Icons.piano, color: AppTheme.primaryBlue, size: 28),
           ),
           const SizedBox(width: 14),
-          Expanded(
+          const Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  isVoiceActive
-                      ? (isPlaying ? 'Singing / Speaking Hymn...' : 'Voice Paused')
-                      : 'Adventist Voice Version',
-                  style: const TextStyle(
+                  'Piano Accompaniment (Sing Along)',
+                  style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 15,
+                    fontSize: 14,
                     color: AppTheme.primaryBlue,
                   ),
                 ),
-                const SizedBox(height: 3),
+                SizedBox(height: 2),
                 Text(
-                  isVoiceActive
-                      ? 'Listen to solemn narration & sing along'
-                      : 'Hear stanzas read with godly reverence',
-                  style: TextStyle(
-                    color: Colors.grey.shade600,
-                    fontSize: 12,
-                  ),
+                  'Play the instrumental melody and sing along as you read the lyrics.',
+                  style: TextStyle(fontSize: 11.5, color: Colors.black54),
                 ),
               ],
             ),
-          ),
-          ElevatedButton.icon(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: isPlaying ? Colors.orange.shade800 : AppTheme.primaryGreen,
-              foregroundColor: Colors.white,
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-            ),
-            icon: Icon(isPlaying ? Icons.pause : Icons.play_arrow, size: 18),
-            label: Text(isPlaying ? 'Pause' : (isVoiceActive ? 'Resume' : 'Listen')),
-            onPressed: () {
-              if (isPlaying) {
-                SdaVoiceNarrationService.instance.pause();
-              } else if (SdaVoiceNarrationService.instance.isPaused) {
-                SdaVoiceNarrationService.instance.resume();
-              } else {
-                _startHymnNarration();
-              }
-            },
           ),
         ],
       ),
     );
   }
 
+  Widget _buildStickyPianoPlayerBar() {
+    return StreamBuilder<PlayerState>(
+      stream: _audioPlayer.playerStateStream,
+      builder: (context, snapshot) {
+        final playerState = snapshot.data;
+        final isPlaying = playerState?.playing ?? false;
+        final processingState = playerState?.processingState;
+        final isBuffering = processingState == ProcessingState.buffering || _isLoading;
+
+        return Container(
+          decoration: BoxDecoration(
+            color: AppTheme.primaryBlue,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.25),
+                blurRadius: 12,
+                offset: const Offset(0, -4),
+              ),
+            ],
+          ),
+          padding: const EdgeInsets.fromLTRB(16, 12, 16, 14),
+          child: SafeArea(
+            top: false,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Top Track Info & Quick Actions
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: AppTheme.sacredGold.withValues(alpha: 0.2),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: const Icon(Icons.piano, color: AppTheme.sacredGold, size: 20),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Hymn #${widget.hymn.number}: ${widget.hymn.title}',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 13,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          Text(
+                            isPlaying
+                                ? '🎹 Piano Playing • Sing Along'
+                                : (isBuffering ? '⏳ Loading Piano Accompaniment...' : '⏸ Piano Paused • Tap Play'),
+                            style: TextStyle(
+                              color: isPlaying ? AppTheme.sacredGold : Colors.white70,
+                              fontSize: 11,
+                              fontWeight: isPlaying ? FontWeight.w600 : FontWeight.normal,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    // Replay Button
+                    IconButton(
+                      icon: const Icon(Icons.replay, color: Colors.white70, size: 20),
+                      tooltip: 'Replay from Start',
+                      onPressed: _replayAudio,
+                    ),
+                    // Loop Toggle
+                    IconButton(
+                      icon: Icon(
+                        Icons.repeat,
+                        color: _isLooping ? AppTheme.sacredGold : Colors.white38,
+                        size: 20,
+                      ),
+                      tooltip: _isLooping ? 'Loop Active' : 'Repeat Off',
+                      onPressed: _toggleLoop,
+                    ),
+                    // Speed Menu
+                    PopupMenuButton<double>(
+                      tooltip: 'Playback Pace',
+                      initialValue: _playbackSpeed,
+                      icon: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.15),
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: Text(
+                          '${_playbackSpeed}x',
+                          style: const TextStyle(color: AppTheme.sacredGold, fontSize: 11, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      itemBuilder: (context) => [
+                        const PopupMenuItem(value: 0.8, child: Text('0.8x Rehearsal Pace')),
+                        const PopupMenuItem(value: 1.0, child: Text('1.0x Worship Standard')),
+                        const PopupMenuItem(value: 1.2, child: Text('1.2x Brisk Pace')),
+                      ],
+                      onSelected: _setSpeed,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 4),
+
+                // Audio Seek Bar
+                StreamBuilder<Duration>(
+                  stream: _audioPlayer.positionStream,
+                  builder: (context, posSnapshot) {
+                    final position = posSnapshot.data ?? Duration.zero;
+                    final total = _audioPlayer.duration ?? Duration.zero;
+
+                    final posSec = position.inMilliseconds.toDouble();
+                    final totSec = total.inMilliseconds.toDouble();
+                    final maxSec = totSec > 0 ? totSec : 1.0;
+                    final currentVal = posSec.clamp(0.0, maxSec);
+
+                    return Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        SliderTheme(
+                          data: SliderTheme.of(context).copyWith(
+                            trackHeight: 3.5,
+                            thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 6),
+                            activeTrackColor: AppTheme.sacredGold,
+                            inactiveTrackColor: Colors.white.withValues(alpha: 0.2),
+                            thumbColor: AppTheme.sacredGold,
+                            overlayColor: AppTheme.sacredGold.withValues(alpha: 0.2),
+                          ),
+                          child: Slider(
+                            value: currentVal,
+                            min: 0.0,
+                            max: maxSec,
+                            onChanged: (val) {
+                              _audioPlayer.seek(Duration(milliseconds: val.toInt()));
+                            },
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                _formatDuration(position),
+                                style: const TextStyle(color: Colors.white70, fontSize: 10),
+                              ),
+                              Text(
+                                _formatDuration(total),
+                                style: const TextStyle(color: Colors.white70, fontSize: 10),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                ),
+                const SizedBox(height: 6),
+
+                // Main Play / Pause Button Row
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppTheme.sacredGold,
+                        foregroundColor: AppTheme.primaryBlue,
+                        padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 12),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                        elevation: 4,
+                      ),
+                      icon: isBuffering
+                          ? const SizedBox(
+                              width: 18,
+                              height: 18,
+                              child: CircularProgressIndicator(strokeWidth: 2, color: AppTheme.primaryBlue),
+                            )
+                          : Icon(isPlaying ? Icons.pause_rounded : Icons.play_arrow_rounded, size: 24),
+                      label: Text(
+                        isPlaying ? 'PAUSE PIANO' : 'PLAY PIANO & SING ALONG',
+                        style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 13, letterSpacing: 0.8),
+                      ),
+                      onPressed: _togglePlayPause,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   Widget _buildLyricsContent() {
-    int segmentCounter = 0;
     final List<Widget> items = [];
 
     for (int i = 0; i < widget.hymn.stanzas.length; i++) {
       final stanzaIndex = i;
-      final currentSegmentIndex = segmentCounter++;
-      final isThisStanzaSpeaking = _activeSegmentIndex == currentSegmentIndex;
 
       // Stanza Card
       items.add(
-        InkWell(
-          borderRadius: BorderRadius.circular(14),
-          onTap: () => _startHymnNarration(startIndex: currentSegmentIndex),
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 300),
-            padding: const EdgeInsets.all(16),
+        Container(
+          padding: const EdgeInsets.all(18),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: Colors.black.withValues(alpha: 0.08)),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.03),
+                blurRadius: 6,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                decoration: BoxDecoration(
+                  color: AppTheme.primaryBlue.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Text(
+                  'STANZA ${stanzaIndex + 1}',
+                  style: const TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.bold,
+                    color: AppTheme.primaryBlue,
+                    letterSpacing: 1.0,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
+              Text(
+                widget.hymn.stanzas[stanzaIndex],
+                style: TextStyle(
+                  fontSize: _lyricsFontSize,
+                  height: 1.75,
+                  fontFamily: 'Serif',
+                  fontWeight: FontWeight.w400,
+                  color: Colors.grey.shade900,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+
+      items.add(const SizedBox(height: 14));
+
+      // Chorus Card (rendered after stanza 1 or as applicable)
+      if (widget.hymn.chorus.isNotEmpty && i == 0) {
+        items.add(
+          Container(
+            padding: const EdgeInsets.all(18),
             decoration: BoxDecoration(
-              color: isThisStanzaSpeaking
-                  ? AppTheme.sacredGold.withValues(alpha: 0.15)
-                  : Colors.white,
-              borderRadius: BorderRadius.circular(14),
+              color: const Color(0xFFFBF8EE),
+              borderRadius: BorderRadius.circular(16),
               border: Border.all(
-                color: isThisStanzaSpeaking
-                    ? AppTheme.sacredGold
-                    : Colors.black.withValues(alpha: 0.08),
-                width: isThisStanzaSpeaking ? 2 : 1,
+                color: AppTheme.sacredGold.withValues(alpha: 0.5),
+                width: 1.5,
               ),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.03),
-                  blurRadius: 6,
+                  color: AppTheme.sacredGold.withValues(alpha: 0.08),
+                  blurRadius: 8,
                   offset: const Offset(0, 2),
                 ),
               ],
@@ -381,142 +620,35 @@ class _SdaHymnDetailScreenState extends State<SdaHymnDetailScreen> {
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
                       decoration: BoxDecoration(
-                        color: isThisStanzaSpeaking
-                            ? AppTheme.sacredGold
-                            : AppTheme.primaryBlue.withValues(alpha: 0.1),
+                        color: AppTheme.sacredGold,
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: Text(
-                        'STANZA ${stanzaIndex + 1}',
+                      child: const Text(
+                        'REFRAIN / CHORUS',
                         style: TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.bold,
-                          color: isThisStanzaSpeaking ? Colors.white : AppTheme.primaryBlue,
+                          color: Colors.white,
                           letterSpacing: 1.0,
                         ),
                       ),
                     ),
-                    if (isThisStanzaSpeaking)
-                      const Row(
-                        children: [
-                          Icon(Icons.volume_up, color: AppTheme.sacredGold, size: 16),
-                          SizedBox(width: 4),
-                          Text(
-                            'Speaking',
-                            style: TextStyle(
-                              color: AppTheme.sacredGold,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 11,
-                            ),
-                          ),
-                        ],
-                      )
-                    else
-                      IconButton(
-                        icon: const Icon(Icons.play_circle_outline, size: 20, color: Colors.grey),
-                        onPressed: () => _startHymnNarration(startIndex: currentSegmentIndex),
-                        padding: EdgeInsets.zero,
-                        constraints: const BoxConstraints(),
-                      ),
+                    const Icon(Icons.music_note, color: AppTheme.sacredGold, size: 18),
                   ],
                 ),
                 const SizedBox(height: 12),
                 Text(
-                  widget.hymn.stanzas[stanzaIndex],
+                  widget.hymn.chorus,
                   style: TextStyle(
-                    fontSize: 16,
-                    height: 1.65,
+                    fontSize: _lyricsFontSize,
+                    height: 1.75,
                     fontFamily: 'Serif',
-                    fontWeight: isThisStanzaSpeaking ? FontWeight.w600 : FontWeight.w400,
-                    color: isThisStanzaSpeaking ? AppTheme.primaryBlue : Colors.grey.shade900,
+                    fontStyle: FontStyle.italic,
+                    fontWeight: FontWeight.w600,
+                    color: AppTheme.primaryBlue,
                   ),
                 ),
               ],
-            ),
-          ),
-        ),
-      );
-
-      items.add(const SizedBox(height: 14));
-
-      // Chorus Card (if exists)
-      if (widget.hymn.chorus.isNotEmpty) {
-        final chorusSegmentIndex = segmentCounter++;
-        final isThisChorusSpeaking = _activeSegmentIndex == chorusSegmentIndex;
-
-        items.add(
-          InkWell(
-            borderRadius: BorderRadius.circular(14),
-            onTap: () => _startHymnNarration(startIndex: chorusSegmentIndex),
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 300),
-              margin: const EdgeInsets.only(left: 12),
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: isThisChorusSpeaking
-                    ? AppTheme.sacredGold.withValues(alpha: 0.2)
-                    : const Color(0xFFFBF8EE),
-                borderRadius: BorderRadius.circular(14),
-                border: Border.all(
-                  color: isThisChorusSpeaking
-                      ? AppTheme.sacredGold
-                      : AppTheme.sacredGold.withValues(alpha: 0.4),
-                  width: isThisChorusSpeaking ? 2 : 1,
-                ),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
-                        decoration: BoxDecoration(
-                          color: AppTheme.sacredGold,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: const Text(
-                          'CHORUS',
-                          style: TextStyle(
-                            fontSize: 11,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                            letterSpacing: 1.0,
-                          ),
-                        ),
-                      ),
-                      if (isThisChorusSpeaking)
-                        const Row(
-                          children: [
-                            Icon(Icons.volume_up, color: AppTheme.sacredGold, size: 16),
-                            SizedBox(width: 4),
-                            Text(
-                              'Speaking',
-                              style: TextStyle(
-                                color: AppTheme.sacredGold,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 11,
-                              ),
-                            ),
-                          ],
-                        ),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    widget.hymn.chorus,
-                    style: TextStyle(
-                      fontSize: 16,
-                      height: 1.65,
-                      fontFamily: 'Serif',
-                      fontStyle: FontStyle.italic,
-                      fontWeight: isThisChorusSpeaking ? FontWeight.w700 : FontWeight.w500,
-                      color: AppTheme.primaryBlue,
-                    ),
-                  ),
-                ],
-              ),
             ),
           ),
         );

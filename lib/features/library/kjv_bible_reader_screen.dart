@@ -247,48 +247,6 @@ class _KjvBibleReaderScreenState extends State<KjvBibleReaderScreen> {
     }
   }
 
-  void _showTranslationDialog() {
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Row(
-          children: [
-            Icon(Icons.language, color: AppTheme.primaryBlue),
-            SizedBox(width: 8),
-            Text('Bible Translation & Language', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-          ],
-        ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: BibleTranslation.values.map((tr) {
-            final isSelected = BibleMultiLangService.instance.currentTranslation == tr;
-            return ListTile(
-              leading: Text(tr.flag, style: const TextStyle(fontSize: 22)),
-              title: Text(tr.label, style: TextStyle(fontWeight: isSelected ? FontWeight.bold : FontWeight.w500)),
-              subtitle: Text(tr.languageName, style: const TextStyle(fontSize: 12)),
-              trailing: isSelected ? const Icon(Icons.check_circle, color: AppTheme.primaryGreen) : null,
-              onTap: () {
-                Navigator.pop(ctx);
-                setState(() {
-                  BibleMultiLangService.instance.setTranslation(tr);
-                });
-                _saveSettings();
-                _loadChapterContent();
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('Switched to ${tr.label} (${tr.languageName})'),
-                    backgroundColor: AppTheme.primaryGreen,
-                    duration: const Duration(seconds: 2),
-                  ),
-                );
-              },
-            );
-          }).toList(),
-        ),
-      ),
-    );
-  }
-
   void _showBookPicker() {
     showModalBottomSheet(
       context: context,
@@ -878,8 +836,6 @@ class _KjvBibleReaderScreenState extends State<KjvBibleReaderScreen> {
     final textColor = _getTextColor();
     final verseNumColor = _getVerseNumberColor();
     final totalChapters = KjvBibleService.instance.getChapterCount(_selectedBook);
-    final localizedBook = BibleMultiLangService.instance.getLocalizedBookName(_selectedBook);
-    final tr = BibleMultiLangService.instance.currentTranslation;
 
     return Scaffold(
       backgroundColor: bgColor,
@@ -889,20 +845,24 @@ class _KjvBibleReaderScreenState extends State<KjvBibleReaderScreen> {
           borderRadius: BorderRadius.circular(8),
           onTap: _showBookPicker,
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Flexible(
                   child: Text(
-                    '$localizedBook $_selectedChapter',
-                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    '$_selectedBook $_selectedChapter',
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 17,
+                      letterSpacing: 0.2,
+                    ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                const SizedBox(width: 2),
-                const Icon(Icons.arrow_drop_down, color: AppTheme.sacredGold, size: 20),
+                const SizedBox(width: 4),
+                const Icon(Icons.arrow_drop_down, color: AppTheme.sacredGold, size: 22),
               ],
             ),
           ),
@@ -910,33 +870,6 @@ class _KjvBibleReaderScreenState extends State<KjvBibleReaderScreen> {
         backgroundColor: AppTheme.primaryBlue,
         foregroundColor: Colors.white,
         actions: [
-          // Translation Selector Pill
-          InkWell(
-            borderRadius: BorderRadius.circular(8),
-            onTap: _showTranslationDialog,
-            child: Container(
-              margin: const EdgeInsets.symmetric(vertical: 10),
-              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-              decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.15),
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: AppTheme.sacredGold.withValues(alpha: 0.5)),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(tr.flag, style: const TextStyle(fontSize: 12)),
-                  const SizedBox(width: 3),
-                  Text(
-                    tr.languageName,
-                    style: const TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          const SizedBox(width: 2),
-
           // Audio Narration Button
           AnimatedBuilder(
             animation: SdaVoiceNarrationService.instance,
@@ -991,7 +924,7 @@ class _KjvBibleReaderScreenState extends State<KjvBibleReaderScreen> {
           ? const Center(child: CircularProgressIndicator())
           : Column(
               children: [
-                // Top Status Bar: Book info, translation, & swipe prompt
+                // Top Status Bar: Book info, KJV indicator, & swipe prompt
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
                   decoration: BoxDecoration(
@@ -1007,7 +940,7 @@ class _KjvBibleReaderScreenState extends State<KjvBibleReaderScreen> {
                           const Icon(Icons.check_circle, size: 13, color: Colors.green),
                           const SizedBox(width: 4),
                           Text(
-                            '${tr.label} • Offline',
+                            'King James Version (KJV) • Offline',
                             style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: textColor.withValues(alpha: 0.7)),
                           ),
                         ],
@@ -1243,7 +1176,7 @@ class _KjvBibleReaderScreenState extends State<KjvBibleReaderScreen> {
                           ),
                           icon: const Icon(Icons.format_list_numbered, size: 15, color: AppTheme.primaryBlue),
                           label: Text(
-                            '$localizedBook $_selectedChapter',
+                            '$_selectedBook $_selectedChapter',
                             style: const TextStyle(fontWeight: FontWeight.bold, color: AppTheme.primaryBlue, fontSize: 13),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,

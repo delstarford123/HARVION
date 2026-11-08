@@ -508,14 +508,14 @@ class _MusicScreenState extends State<MusicScreen> with SingleTickerProviderStat
               ),
               const Row(
                 children: [
-                  Icon(Icons.record_voice_over, color: AppTheme.sacredGold, size: 14),
+                  Icon(Icons.piano, color: AppTheme.primaryBlue, size: 16),
                   SizedBox(width: 4),
                   Text(
-                    'Voice Version Available',
+                    'Piano Accompaniment (Sing Along)',
                     style: TextStyle(
                       fontSize: 11,
                       fontWeight: FontWeight.w600,
-                      color: AppTheme.sacredGold,
+                      color: AppTheme.primaryBlue,
                     ),
                   ),
                 ],
@@ -659,13 +659,13 @@ class _MusicScreenState extends State<MusicScreen> with SingleTickerProviderStat
                   ),
                 ),
 
-                // Voice Narration & Sing Button
+                // Piano Accompaniment (Sing Along) Button
                 IconButton(
-                  tooltip: 'Voice Version / Sing Along',
+                  tooltip: 'Play Piano Accompaniment & Sing Along',
                   icon: const Icon(
-                    Icons.record_voice_over,
-                    color: AppTheme.sacredGold,
-                    size: 24,
+                    Icons.piano,
+                    color: AppTheme.primaryBlue,
+                    size: 26,
                   ),
                   onPressed: () {
                     Navigator.push(

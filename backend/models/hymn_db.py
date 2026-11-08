@@ -714,3 +714,4 @@ def save_hymn(data: Dict[str, Any]) -> Dict[str, Any]:
         conn.commit()
 
     return get_hymn_by_number(num) or {}
+
