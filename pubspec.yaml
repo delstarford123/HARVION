@@ -54,6 +54,7 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
+    - assets/bible/
     # If you have specific subfolders, list them here:
     # - assets/music/
     # - assets/pdfs/

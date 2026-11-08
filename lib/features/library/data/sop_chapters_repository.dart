@@ -190,8 +190,8 @@ class SopChaptersRepository {
       return ['No content available on this page.'];
     }
 
-    // Intelligently split paragraphs into pages
-    final paragraphs = content.split('\\n\\n');
+    // Intelligently split paragraphs into comfortable reading pages (~250-280 words)
+    final paragraphs = content.split(RegExp(r'\r?\n\s*\r?\n'));
     final List<String> pages = [];
     StringBuffer currentPage = StringBuffer();
     int wordCount = 0;
@@ -199,7 +199,7 @@ class SopChaptersRepository {
     for (final p in paragraphs) {
       final trimmed = p.trim();
       if (trimmed.isEmpty) continue;
-      final wordsInPara = trimmed.split(RegExp(r'\\s+')).length;
+      final wordsInPara = trimmed.split(RegExp(r'\s+')).length;
 
       if (wordCount + wordsInPara > 280 && currentPage.isNotEmpty) {
         pages.add(currentPage.toString().trim());
@@ -208,7 +208,7 @@ class SopChaptersRepository {
       }
 
       if (currentPage.isNotEmpty) {
-        currentPage.write('\\n\\n');
+        currentPage.write('\n\n');
       }
       currentPage.write(trimmed);
       wordCount += wordsInPara;

@@ -1,8 +1,10 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:flutter/services.dart';
 import 'package:share_plus/share_plus.dart';
 import '../../core/theme.dart';
+import 'data/kjv_bible_service.dart';
+
+enum BibleTheme { light, night, sepia, cream }
 
 class KjvBibleReaderScreen extends StatefulWidget {
   final String initialBook;
@@ -21,131 +23,180 @@ class KjvBibleReaderScreen extends StatefulWidget {
 class _KjvBibleReaderScreenState extends State<KjvBibleReaderScreen> {
   late String _selectedBook;
   late int _selectedChapter;
-  double _fontSize = 17.0;
-  bool _isDarkReadingMode = false;
-  bool _isLoading = false;
+  double _fontSize = 17.5;
+  String _fontFamily = 'Serif';
+  BibleTheme _theme = BibleTheme.light;
+  bool _isLoading = true;
   List<Map<String, dynamic>> _verses = [];
 
-  static const List<String> oldTestament = [
-    'Genesis', 'Exodus', 'Leviticus', 'Numbers', 'Deuteronomy',
-    'Joshua', 'Judges', 'Ruth', '1 Samuel', '2 Samuel',
-    '1 Kings', '2 Kings', '1 Chronicles', '2 Chronicles', 'Ezra',
-    'Nehemiah', 'Esther', 'Job', 'Psalms', 'Proverbs',
-    'Ecclesiastes', 'Song of Solomon', 'Isaiah', 'Jeremiah', 'Lamentations',
-    'Ezekiel', 'Daniel', 'Hosea', 'Joel', 'Amos',
-    'Obadiah', 'Jonah', 'Micah', 'Nahum', 'Habakkuk',
-    'Zephaniah', 'Haggai', 'Zechariah', 'Malachi'
-  ];
+  final TextEditingController _searchController = TextEditingController();
+  List<Map<String, dynamic>> _searchResults = [];
+  bool _isSearching = false;
 
-  static const List<String> newTestament = [
-    'Matthew', 'Mark', 'Luke', 'John', 'Acts',
-    'Romans', '1 Corinthians', '2 Corinthians', 'Galatians', 'Ephesians',
-    'Philippians', 'Colossians', '1 Thessalonians', '2 Thessalonians', '1 Timothy',
-    '2 Timothy', 'Titus', 'Philemon', 'Hebrews', 'James',
-    '1 Peter', '2 Peter', '1 John', '2 John', '3 John',
-    'Jude', 'Revelation'
-  ];
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
     _selectedBook = widget.initialBook;
     _selectedChapter = widget.initialChapter;
+    _initializeBible();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _initializeBible() async {
+    setState(() => _isLoading = true);
+    await KjvBibleService.instance.ensureInitialized();
     _loadChapterContent();
   }
 
-  Future<void> _loadChapterContent() async {
-    setState(() => _isLoading = true);
-
-    // Try fetching from public domain Bible API
-    try {
-      final formattedBook = _selectedBook.replaceAll(' ', '+');
-      final url = Uri.parse('https://bible-api.com/$formattedBook+$_selectedChapter?translation=kjv');
-      final response = await http.get(url).timeout(const Duration(seconds: 4));
-
-      if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-        final list = data['verses'] as List<dynamic>? ?? [];
-        if (mounted) {
-          setState(() {
-            _verses = list.map((v) => {
-              'verse': v['verse'] as int? ?? 0,
-              'text': v['text'] as String? ?? '',
-            }).toList();
-            _isLoading = false;
-          });
-          return;
-        }
-      }
-    } catch (_) {
-      // Fallback to offline curated scriptures
-    }
-
-    // Curated offline fallback for key prophetic and gospel passages
-    final fallback = _getOfflineFallback(_selectedBook, _selectedChapter);
+  void _loadChapterContent() {
+    final verses = KjvBibleService.instance.getVerses(_selectedBook, _selectedChapter);
     if (mounted) {
       setState(() {
-        _verses = fallback;
+        _verses = verses;
         _isLoading = false;
       });
+      // Scroll to top on chapter change
+      if (_scrollController.hasClients) {
+        _scrollController.animateTo(
+          0,
+          duration: const Duration(milliseconds: 250),
+          curve: Curves.easeOut,
+        );
+      }
     }
   }
 
-  List<Map<String, dynamic>> _getOfflineFallback(String book, int chapter) {
-    if (book == 'Revelation' && chapter == 14) {
-      return [
-        {'verse': 6, 'text': 'And I saw another angel fly in the midst of heaven, having the everlasting gospel to preach unto them that dwell on the earth, and to every nation, and kindred, and tongue, and people,'},
-        {'verse': 7, 'text': 'Saying with a loud voice, Fear God, and give glory to him; for the hour of his judgment is come: and worship him that made heaven, and earth, and the sea, and the fountains of waters.'},
-        {'verse': 8, 'text': 'And there followed another angel, saying, Babylon is fallen, is fallen, that great city, because she made all nations drink of the wine of the wrath of her fornication.'},
-        {'verse': 9, 'text': 'And the third angel followed them, saying with a loud voice, If any man worship the beast and his image, and receive his mark in his forehead, or in his hand,'},
-        {'verse': 10, 'text': 'The same shall drink of the wine of the wrath of God, which is poured out without mixture into the cup of his indignation; and he shall be tormented with fire and brimstone in the presence of the holy angels, and in the presence of the Lamb:'},
-        {'verse': 11, 'text': 'And the smoke of their torment ascendeth up for ever and ever: and they have no rest day nor night, who worship the beast and his image, and whosoever receiveth the mark of his name.'},
-        {'verse': 12, 'text': 'Here is the patience of the saints: here are they that keep the commandments of God, and the faith of Jesus.'},
+  void _nextChapter() {
+    final totalChapters = KjvBibleService.instance.getChapterCount(_selectedBook);
+    if (_selectedChapter < totalChapters) {
+      setState(() => _selectedChapter++);
+      _loadChapterContent();
+    } else {
+      // Move to next book if available
+      final allBooks = [
+        ...KjvBibleService.oldTestament,
+        ...KjvBibleService.newTestament
       ];
-    } else if (book == 'Exodus' && chapter == 20) {
-      return [
-        {'verse': 1, 'text': 'And God spake all these words, saying,'},
-        {'verse': 2, 'text': 'I am the LORD thy God, which have brought thee out of the land of Egypt, out of the house of bondage.'},
-        {'verse': 3, 'text': 'Thou shalt have no other gods before me.'},
-        {'verse': 8, 'text': 'Remember the sabbath day, to keep it holy.'},
-        {'verse': 9, 'text': 'Six days shalt thou labour, and do all thy work:'},
-        {'verse': 10, 'text': 'But the seventh day is the sabbath of the LORD thy God: in it thou shalt not do any work, thou, nor thy son, nor thy daughter, thy manservant, nor thy maidservant, nor thy cattle, nor thy stranger that is within thy gates:'},
-        {'verse': 11, 'text': 'For in six days the LORD made heaven and earth, the sea, and all that in them is, and rested the seventh day: wherefore the LORD blessed the sabbath day, and hallowed it.'},
-      ];
-    } else if (book == 'Psalms' && chapter == 23) {
-      return [
-        {'verse': 1, 'text': 'The LORD is my shepherd; I shall not want.'},
-        {'verse': 2, 'text': 'He maketh me to lie down in green pastures: he leadeth me beside the still waters.'},
-        {'verse': 3, 'text': 'He restoreth my soul: he leadeth me in the paths of righteousness for his name\'s sake.'},
-        {'verse': 4, 'text': 'Yea, though I walk through the valley of the shadow of death, I will fear no evil: for thou art with me; thy rod and thy staff they comfort me.'},
-        {'verse': 5, 'text': 'Thou preparest a table before me in the presence of mine enemies: thou anointest my head with oil; my cup runneth over.'},
-        {'verse': 6, 'text': 'Surely goodness and mercy shall follow me all the days of my life: and I will dwell in the house of the LORD for ever.'},
-      ];
+      final currentIndex = allBooks.indexOf(_selectedBook);
+      if (currentIndex != -1 && currentIndex + 1 < allBooks.length) {
+        setState(() {
+          _selectedBook = allBooks[currentIndex + 1];
+          _selectedChapter = 1;
+        });
+        _loadChapterContent();
+      }
     }
+  }
 
-    return [
-      {'verse': 1, 'text': 'In the beginning God created the heaven and the earth.'},
-      {'verse': 2, 'text': 'Thy word is a lamp unto my feet, and a light unto my path. (Psalm 119:105)'},
-      {'verse': 3, 'text': 'Connect to network to download all verses in this chapter, or read in offline mode.'},
-    ];
+  void _previousChapter() {
+    if (_selectedChapter > 1) {
+      setState(() => _selectedChapter--);
+      _loadChapterContent();
+    } else {
+      // Move to previous book if available
+      final allBooks = [
+        ...KjvBibleService.oldTestament,
+        ...KjvBibleService.newTestament
+      ];
+      final currentIndex = allBooks.indexOf(_selectedBook);
+      if (currentIndex > 0) {
+        final prevBook = allBooks[currentIndex - 1];
+        final prevBookTotalChapters = KjvBibleService.instance.getChapterCount(prevBook);
+        setState(() {
+          _selectedBook = prevBook;
+          _selectedChapter = prevBookTotalChapters;
+        });
+        _loadChapterContent();
+      }
+    }
+  }
+
+  Color _getBackgroundColor() {
+    switch (_theme) {
+      case BibleTheme.light:
+        return const Color(0xFFFFFDF8);
+      case BibleTheme.night:
+        return const Color(0xFF121212);
+      case BibleTheme.sepia:
+        return const Color(0xFFFBF0D9);
+      case BibleTheme.cream:
+        return const Color(0xFFF7F4EA);
+    }
+  }
+
+  Color _getTextColor() {
+    switch (_theme) {
+      case BibleTheme.light:
+        return const Color(0xFF212121);
+      case BibleTheme.night:
+        return const Color(0xFFE0E0E0);
+      case BibleTheme.sepia:
+        return const Color(0xFF2D2418);
+      case BibleTheme.cream:
+        return const Color(0xFF2C2C2C);
+    }
+  }
+
+  Color _getVerseNumberColor() {
+    switch (_theme) {
+      case BibleTheme.light:
+        return AppTheme.primaryBlue;
+      case BibleTheme.night:
+        return AppTheme.sacredGold;
+      case BibleTheme.sepia:
+        return const Color(0xFF8C5D1E);
+      case BibleTheme.cream:
+        return const Color(0xFF5D4037);
+    }
   }
 
   void _showBookPicker() {
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.white,
-      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
       builder: (context) {
         return DefaultTabController(
           length: 2,
           child: SizedBox(
-            height: 480,
+            height: 520,
             child: Column(
               children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                  decoration: const BoxDecoration(
+                    color: AppTheme.primaryBlue,
+                    borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Select Bible Book (KJV)',
+                        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.close, color: Colors.white70),
+                        onPressed: () => Navigator.pop(context),
+                      )
+                    ],
+                  ),
+                ),
                 const TabBar(
                   indicatorColor: AppTheme.sacredGold,
                   labelColor: AppTheme.primaryBlue,
                   unselectedLabelColor: Colors.grey,
+                  labelStyle: TextStyle(fontWeight: FontWeight.bold),
                   tabs: [
                     Tab(text: 'Old Testament (39)'),
                     Tab(text: 'New Testament (27)'),
@@ -154,8 +205,8 @@ class _KjvBibleReaderScreenState extends State<KjvBibleReaderScreen> {
                 Expanded(
                   child: TabBarView(
                     children: [
-                      _buildBookGrid(oldTestament),
-                      _buildBookGrid(newTestament),
+                      _buildBookGrid(KjvBibleService.oldTestament),
+                      _buildBookGrid(KjvBibleService.newTestament),
                     ],
                   ),
                 ),
@@ -172,7 +223,7 @@ class _KjvBibleReaderScreenState extends State<KjvBibleReaderScreen> {
       padding: const EdgeInsets.all(12),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 3,
-        childAspectRatio: 2.4,
+        childAspectRatio: 2.3,
         crossAxisSpacing: 8,
         mainAxisSpacing: 8,
       ),
@@ -180,6 +231,7 @@ class _KjvBibleReaderScreenState extends State<KjvBibleReaderScreen> {
       itemBuilder: (context, i) {
         final b = books[i];
         final isSelected = b == _selectedBook;
+        final chapters = KjvBibleService.instance.getChapterCount(b);
         return InkWell(
           onTap: () {
             Navigator.pop(context);
@@ -194,16 +246,33 @@ class _KjvBibleReaderScreenState extends State<KjvBibleReaderScreen> {
             decoration: BoxDecoration(
               color: isSelected ? AppTheme.primaryBlue : Colors.grey.shade100,
               borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: isSelected ? AppTheme.sacredGold : Colors.grey.shade300),
-            ),
-            child: Text(
-              b,
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
-                color: isSelected ? Colors.white : Colors.black87,
+              border: Border.all(
+                color: isSelected ? AppTheme.sacredGold : Colors.grey.shade300,
+                width: isSelected ? 2 : 1,
               ),
-              textAlign: TextAlign.center,
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  b,
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
+                    color: isSelected ? Colors.white : Colors.black87,
+                  ),
+                  textAlign: TextAlign.center,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                Text(
+                  '$chapters ch',
+                  style: TextStyle(
+                    fontSize: 10,
+                    color: isSelected ? AppTheme.sacredGold : Colors.grey.shade600,
+                  ),
+                ),
+              ],
             ),
           ),
         );
@@ -212,20 +281,35 @@ class _KjvBibleReaderScreenState extends State<KjvBibleReaderScreen> {
   }
 
   void _showChapterPicker() {
+    final totalChapters = KjvBibleService.instance.getChapterCount(_selectedBook);
+
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.white,
-      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
       builder: (context) {
         return Container(
           padding: const EdgeInsets.all(16),
-          height: 380,
+          height: 420,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Select Chapter - $_selectedBook',
-                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: AppTheme.primaryBlue)),
-              const SizedBox(height: 12),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    '$_selectedBook — Select Chapter',
+                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: AppTheme.primaryBlue),
+                  ),
+                  Text(
+                    '$totalChapters Total Chapters',
+                    style: const TextStyle(fontSize: 12, color: Colors.grey, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+              const Divider(height: 20),
               Expanded(
                 child: GridView.builder(
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -234,7 +318,7 @@ class _KjvBibleReaderScreenState extends State<KjvBibleReaderScreen> {
                     crossAxisSpacing: 8,
                     mainAxisSpacing: 8,
                   ),
-                  itemCount: 50,
+                  itemCount: totalChapters,
                   itemBuilder: (context, i) {
                     final ch = i + 1;
                     final isSel = ch == _selectedChapter;
@@ -247,14 +331,19 @@ class _KjvBibleReaderScreenState extends State<KjvBibleReaderScreen> {
                       child: Container(
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
-                          color: isSel ? AppTheme.sacredGold : Colors.grey.shade100,
+                          color: isSel ? AppTheme.primaryBlue : Colors.grey.shade100,
                           borderRadius: BorderRadius.circular(8),
+                          border: Border.all(
+                            color: isSel ? AppTheme.sacredGold : Colors.grey.shade300,
+                            width: isSel ? 2 : 1,
+                          ),
                         ),
                         child: Text(
                           '$ch',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: isSel ? Colors.black : Colors.black87,
+                            color: isSel ? Colors.white : Colors.black87,
+                            fontSize: 14,
                           ),
                         ),
                       ),
@@ -269,172 +358,434 @@ class _KjvBibleReaderScreenState extends State<KjvBibleReaderScreen> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final bgColor = _isDarkReadingMode ? const Color(0xFF1E1E1E) : const Color(0xFFFFFDF8);
-    final textColor = _isDarkReadingMode ? const Color(0xFFE0E0E0) : const Color(0xFF212121);
-    final verseNumColor = _isDarkReadingMode ? AppTheme.sacredGold : AppTheme.primaryBlue;
-
-    return Scaffold(
-      backgroundColor: bgColor,
-      appBar: AppBar(
-        title: Text('$_selectedBook $_selectedChapter (KJV)', style: const TextStyle(fontWeight: FontWeight.bold)),
-        backgroundColor: AppTheme.primaryBlue,
-        foregroundColor: Colors.white,
-        actions: [
-          IconButton(
-            tooltip: 'Choose Book',
-            icon: const Icon(Icons.menu_book),
-            onPressed: _showBookPicker,
-          ),
-          IconButton(
-            tooltip: 'Choose Chapter',
-            icon: const Icon(Icons.numbers),
-            onPressed: _showChapterPicker,
-          ),
-          IconButton(
-            tooltip: _isDarkReadingMode ? 'Light Reading Mode' : 'Night Reading Mode',
-            icon: Icon(_isDarkReadingMode ? Icons.light_mode : Icons.dark_mode),
-            onPressed: () => setState(() => _isDarkReadingMode = !_isDarkReadingMode),
-          ),
-          PopupMenuButton<String>(
-            icon: const Icon(Icons.text_fields),
-            tooltip: 'Font Size',
-            onSelected: (val) {
-              setState(() {
-                if (val == 'increase' && _fontSize < 28) _fontSize += 2;
-                if (val == 'decrease' && _fontSize > 13) _fontSize -= 2;
-              });
-            },
-            itemBuilder: (context) => [
-              const PopupMenuItem(value: 'increase', child: Text('A+ Enlarge Font')),
-              const PopupMenuItem(value: 'decrease', child: Text('A- Reduce Font')),
-            ],
-          ),
-        ],
+  void _showSearchDialog() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      body: _isLoading
-          ? const Center(child: CircularProgressIndicator(color: AppTheme.sacredGold))
-          : SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Book Chapter Header
-                  Center(
-                    child: Column(
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setSheetState) {
+            return Padding(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom,
+                top: 16,
+                left: 16,
+                right: 16,
+              ),
+              child: SizedBox(
+                height: 550,
+                child: Column(
+                  children: [
+                    Row(
                       children: [
-                        Text(
-                          _selectedBook.toUpperCase(),
-                          style: TextStyle(
-                            fontSize: 13,
-                            letterSpacing: 2.0,
-                            fontWeight: FontWeight.bold,
-                            color: verseNumColor,
-                          ),
+                        const Icon(Icons.search, color: AppTheme.primaryBlue),
+                        const SizedBox(width: 8),
+                        const Text(
+                          'Search Scriptures (KJV)',
+                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: AppTheme.primaryBlue),
                         ),
-                        const SizedBox(height: 4),
-                        Text(
-                          'Chapter $_selectedChapter',
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            color: textColor,
-                          ),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.symmetric(vertical: 12),
-                          width: 60,
-                          height: 2,
-                          color: AppTheme.sacredGold,
+                        const Spacer(),
+                        IconButton(
+                          icon: const Icon(Icons.close),
+                          onPressed: () => Navigator.pop(context),
                         ),
                       ],
                     ),
-                  ),
-
-                  const SizedBox(height: 10),
-
-                  // Verses
-                  ..._verses.map((v) {
-                    final vNum = v['verse'];
-                    final text = v['text'].toString().trim();
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 12.0),
-                      child: InkWell(
-                        onLongPress: () {
-                          Share.share(
-                            '📖 "$text"\n— $_selectedBook $_selectedChapter:$vNum (KJV)\nHarvion SDA Ministry',
-                          );
-                        },
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(
-                              width: 28,
-                              child: Text(
-                                '$vNum',
-                                style: TextStyle(
-                                  fontSize: _fontSize * 0.75,
-                                  fontWeight: FontWeight.bold,
-                                  color: verseNumColor,
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: Text(
-                                text,
-                                style: TextStyle(
-                                  fontSize: _fontSize,
-                                  height: 1.65,
-                                  fontFamily: 'serif',
-                                  color: textColor,
-                                ),
-                              ),
-                            ),
-                          ],
+                    const SizedBox(height: 8),
+                    TextField(
+                      controller: _searchController,
+                      decoration: InputDecoration(
+                        hintText: 'Search word or phrase (e.g. Sabbath, Faith, Seal)...',
+                        filled: true,
+                        fillColor: Colors.grey.shade100,
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide.none),
+                        suffixIcon: IconButton(
+                          icon: const Icon(Icons.arrow_forward),
+                          onPressed: () {
+                            final q = _searchController.text.trim();
+                            if (q.isNotEmpty) {
+                              setSheetState(() => _isSearching = true);
+                              final res = KjvBibleService.instance.searchVerses(q);
+                              setSheetState(() {
+                                _searchResults = res;
+                                _isSearching = false;
+                              });
+                            }
+                          },
                         ),
                       ),
-                    );
-                  }),
+                      onSubmitted: (q) {
+                        if (q.trim().isNotEmpty) {
+                          setSheetState(() => _isSearching = true);
+                          final res = KjvBibleService.instance.searchVerses(q);
+                          setSheetState(() {
+                            _searchResults = res;
+                            _isSearching = false;
+                          });
+                        }
+                      },
+                    ),
+                    const SizedBox(height: 12),
+                    if (_isSearching)
+                      const Expanded(child: Center(child: CircularProgressIndicator()))
+                    else if (_searchResults.isEmpty)
+                      const Expanded(
+                        child: Center(
+                          child: Text('Type a keyword to search all 66 books of the Bible.', style: TextStyle(color: Colors.grey)),
+                        ),
+                      )
+                    else
+                      Expanded(
+                        child: ListView.separated(
+                          itemCount: _searchResults.length,
+                          separatorBuilder: (_, __) => const Divider(height: 1),
+                          itemBuilder: (context, i) {
+                            final item = _searchResults[i];
+                            return ListTile(
+                              title: Text(
+                                '${item['book']} ${item['chapter']}:${item['verse']}',
+                                style: const TextStyle(fontWeight: FontWeight.bold, color: AppTheme.primaryBlue),
+                              ),
+                              subtitle: Text(
+                                item['text'].toString(),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              onTap: () {
+                                Navigator.pop(context);
+                                setState(() {
+                                  _selectedBook = item['book'] as String;
+                                  _selectedChapter = item['chapter'] as int;
+                                });
+                                _loadChapterContent();
+                              },
+                            );
+                          },
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
 
-                  const SizedBox(height: 30),
-
-                  // Bottom Chapter Controls
+  void _showReadingPreferences() {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setSheetState) {
+            return Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text('Reading Customization', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                  const SizedBox(height: 16),
+                  const Text('Theme Mode', style: TextStyle(fontSize: 13, color: Colors.grey, fontWeight: FontWeight.w600)),
+                  const SizedBox(height: 8),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      if (_selectedChapter > 1)
-                        ElevatedButton.icon(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppTheme.primaryBlue,
-                            foregroundColor: Colors.white,
-                          ),
-                          icon: const Icon(Icons.chevron_left),
-                          label: Text('Chapter ${_selectedChapter - 1}'),
-                          onPressed: () {
-                            setState(() => _selectedChapter--);
-                            _loadChapterContent();
-                          },
-                        )
-                      else
-                        const SizedBox.shrink(),
-                      ElevatedButton.icon(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppTheme.primaryGreen,
-                          foregroundColor: Colors.white,
-                        ),
-                        icon: const Icon(Icons.chevron_right),
-                        label: Text('Chapter ${_selectedChapter + 1}'),
+                      _buildThemeTile('Light', BibleTheme.light, const Color(0xFFFFFDF8), Colors.black, setSheetState),
+                      _buildThemeTile('Night', BibleTheme.night, const Color(0xFF121212), Colors.white, setSheetState),
+                      _buildThemeTile('Sepia', BibleTheme.sepia, const Color(0xFFFBF0D9), const Color(0xFF2D2418), setSheetState),
+                      _buildThemeTile('Cream', BibleTheme.cream, const Color(0xFFF7F4EA), const Color(0xFF2C2C2C), setSheetState),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  const Text('Font Size', style: TextStyle(fontSize: 13, color: Colors.grey, fontWeight: FontWeight.w600)),
+                  Row(
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.remove_circle_outline),
                         onPressed: () {
-                          setState(() => _selectedChapter++);
-                          _loadChapterContent();
+                          if (_fontSize > 13) {
+                            setState(() => _fontSize -= 1.0);
+                            setSheetState(() {});
+                          }
+                        },
+                      ),
+                      Expanded(
+                        child: Slider(
+                          value: _fontSize,
+                          min: 13.0,
+                          max: 28.0,
+                          activeColor: AppTheme.primaryBlue,
+                          onChanged: (val) {
+                            setState(() => _fontSize = val);
+                            setSheetState(() {});
+                          },
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.add_circle_outline),
+                        onPressed: () {
+                          if (_fontSize < 28) {
+                            setState(() => _fontSize += 1.0);
+                            setSheetState(() {});
+                          }
                         },
                       ),
                     ],
                   ),
-                  const SizedBox(height: 40),
                 ],
               ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Widget _buildThemeTile(String label, BibleTheme t, Color bg, Color textCol, StateSetter setSheetState) {
+    final isSel = _theme == t;
+    return InkWell(
+      onTap: () {
+        setState(() => _theme = t);
+        setSheetState(() {});
+      },
+      child: Column(
+        children: [
+          Container(
+            width: 55,
+            height: 45,
+            decoration: BoxDecoration(
+              color: bg,
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(color: isSel ? AppTheme.sacredGold : Colors.grey.shade400, width: isSel ? 3 : 1),
+            ),
+            alignment: Alignment.center,
+            child: Text('Aa', style: TextStyle(color: textCol, fontWeight: FontWeight.bold, fontSize: 14)),
+          ),
+          const SizedBox(height: 4),
+          Text(label, style: TextStyle(fontSize: 11, fontWeight: isSel ? FontWeight.bold : FontWeight.normal)),
+        ],
+      ),
+    );
+  }
+
+  void _shareVerse(int verseNum, String verseText) {
+    final content = '$_selectedBook $_selectedChapter:$verseNum (KJV)\n\n"$verseText"\n\n— Read on HARVION SDA Ministry App';
+    Share.share(content);
+  }
+
+  void _copyVerse(int verseNum, String verseText) {
+    final content = '$_selectedBook $_selectedChapter:$verseNum (KJV) — "$verseText"';
+    Clipboard.setData(ClipboardData(text: content));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Copied $_selectedBook $_selectedChapter:$verseNum to clipboard'),
+        duration: const Duration(seconds: 2),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final bgColor = _getBackgroundColor();
+    final textColor = _getTextColor();
+    final verseNumColor = _getVerseNumberColor();
+    final totalChapters = KjvBibleService.instance.getChapterCount(_selectedBook);
+
+    return Scaffold(
+      backgroundColor: bgColor,
+      appBar: AppBar(
+        title: InkWell(
+          onTap: _showBookPicker,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                '$_selectedBook $_selectedChapter',
+                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+              ),
+              const Icon(Icons.arrow_drop_down, color: AppTheme.sacredGold),
+            ],
+          ),
+        ),
+        backgroundColor: AppTheme.primaryBlue,
+        foregroundColor: Colors.white,
+        actions: [
+          IconButton(
+            tooltip: 'Search Bible',
+            icon: const Icon(Icons.search),
+            onPressed: _showSearchDialog,
+          ),
+          IconButton(
+            tooltip: 'Select Chapter',
+            icon: const Icon(Icons.numbers),
+            onPressed: _showChapterPicker,
+          ),
+          IconButton(
+            tooltip: 'Reading Customization',
+            icon: const Icon(Icons.format_size),
+            onPressed: _showReadingPreferences,
+          ),
+        ],
+      ),
+      body: _isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : Column(
+              children: [
+                // Top Status Bar: Book info & offline indicator
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  decoration: BoxDecoration(
+                    color: Colors.black.withOpacity(0.04),
+                    border: Border(bottom: BorderSide(color: Colors.grey.withOpacity(0.2))),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          const Icon(Icons.check_circle, size: 14, color: Colors.green),
+                          const SizedBox(width: 4),
+                          Text(
+                            'Complete KJV Offline',
+                            style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: textColor.withOpacity(0.7)),
+                          ),
+                        ],
+                      ),
+                      Text(
+                        'Chapter $_selectedChapter of $totalChapters • ${_verses.length} Verses',
+                        style: TextStyle(fontSize: 11, color: textColor.withOpacity(0.7)),
+                      ),
+                    ],
+                  ),
+                ),
+
+                // Verses List View
+                Expanded(
+                  child: ListView.builder(
+                    controller: _scrollController,
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                    itemCount: _verses.length,
+                    itemBuilder: (context, index) {
+                      final item = _verses[index];
+                      final vNum = item['verse'] as int? ?? (index + 1);
+                      final text = item['text'] as String? ?? '';
+
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 16.0),
+                        child: InkWell(
+                          onLongPress: () {
+                            showModalBottomSheet(
+                              context: context,
+                              builder: (_) => Container(
+                                padding: const EdgeInsets.all(16),
+                                child: Wrap(
+                                  children: [
+                                    ListTile(
+                                      leading: const Icon(Icons.copy, color: AppTheme.primaryBlue),
+                                      title: const Text('Copy Verse'),
+                                      onTap: () {
+                                        Navigator.pop(context);
+                                        _copyVerse(vNum, text);
+                                      },
+                                    ),
+                                    ListTile(
+                                      leading: const Icon(Icons.share, color: AppTheme.sacredGold),
+                                      title: const Text('Share Verse'),
+                                      onTap: () {
+                                        Navigator.pop(context);
+                                        _shareVerse(vNum, text);
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                          child: RichText(
+                            text: TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: '$vNum ',
+                                  style: TextStyle(
+                                    fontSize: _fontSize * 0.75,
+                                    fontWeight: FontWeight.bold,
+                                    color: verseNumColor,
+                                    fontFamily: _fontFamily,
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: text,
+                                  style: TextStyle(
+                                    fontSize: _fontSize,
+                                    color: textColor,
+                                    fontFamily: _fontFamily,
+                                    height: 1.65,
+                                    letterSpacing: 0.2,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+
+                // Bottom Navigation Bar for Chapter prev/next
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  decoration: BoxDecoration(
+                    color: bgColor,
+                    border: Border(top: BorderSide(color: Colors.grey.withOpacity(0.2))),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      ElevatedButton.icon(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.grey.shade200,
+                          foregroundColor: Colors.black87,
+                          elevation: 0,
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                        ),
+                        icon: const Icon(Icons.arrow_back_ios, size: 14),
+                        label: const Text('Prev Ch', style: TextStyle(fontSize: 12)),
+                        onPressed: _previousChapter,
+                      ),
+                      TextButton.icon(
+                        icon: const Icon(Icons.format_list_numbered, size: 16, color: AppTheme.primaryBlue),
+                        label: Text(
+                          '$_selectedBook $_selectedChapter',
+                          style: const TextStyle(fontWeight: FontWeight.bold, color: AppTheme.primaryBlue),
+                        ),
+                        onPressed: _showChapterPicker,
+                      ),
+                      ElevatedButton.icon(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppTheme.primaryBlue,
+                          foregroundColor: Colors.white,
+                          elevation: 0,
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                        ),
+                        label: const Text('Next Ch', style: TextStyle(fontSize: 12)),
+                        icon: const Icon(Icons.arrow_forward_ios, size: 14),
+                        onPressed: _nextChapter,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
     );
   }
