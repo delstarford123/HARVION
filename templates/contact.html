@@ -1,322 +1,196 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Contact HARVION — Literature Evangelism & Ministry Inquiries</title>
-  
-  <!-- Marketing & Social Sharing Meta Tags -->
-  <meta name="description" content="Get in touch with HARVION SDA Ministry. Contact us for physical Adventist book orders, literature evangelist partnerships, prayer requests, or general inquiries.">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://harvion.delstarfordworks.co.ke/contact.html">
-  <meta property="og:title" content="Contact HARVION — Adventist Literature Ministry">
-  <meta property="og:description" content="Reach our literature evangelism team at harvion@delstarfordworks.co.ke or call 0745090990.">
-  <meta property="og:image" content="https://images.unsplash.com/photo-1519791883288-dc8bd696e667?w=1200&q=80">
-  <meta name="twitter:card" content="summary_large_image">
+{% extends "base.html" %}
 
-  <!-- Favicon -->
-  <link rel="icon" href="https://img.icons8.com/color/96/holy-bible.png" type="image/png">
+{% block title %}Contact HARVION — Literature Evangelism & Ministry Inquiries{% endblock %}
+{% block og_path %}/contact.html{% endblock %}
+{% block og_title %}Contact HARVION — Adventist Literature Ministry{% endblock %}
+{% block og_description %}Get in touch with HARVION SDA Ministry for physical book deliveries across Kenya, literature evangelist partnerships, or prayer requests.{% endblock %}
 
-  <!-- Google Fonts & Font Awesome 6 Icons -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Inter:wght@300;400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            brand: {
-              dark: '#081325',
-              navy: '#0F2347',
-              royal: '#1A365D',
-              gold: '#D4AF37',
-              goldHover: '#B89628',
-              goldLight: '#FBF4DB',
-              cream: '#FDFBF7'
-            }
-          },
-          fontFamily: {
-            heading: ['Cinzel', 'serif'],
-            body: ['Inter', 'sans-serif'],
-            serif: ['Lora', 'serif'],
-          }
-        }
-      }
-    }
-  </script>
-
-  <style>
-    html { scroll-behavior: smooth; }
-    .glass-nav {
-      background: rgba(8, 19, 37, 0.92);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-    }
-    .gold-gradient-text {
-      background: linear-gradient(135deg, #FFF1C5 0%, #D4AF37 50%, #AA8010 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .gold-border {
-      border: 1px solid rgba(212, 175, 55, 0.28);
-    }
-  </style>
-</head>
-<body class="bg-brand-dark text-slate-100 font-body antialiased selection:bg-brand-gold selection:text-brand-dark">
-
-  <!-- ========================================== -->
-  <!-- 📌 NAVIGATION BAR                         -->
-  <!-- ========================================== -->
-  <nav class="fixed top-0 left-0 w-full z-50 glass-nav border-b border-white/10 transition duration-300">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-      
-      <!-- Brand Logo -->
-      <a href="/home.html" class="flex items-center space-x-3 group">
-        <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-brand-gold to-yellow-200 flex items-center justify-center shadow-lg shadow-brand-gold/20 group-hover:scale-105 transition">
-          <img src="/assets/images/harvion_logo.png" alt="HARVION Logo" class="w-full h-full object-contain rounded-xl p-0.5 bg-white">
-        </div>
-        <div>
-          <span class="font-heading font-extrabold text-2xl tracking-wider gold-gradient-text block leading-none">HARVION</span>
-          <span class="text-[10px] uppercase tracking-widest text-brand-gold/80 font-semibold">SDA Ministry Ecosystem</span>
-        </div>
-      </a>
-
-      <!-- Desktop Links -->
-      <div class="hidden md:flex items-center space-x-8 text-sm font-medium text-slate-300">
-        <a href="/home.html" class="hover:text-brand-gold transition">Home</a>
-        <a href="/books.html" class="hover:text-brand-gold transition">50 SOP Books</a>
-        <a href="/about.html" class="hover:text-brand-gold transition">About & Faith</a>
-        <a href="/support.html" class="hover:text-brand-gold transition">Support Work</a>
-        <a href="/contact.html" class="text-brand-gold font-bold transition">Contact Us</a>
+{% block content %}
+<!-- ========================================== -->
+<!-- ✉️ HERO & CONTACT SECTION                   -->
+<!-- ========================================== -->
+<section class="pt-36 pb-20 md:pt-44 md:pb-28 bg-gradient-to-b from-brand-dark via-brand-navy to-brand-dark border-b border-white/10 relative">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    
+    <div class="text-center max-w-3xl mx-auto mb-16">
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-gold/10 border border-brand-gold/30 text-brand-gold text-xs font-semibold uppercase tracking-wider mb-4">
+        <i class="fa-solid fa-envelope-open-text"></i> Connect With Harvion Ministry
       </div>
+      <h1 class="text-4xl sm:text-5xl font-heading font-extrabold text-white leading-tight">
+        We Are Here to Serve & Fellowship With You
+      </h1>
+      <p class="text-slate-300 font-serif text-base mt-4 leading-relaxed">
+        Whether you need physical book deliveries across Kenya, wish to partner as a literature evangelist, or have a prayer request — our team is ready to assist.
+      </p>
+    </div>
 
-      <!-- Action Button -->
-      <div class="hidden md:flex items-center space-x-4">
-        <a href="/support.html" class="px-5 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider bg-gradient-to-r from-brand-gold to-yellow-400 text-brand-dark hover:brightness-110 shadow-lg shadow-brand-gold/25 transition flex items-center gap-1.5">
-          <i class="fa-solid fa-hand-holding-heart"></i> Support Ministry
+    <!-- Contact Info Cards Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+      
+      <!-- Card 1: Email -->
+      <div class="bg-brand-navy/60 rounded-2xl p-8 gold-border text-center hover:bg-brand-navy/90 transition shadow-xl">
+        <div class="w-14 h-14 rounded-2xl bg-brand-gold/20 flex items-center justify-center mx-auto mb-4 text-brand-gold text-2xl">
+          <i class="fa-solid fa-envelope"></i>
+        </div>
+        <h3 class="font-heading font-bold text-lg text-white mb-2">Direct Ministry Email</h3>
+        <p class="text-xs text-slate-400 mb-4 font-serif">For inquiries, bulk orders, and literature evangelist verification.</p>
+        <a href="mailto:harvion@delstarfordworks.co.ke" class="text-brand-gold hover:underline font-semibold text-sm break-all">
+          harvion@delstarfordworks.co.ke
         </a>
       </div>
 
-      <!-- Mobile Menu Button -->
-      <button onclick="toggleMobileMenu()" class="md:hidden text-2xl text-brand-gold p-2">
-        <i class="fa-solid fa-bars" id="menu-icon"></i>
-      </button>
-    </div>
-
-    <!-- Mobile Dropdown -->
-    <div id="mobile-menu" class="hidden md:hidden bg-brand-dark/95 border-b border-brand-gold/20 px-6 py-6 space-y-4 text-center">
-      <a href="/home.html" class="block text-slate-200 hover:text-brand-gold py-2 font-medium">Home</a>
-      <a href="/books.html" class="block text-slate-200 hover:text-brand-gold py-2 font-medium">50 SOP Books</a>
-      <a href="/about.html" class="block text-slate-200 hover:text-brand-gold py-2 font-medium">About & Faith</a>
-      <a href="/support.html" class="block text-slate-200 hover:text-brand-gold py-2 font-medium">Support Work</a>
-      <a href="/contact.html" class="block text-brand-gold font-bold py-2">Contact Us</a>
-      <a href="/support.html" class="block w-full py-3 rounded-lg bg-brand-gold text-brand-dark font-bold uppercase text-xs tracking-wider">Support Ministry</a>
-    </div>
-  </nav>
-
-  <!-- ========================================== -->
-  <!-- ✉️ HERO & CONTACT SECTION                   -->
-  <!-- ========================================== -->
-  <section class="pt-36 pb-20 md:pt-44 md:pb-28 bg-gradient-to-b from-brand-dark via-brand-navy to-brand-dark border-b border-white/10 relative">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-      
-      <div class="text-center max-w-3xl mx-auto mb-16">
-        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-gold/10 border border-brand-gold/30 text-brand-gold text-xs font-semibold uppercase tracking-wider mb-4">
-          <i class="fa-solid fa-envelope-open-text"></i> Connect With Harvion Ministry
+      <!-- Card 2: Phone & WhatsApp -->
+      <div class="bg-brand-navy/60 rounded-2xl p-8 gold-border text-center hover:bg-brand-navy/90 transition shadow-xl">
+        <div class="w-14 h-14 rounded-2xl bg-brand-gold/20 flex items-center justify-center mx-auto mb-4 text-brand-gold text-2xl">
+          <i class="fa-solid fa-phone-volume"></i>
         </div>
-        <h1 class="text-4xl sm:text-5xl font-heading font-extrabold text-white leading-tight">
-          We Are Here to Serve & Fellowship With You
-        </h1>
-        <p class="text-slate-300 font-serif text-base mt-4 leading-relaxed">
-          Whether you need assistance with physical book deliveries across Kenya, want to join our literature evangelism family, or request prayer — our dedicated team is at your service.
-        </p>
+        <h3 class="font-heading font-bold text-lg text-white mb-2">Phone & WhatsApp</h3>
+        <p class="text-xs text-slate-400 mb-4 font-serif">Reach our customer desk and colporteur coordination team.</p>
+        <a href="tel:0745090990" class="text-brand-gold hover:underline font-semibold text-sm block mb-1">
+          0745090990
+        </a>
+        <span class="text-[11px] text-slate-400">WhatsApp: +254 745 090 990</span>
       </div>
 
-      <!-- Contact Info Cards Grid -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-        
-        <!-- Card 1: Email -->
-        <div class="bg-brand-navy/60 rounded-2xl p-8 gold-border text-center hover:bg-brand-navy/90 transition shadow-xl">
-          <div class="w-14 h-14 rounded-2xl bg-brand-gold/20 flex items-center justify-center mx-auto mb-4 text-brand-gold text-2xl">
-            <i class="fa-solid fa-envelope"></i>
-          </div>
-          <h3 class="font-heading font-bold text-lg text-white mb-2">Direct Ministry Email</h3>
-          <p class="text-xs text-slate-400 mb-4 font-serif">For official communication, book orders, and literature evangelist verification.</p>
-          <a href="mailto:harvion@delstarfordworks.co.ke" class="text-brand-gold hover:underline font-semibold text-sm break-all">
-            harvion@delstarfordworks.co.ke
-          </a>
+      <!-- Card 3: Literature Depots -->
+      <div class="bg-brand-navy/60 rounded-2xl p-8 gold-border text-center hover:bg-brand-navy/90 transition shadow-xl">
+        <div class="w-14 h-14 rounded-2xl bg-brand-gold/20 flex items-center justify-center mx-auto mb-4 text-brand-gold text-2xl">
+          <i class="fa-solid fa-book-bible"></i>
         </div>
-
-        <!-- Card 2: Phone & WhatsApp -->
-        <div class="bg-brand-navy/60 rounded-2xl p-8 gold-border text-center hover:bg-brand-navy/90 transition shadow-xl">
-          <div class="w-14 h-14 rounded-2xl bg-brand-gold/20 flex items-center justify-center mx-auto mb-4 text-brand-gold text-2xl">
-            <i class="fa-solid fa-phone-volume"></i>
-          </div>
-          <h3 class="font-heading font-bold text-lg text-white mb-2">Phone & WhatsApp</h3>
-          <p class="text-xs text-slate-400 mb-4 font-serif">Reach our customer support desk and colporteur coordination team.</p>
-          <a href="tel:0745090990" class="text-brand-gold hover:underline font-semibold text-sm block mb-1">
-            0745090990
-          </a>
-          <span class="text-[11px] text-slate-400">WhatsApp: +254 745 090 990</span>
-        </div>
-
-        <!-- Card 3: Literature Depots -->
-        <div class="bg-brand-navy/60 rounded-2xl p-8 gold-border text-center hover:bg-brand-navy/90 transition shadow-xl">
-          <div class="w-14 h-14 rounded-2xl bg-brand-gold/20 flex items-center justify-center mx-auto mb-4 text-brand-gold text-2xl">
-            <i class="fa-solid fa-book-bible"></i>
-          </div>
-          <h3 class="font-heading font-bold text-lg text-white mb-2">Depot & Distribution</h3>
-          <p class="text-xs text-slate-400 mb-4 font-serif">Maxwell Adventist Book Centre, Newlife SDA Church, and Doorstep Couriers across East Africa.</p>
-          <span class="text-xs text-brand-gold font-medium">Nairobi • Kisumu • Mombasa • Eldoret</span>
-        </div>
-
-      </div>
-
-      <!-- Contact & Prayer Request Form -->
-      <div class="bg-brand-navy/80 rounded-3xl p-8 sm:p-12 gold-border shadow-2xl max-w-3xl mx-auto">
-        <h2 class="text-2xl sm:text-3xl font-heading font-bold text-white text-center mb-2">
-          Send Us a Message or Prayer Request
-        </h2>
-        <p class="text-center text-slate-300 font-serif text-sm mb-8">
-          Fill in your details below and a member of our ministry will respond promptly.
-        </p>
-
-        <form id="contact-form" onsubmit="handleContactSubmit(event)" class="space-y-6">
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            <div>
-              <label class="block text-xs uppercase font-bold text-slate-300 mb-2">Full Name</label>
-              <input type="text" id="contact-name" required placeholder="Brother / Sister Name" class="w-full px-4 py-3 rounded-xl bg-brand-dark/90 border border-white/10 text-white placeholder-slate-500 focus:outline-none focus:border-brand-gold transition text-sm">
-            </div>
-            <div>
-              <label class="block text-xs uppercase font-bold text-slate-300 mb-2">Phone Number (M-Pesa / Call)</label>
-              <input type="tel" id="contact-phone" required placeholder="e.g. 0745090990" class="w-full px-4 py-3 rounded-xl bg-brand-dark/90 border border-white/10 text-white placeholder-slate-500 focus:outline-none focus:border-brand-gold transition text-sm">
-            </div>
-          </div>
-
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            <div>
-              <label class="block text-xs uppercase font-bold text-slate-300 mb-2">Your Email</label>
-              <input type="email" id="contact-email" required placeholder="name@example.com" class="w-full px-4 py-3 rounded-xl bg-brand-dark/90 border border-white/10 text-white placeholder-slate-500 focus:outline-none focus:border-brand-gold transition text-sm">
-            </div>
-            <div>
-              <label class="block text-xs uppercase font-bold text-slate-300 mb-2">Inquiry Type</label>
-              <select id="contact-category" class="w-full px-4 py-3 rounded-xl bg-brand-dark/90 border border-white/10 text-white focus:outline-none focus:border-brand-gold transition text-sm">
-                <option value="Book Order Support">Hardcopy Book Order Support</option>
-                <option value="Colporteur Literature Evangelism">Literature Evangelism / Selling Books</option>
-                <option value="Prayer Request">Prayer & Spiritual Guidance</option>
-                <option value="Church Camp Meeting Outpost">Camp Meeting Book Stand Inquiry</option>
-                <option value="General Inquiry">General Ministry Inquiry</option>
-              </select>
-            </div>
-          </div>
-
-          <div>
-            <label class="block text-xs uppercase font-bold text-slate-300 mb-2">Your Message / Prayer Request</label>
-            <textarea id="contact-message" rows="5" required placeholder="Write your message, book delivery questions, or spiritual prayer request here..." class="w-full px-4 py-3 rounded-xl bg-brand-dark/90 border border-white/10 text-white placeholder-slate-500 focus:outline-none focus:border-brand-gold transition text-sm"></textarea>
-          </div>
-
-          <div class="text-center pt-2">
-            <button type="submit" id="submit-btn" class="w-full sm:w-auto px-10 py-3.5 rounded-xl bg-gradient-to-r from-brand-gold to-yellow-400 text-brand-dark font-bold uppercase tracking-wider text-sm hover:brightness-110 shadow-lg shadow-brand-gold/25 transition">
-              <i class="fa-solid fa-paper-plane mr-2"></i> Submit Message
-            </button>
-          </div>
-        </form>
-
-        <div id="contact-alert" class="hidden mt-6 p-4 rounded-xl text-center text-sm font-semibold"></div>
+        <h3 class="font-heading font-bold text-lg text-white mb-2">Depot & Distribution</h3>
+        <p class="text-xs text-slate-400 mb-4 font-serif">Maxwell Adventist Book Centre, Newlife SDA Church, and Doorstep Couriers across East Africa.</p>
+        <span class="text-xs text-brand-gold font-medium">Nairobi • Kisumu • Mombasa • Eldoret</span>
       </div>
 
     </div>
-  </section>
 
-  <!-- ========================================== -->
-  <!-- 📢 VIRAL SHARE SECTION                    -->
-  <!-- ========================================== -->
-  <section class="py-16 bg-brand-navy border-t border-brand-gold/30 text-center">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-      
-      <h2 class="text-2xl sm:text-3xl font-heading font-bold text-white mb-3">
-        Share Our Mission With Believers Everywhere
+    <!-- Contact & Prayer Request Form -->
+    <div class="bg-brand-navy/80 rounded-3xl p-8 sm:p-12 gold-border shadow-2xl max-w-3xl mx-auto">
+      <h2 class="text-2xl sm:text-3xl font-heading font-bold text-white text-center mb-2">
+        Send Us a Message or Prayer Request
       </h2>
-      <p class="text-slate-300 font-serif text-sm max-w-xl mx-auto mb-8">
-        Help fellow church members and friends learn about the foundational truths and literature ministry of HARVION.
+      <p class="text-center text-slate-300 font-serif text-sm mb-8">
+        Fill in your details below and a member of our ministry will respond promptly.
       </p>
 
-      <div class="flex flex-wrap items-center justify-center gap-3">
-        <a href="https://api.whatsapp.com/send?text=Explore%20the%20mission%20and%20Adventist%20heritage%20behind%20HARVION%3A%20https%3A%2F%2Fharvion.delstarfordworks.co.ke%2Fabout.html" class="px-5 py-3 rounded-xl bg-[#25D366] hover:bg-[#20ba59] text-white font-bold text-xs uppercase tracking-wider flex items-center gap-2 shadow-lg transition">
-          <i class="fa-brands fa-whatsapp text-lg"></i> Share on WhatsApp
-        </a>
+      <form id="contact-form" onsubmit="handleContactSubmit(event)" class="space-y-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-xs uppercase font-bold text-slate-300 mb-2">Full Name</label>
+            <input type="text" id="contact-name" required placeholder="Brother / Sister Name" class="w-full px-4 py-3 rounded-xl bg-brand-dark/90 border border-white/10 text-white placeholder-slate-500 focus:outline-none focus:border-brand-gold transition text-sm">
+          </div>
+          <div>
+            <label class="block text-xs uppercase font-bold text-slate-300 mb-2">Phone Number (Call / WhatsApp)</label>
+            <input type="tel" id="contact-phone" required placeholder="e.g. 0745090990" class="w-full px-4 py-3 rounded-xl bg-brand-dark/90 border border-white/10 text-white placeholder-slate-500 focus:outline-none focus:border-brand-gold transition text-sm">
+          </div>
+        </div>
 
-        <a href="https://t.me/share/url?url=https%3A%2F%2Fharvion.delstarfordworks.co.ke%2Fabout.html&text=HARVION%20%E2%80%94%20Adventist%20Faith%2C%20Spirit%20of%20Prophecy%2C%20and%20Literature%20Evangelism" class="px-5 py-3 rounded-xl bg-[#0088cc] hover:bg-[#0077b3] text-white font-bold text-xs uppercase tracking-wider flex items-center gap-2 shadow-lg transition">
-          <i class="fa-brands fa-telegram text-lg"></i> Share on Telegram
-        </a>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-xs uppercase font-bold text-slate-300 mb-2">Your Email</label>
+            <input type="email" id="contact-email" required placeholder="name@example.com" class="w-full px-4 py-3 rounded-xl bg-brand-dark/90 border border-white/10 text-white placeholder-slate-500 focus:outline-none focus:border-brand-gold transition text-sm">
+          </div>
+          <div>
+            <label class="block text-xs uppercase font-bold text-slate-300 mb-2">Inquiry Type</label>
+            <select id="contact-category" class="w-full px-4 py-3 rounded-xl bg-brand-dark/90 border border-white/10 text-white focus:outline-none focus:border-brand-gold transition text-sm">
+              <option value="Hardcopy Book Order Support">Hardcopy Book Order Support</option>
+              <option value="Colporteur Literature Evangelism">Literature Evangelism / Selling Books</option>
+              <option value="SDA Hymnal & Audio Inquiries">695 SDA Hymnal & Music</option>
+              <option value="Prayer Request">Prayer & Spiritual Guidance</option>
+              <option value="Camp Meeting Book Stand Inquiry">Camp Meeting Book Stand Inquiry</option>
+              <option value="General Inquiry">General Ministry Inquiry</option>
+            </select>
+          </div>
+        </div>
 
-        <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fharvion.delstarfordworks.co.ke%2Fabout.html" class="px-5 py-3 rounded-xl bg-[#1877F2] hover:bg-[#166fe5] text-white font-bold text-xs uppercase tracking-wider flex items-center gap-2 shadow-lg transition">
-          <i class="fa-brands fa-facebook text-lg"></i> Share on Facebook
-        </a>
-      </div>
+        <div>
+          <label class="block text-xs uppercase font-bold text-slate-300 mb-2">Your Message / Prayer Request</label>
+          <textarea id="contact-message" rows="5" required placeholder="Write your message, book delivery questions, or spiritual prayer request here..." class="w-full px-4 py-3 rounded-xl bg-brand-dark/90 border border-white/10 text-white placeholder-slate-500 focus:outline-none focus:border-brand-gold transition text-sm"></textarea>
+        </div>
 
+        <div class="text-center pt-2">
+          <button type="submit" id="submit-btn" class="w-full sm:w-auto px-10 py-3.5 rounded-xl bg-gradient-to-r from-brand-gold to-yellow-400 text-brand-dark font-bold uppercase tracking-wider text-sm hover:brightness-110 shadow-lg shadow-brand-gold/25 transition">
+            <i class="fa-solid fa-paper-plane mr-2"></i> Submit Message
+          </button>
+        </div>
+      </form>
+
+      <div id="contact-alert" class="hidden mt-6 p-4 rounded-xl text-center text-sm font-semibold"></div>
     </div>
-  </section>
 
-  <!-- ========================================== -->
-  <!-- ⚓ FOOTER                                  -->
-  <!-- ========================================== -->
-  <footer class="bg-black/90 border-t border-white/10 py-12 text-slate-400 text-xs">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center sm:text-left flex flex-col sm:flex-row items-center justify-between gap-4">
-      <div>
-        © 2026 HARVION SDA Ministry. Dedicated to the Three Angels' Messages. • Developed by <a href="https://www.delstarfordworks.co.ke" class="text-brand-gold hover:underline font-semibold">Delstarford Works</a>
-      </div>
-      <div class="flex items-center space-x-6">
-        <a href="/home.html" class="hover:text-brand-gold">Home</a>
-        <a href="/books.html" class="hover:text-brand-gold">50 Books</a>
-        <a href="/about.html" class="hover:text-brand-gold">About Platform</a>
-        <a href="/support.html" class="hover:text-brand-gold">Support Work</a>
-        <a href="/contact.html" class="hover:text-brand-gold">Contact Us</a>
-        <a href="/api/health" class="hover:text-brand-gold">Status: Online</a>
-      </div>
+  </div>
+</section>
+
+<!-- ========================================== -->
+<!-- 📢 SHARE SECTION                           -->
+<!-- ========================================== -->
+<section class="py-16 bg-brand-navy border-t border-brand-gold/30 text-center">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    
+    <h2 class="text-2xl sm:text-3xl font-heading font-bold text-white mb-3">
+      Connect Fellow Church Members With HARVION
+    </h2>
+    <p class="text-slate-300 font-serif text-sm max-w-xl mx-auto mb-8">
+      Help others discover the 50 Spirit of Prophecy volumes, 695 SDA hymns with piano accompaniment, and colporteur materials.
+    </p>
+
+    <div class="flex flex-wrap items-center justify-center gap-3">
+      <a href="https://api.whatsapp.com/send?text=Get%20in%20touch%20with%20HARVION%20SDA%20Ministry%3A%20https%3A%2F%2Fharvion.delstarfordworks.co.ke%2Fcontact.html" target="_blank" rel="noopener" class="px-5 py-3 rounded-xl bg-[#25D366] hover:bg-[#20ba59] text-white font-bold text-xs uppercase tracking-wider flex items-center gap-2 shadow-lg transition">
+        <i class="fa-brands fa-whatsapp text-lg"></i> Share on WhatsApp
+      </a>
+
+      <a href="https://t.me/share/url?url=https%3A%2F%2Fharvion.delstarfordworks.co.ke%2Fcontact.html&text=HARVION%20SDA%20Ministry%20Contact%20and%20Literature%20Evangelism" target="_blank" rel="noopener" class="px-5 py-3 rounded-xl bg-[#0088cc] hover:bg-[#0077b3] text-white font-bold text-xs uppercase tracking-wider flex items-center gap-2 shadow-lg transition">
+        <i class="fa-brands fa-telegram text-lg"></i> Share on Telegram
+      </a>
+
+      <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fharvion.delstarfordworks.co.ke%2Fcontact.html" target="_blank" rel="noopener" class="px-5 py-3 rounded-xl bg-[#1877F2] hover:bg-[#166fe5] text-white font-bold text-xs uppercase tracking-wider flex items-center gap-2 shadow-lg transition">
+        <i class="fa-brands fa-facebook text-lg"></i> Share on Facebook
+      </a>
     </div>
-  </footer>
 
-  <script>
-    function toggleMobileMenu() {
-      const menu = document.getElementById('mobile-menu');
-      const icon = document.getElementById('menu-icon');
-      menu.classList.toggle('hidden');
-      if (menu.classList.contains('hidden')) {
-        icon.className = 'fa-solid fa-bars';
-      } else {
-        icon.className = 'fa-solid fa-xmark';
-      }
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  function handleContactSubmit(e) {
+    e.preventDefault();
+    const btn = document.getElementById('submit-btn');
+    const alert = document.getElementById('contact-alert');
+    const name = document.getElementById('contact-name').value;
+    const email = document.getElementById('contact-email').value;
+    const phone = document.getElementById('contact-phone').value;
+    const category = document.getElementById('contact-category').value;
+
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Submitting...';
+
+    setTimeout(() => {
+      alert.className = 'mt-6 p-4 rounded-xl text-center text-sm font-semibold bg-emerald-500/20 border border-emerald-500/40 text-emerald-300';
+      alert.innerHTML = `✓ Thank you, Brother/Sister ${name}! Your inquiry regarding "${category}" has been received. Our team will contact you via ${email} or ${phone}. God bless you!`;
+      alert.classList.remove('hidden');
+      document.getElementById('contact-form').reset();
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fa-solid fa-paper-plane mr-2"></i> Submit Message';
+      showToast('Message submitted successfully!');
+    }, 900);
+  }
+
+  // Prepopulate if query params present
+  document.addEventListener('DOMContentLoaded', () => {
+    const params = new URLSearchParams(window.location.search);
+    const book = params.get('book');
+    const type = params.get('type');
+    if (book) {
+      const msgBox = document.getElementById('contact-message');
+      const catBox = document.getElementById('contact-category');
+      if (catBox) catBox.value = 'Hardcopy Book Order Support';
+      if (msgBox) msgBox.value = `I would like to order a physical copy of: ${book}. Please guide me on delivery.`;
+    } else if (type === 'colporteur') {
+      const catBox = document.getElementById('contact-category');
+      if (catBox) catBox.value = 'Colporteur Literature Evangelism';
     }
-
-    function handleContactSubmit(e) {
-      e.preventDefault();
-      const btn = document.getElementById('submit-btn');
-      const alert = document.getElementById('contact-alert');
-      const name = document.getElementById('contact-name').value;
-      const email = document.getElementById('contact-email').value;
-      const phone = document.getElementById('contact-phone').value;
-      const category = document.getElementById('contact-category').value;
-      const message = document.getElementById('contact-message').value;
-
-      btn.disabled = true;
-      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Submitting...';
-
-      // Send to local mailto or API
-      setTimeout(() => {
-        alert.className = 'mt-6 p-4 rounded-xl text-center text-sm font-semibold bg-emerald-500/20 border border-emerald-500/40 text-emerald-300';
-        alert.innerHTML = `✓ Thank you, Brother/Sister ${name}! Your inquiry regarding "${category}" has been received. Our team will contact you via ${email} or ${phone}. God bless you!`;
-        alert.classList.remove('hidden');
-        document.getElementById('contact-form').reset();
-        btn.disabled = false;
-        btn.innerHTML = '<i class="fa-solid fa-paper-plane mr-2"></i> Submit Message';
-      }, 1000);
-    }
-  </script>
-</body>
-</html>
+  });
+</script>
+{% endblock %}

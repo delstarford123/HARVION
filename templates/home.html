@@ -1,729 +1,532 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HARVION — Spreading the Everlasting Gospel & Spirit of Prophecy</title>
-  
-  <!-- Marketing & Social Sharing Meta Tags (Open Graph & Twitter Cards) -->
-  <meta name="description" content="HARVION is an all-in-one Seventh-day Adventist digital ecosystem featuring all 50 Spirit of Prophecy books with full pagination, literature evangelism, daily devotionals, Sabbath School lessons, and global livestreams.">
-  <meta name="keywords" content="Seventh-day Adventist, Spirit of Prophecy, Ellen G. White, Sabbath School, Colporteur Ministry, Adventist Health, KJV Bible, Devotionals, HARVION, Literature Evangelism">
-  <meta name="author" content="HARVION SDA Ministry">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://harvion.delstarfordworks.co.ke/">
-  <meta property="og:title" content="HARVION — Spreading the Everlasting Gospel to Every Nation">
-  <meta property="og:description" content="Access all 50 Spirit of Prophecy volumes, daily morning devotionals, Sabbath School quarterly, camp meeting book locator, and livestreams.">
-  <meta property="og:image" content="https://images.unsplash.com/photo-1504052434569-70ad5836ab65?w=1200&q=80">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="HARVION — Adventist Truth & Literature Evangelism">
-  <meta name="twitter:description" content="Read Ellen G. White books page-by-page, order hard copies via M-Pesa, watch sermons, and study daily devotionals.">
-  <meta name="twitter:image" content="https://images.unsplash.com/photo-1504052434569-70ad5836ab65?w=1200&q=80">
+{% extends "base.html" %}
 
-  <!-- Favicon -->
-  <link rel="icon" href="https://img.icons8.com/color/96/holy-bible.png" type="image/png">
+{% block title %}HARVION — Spreading the Everlasting Gospel & Spirit of Prophecy{% endblock %}
+{% block og_path %}/home.html{% endblock %}
+{% block og_title %}HARVION — The Complete Seventh-day Adventist Ecosystem{% endblock %}
+{% block og_description %}All-in-one Adventist platform: 50 Spirit of Prophecy books paginated, 695 SDA Hymnal with piano accompaniment, literature evangelism, daily devotionals, and M-Pesa orders.{% endblock %}
 
-  <!-- Google Fonts & Font Awesome 6 Icons -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Inter:wght@300;400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            brand: {
-              dark: '#081325',
-              navy: '#0F2347',
-              royal: '#1A365D',
-              gold: '#D4AF37',
-              goldHover: '#B89628',
-              goldLight: '#FBF4DB',
-              cream: '#FDFBF7'
-            }
-          },
-          fontFamily: {
-            heading: ['Cinzel', 'serif'],
-            body: ['Inter', 'sans-serif'],
-            serif: ['Lora', 'serif'],
-          }
-        }
-      }
-    }
-  </script>
+{% block content %}
+<!-- ========================================== -->
+<!-- 🌟 HERO MASTER SECTION                     -->
+<!-- ========================================== -->
+<section class="relative pt-36 pb-24 md:pt-48 md:pb-36 hero-gradient overflow-hidden">
+  <!-- Decorative background glow -->
+  <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-brand-gold/10 rounded-full blur-3xl pointer-events-none"></div>
 
-  <style>
-    html { scroll-behavior: smooth; }
-    .glass-nav {
-      background: rgba(8, 19, 37, 0.88);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-    }
-    .hero-gradient {
-      background: radial-gradient(circle at 50% 20%, rgba(212, 175, 55, 0.15) 0%, rgba(8, 19, 37, 0.98) 70%),
-                  linear-gradient(180deg, #081325 0%, #0F2347 100%);
-    }
-    .gold-gradient-text {
-      background: linear-gradient(135deg, #FFF1C5 0%, #D4AF37 50%, #AA8010 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .gold-border {
-      border: 1px solid rgba(212, 175, 55, 0.28);
-    }
-    .gold-shadow {
-      box-shadow: 0 10px 30px -10px rgba(212, 175, 55, 0.3);
-    }
-  </style>
-</head>
-<body class="bg-brand-dark text-slate-100 font-body antialiased selection:bg-brand-gold selection:text-brand-dark">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+    
+    <!-- Ministry Badge -->
+    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-gold/10 border border-brand-gold/30 text-brand-gold text-xs font-semibold uppercase tracking-wider mb-8">
+      <i class="fa-solid fa-dove"></i>
+      <span>Proclaiming the Three Angels' Messages (Revelation 14:6–12)</span>
+    </div>
 
-  <!-- ========================================== -->
-  <!-- 📌 NAVIGATION BAR                         -->
-  <!-- ========================================== -->
-  <nav class="fixed top-0 left-0 w-full z-50 glass-nav border-b border-white/10 transition duration-300">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-      
-      <!-- Brand Logo -->
-      <a href="/home.html" class="flex items-center space-x-3 group">
-        <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-brand-gold to-yellow-200 flex items-center justify-center shadow-lg shadow-brand-gold/20 group-hover:scale-105 transition">
-          <img src="/assets/images/harvion_logo.png" alt="HARVION Logo" class="w-full h-full object-contain rounded-xl p-0.5 bg-white">
-        </div>
-        <div>
-          <span class="font-heading font-extrabold text-2xl tracking-wider gold-gradient-text block leading-none">HARVION</span>
-          <span class="text-[10px] uppercase tracking-widest text-brand-gold/80 font-semibold">SDA Ministry Ecosystem</span>
-        </div>
+    <!-- Main Headline -->
+    <h1 class="text-4xl sm:text-6xl lg:text-7xl font-heading font-extrabold tracking-tight leading-tight max-w-5xl mx-auto mb-6">
+      The Complete Adventist Gospel & <span class="gold-gradient-text">Spirit of Prophecy</span> Ecosystem
+    </h1>
+
+    <!-- Subheadline -->
+    <p class="text-lg sm:text-xl text-slate-300 font-serif max-w-3xl mx-auto leading-relaxed mb-10">
+      Empowering believers, pastors, and literature evangelists worldwide. Sing all 695 SDA hymns with pure piano accompaniment, read all 50 Ellen G. White masterworks page-by-page, order physical missionary books via M-Pesa, and study present truth daily.
+    </p>
+
+    <!-- Master Action Buttons -->
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-2xl mx-auto mb-16">
+      <a href="/hymns.html" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-gradient-to-r from-brand-gold via-yellow-400 to-brand-gold text-brand-dark font-bold text-sm uppercase tracking-wider shadow-xl shadow-brand-gold/30 hover:scale-105 transition flex items-center justify-center gap-3">
+        <i class="fa-solid fa-music text-base"></i> 695 SDA Hymnal & Piano
       </a>
-
-      <!-- Desktop Links -->
-      <div class="hidden md:flex items-center space-x-8 text-sm font-medium text-slate-300">
-        <a href="#features" class="hover:text-brand-gold transition">Features</a>
-        <a href="/books.html" class="hover:text-brand-gold transition">50 SOP Books</a>
-        <a href="#colporteur" class="hover:text-brand-gold transition">Colporteurs</a>
-        <a href="/about.html" class="hover:text-brand-gold transition">About & Faith</a>
-        <a href="/support.html" class="hover:text-brand-gold transition">Support Work</a>
-        <a href="/contact.html" class="hover:text-brand-gold transition">Contact Us</a>
-      </div>
-
-      <!-- Action Buttons -->
-      <div class="hidden md:flex items-center space-x-4">
-        <a href="/support.html" class="px-5 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider bg-gradient-to-r from-brand-gold to-yellow-400 text-brand-dark hover:brightness-110 shadow-lg shadow-brand-gold/25 transition flex items-center gap-1.5">
-          <i class="fa-solid fa-hand-holding-heart"></i> Support Ministry
-        </a>
-      </div>
-
-      <!-- Mobile Menu Button -->
-      <button onclick="toggleMobileMenu()" class="md:hidden text-2xl text-brand-gold p-2">
-        <i class="fa-solid fa-bars" id="menu-icon"></i>
-      </button>
+      <a href="/books.html" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-white/10 hover:bg-white/15 border border-brand-gold/40 text-brand-gold hover:text-white font-bold text-sm uppercase tracking-wider transition flex items-center justify-center gap-3">
+        <i class="fa-solid fa-book-bible text-base"></i> 50 SOP Books Library
+      </a>
+      <a href="/support.html" class="w-full sm:w-auto px-6 py-4 rounded-xl bg-emerald-600/30 hover:bg-emerald-600/50 border border-emerald-500/40 text-emerald-300 font-semibold text-sm transition flex items-center justify-center gap-2">
+        <i class="fa-solid fa-hand-holding-heart text-rose-400"></i> Support Ministry
+      </a>
     </div>
 
-    <!-- Mobile Dropdown -->
-    <div id="mobile-menu" class="hidden md:hidden bg-brand-dark/95 border-b border-brand-gold/20 px-6 py-6 space-y-4 text-center">
-      <a href="#features" onclick="toggleMobileMenu()" class="block text-slate-200 hover:text-brand-gold py-2 font-medium">Features</a>
-      <a href="/books.html" class="block text-slate-200 hover:text-brand-gold py-2 font-medium">50 SOP Books</a>
-      <a href="#colporteur" onclick="toggleMobileMenu()" class="block text-slate-200 hover:text-brand-gold py-2 font-medium">Colporteur Portal</a>
-      <a href="/about.html" onclick="toggleMobileMenu()" class="block text-slate-200 hover:text-brand-gold py-2 font-medium">About & Faith</a>
-      <a href="/support.html" onclick="toggleMobileMenu()" class="block text-slate-200 hover:text-brand-gold py-2 font-medium">Support Work</a>
-      <a href="/contact.html" onclick="toggleMobileMenu()" class="block text-slate-200 hover:text-brand-gold py-2 font-medium">Contact Us</a>
-      <a href="/support.html" onclick="toggleMobileMenu()" class="block w-full py-3 rounded-lg bg-brand-gold text-brand-dark font-bold uppercase text-xs tracking-wider">Support Work</a>
+    <!-- Quick Proof Numbers Grid -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto pt-8 border-t border-white/10 text-center">
+      <div class="p-4 bg-white/5 rounded-2xl border border-white/5">
+        <div class="text-3xl sm:text-4xl font-extrabold gold-gradient-text font-heading">695</div>
+        <div class="text-xs uppercase tracking-widest text-slate-400 mt-1">SDA Hymns & Piano</div>
+      </div>
+      <div class="p-4 bg-white/5 rounded-2xl border border-white/5">
+        <div class="text-3xl sm:text-4xl font-extrabold gold-gradient-text font-heading">50</div>
+        <div class="text-xs uppercase tracking-widest text-slate-400 mt-1">EGW Inspired Volumes</div>
+      </div>
+      <div class="p-4 bg-white/5 rounded-2xl border border-white/5">
+        <div class="text-3xl sm:text-4xl font-extrabold gold-gradient-text font-heading">100%</div>
+        <div class="text-xs uppercase tracking-widest text-slate-400 mt-1">Zero-Data Offline PWA</div>
+      </div>
+      <div class="p-4 bg-white/5 rounded-2xl border border-white/5">
+        <div class="text-3xl sm:text-4xl font-extrabold gold-gradient-text font-heading">M-PESA</div>
+        <div class="text-xs uppercase tracking-widest text-slate-400 mt-1">Instant Daraja STK Push</div>
+      </div>
     </div>
-  </nav>
 
-  <!-- ========================================== -->
-  <!-- 🌟 HERO MARKETING SECTION                 -->
-  <!-- ========================================== -->
-  <section class="relative pt-36 pb-24 md:pt-48 md:pb-36 hero-gradient overflow-hidden">
-    <!-- Decorative background glow -->
-    <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[650px] bg-brand-gold/10 rounded-full blur-3xl pointer-events-none"></div>
+  </div>
+</section>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+<!-- ========================================== -->
+<!-- 🎹 SPOTLIGHT: 695 SDA HYMNAL WITH PIANO    -->
+<!-- ========================================== -->
+<section class="py-24 bg-gradient-to-b from-brand-dark via-brand-navy to-brand-dark border-y border-brand-gold/30 relative">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
       
-      <!-- Ministry Badge -->
-      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-gold/10 border border-brand-gold/30 text-brand-gold text-xs font-semibold uppercase tracking-wider mb-8 animate-pulse">
-        <i class="fa-solid fa-dove"></i>
-        <span>Spreading the Three Angels' Messages Globally</span>
-      </div>
-
-      <!-- Main Headline -->
-      <h1 class="text-4xl sm:text-6xl lg:text-7xl font-heading font-extrabold tracking-tight leading-tight max-w-5xl mx-auto mb-6">
-        The Complete Adventist Gospel & <span class="gold-gradient-text">Spirit of Prophecy</span> Library
-      </h1>
-
-      <!-- Subheadline -->
-      <p class="text-lg sm:text-xl text-slate-300 font-serif max-w-3xl mx-auto leading-relaxed mb-10">
-        Empowering believers, pastors, and literature evangelists worldwide. Explore all 50 Ellen G. White volumes page-by-page, order missionary books via M-Pesa, study daily devotionals, and broadcast camp meetings live.
-      </p>
-
-      <!-- CTA Buttons -->
-      <div class="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-lg mx-auto mb-16">
-        <a href="#sop-library" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-gradient-to-r from-brand-gold via-yellow-400 to-brand-gold text-brand-dark font-bold text-sm uppercase tracking-wider shadow-xl shadow-brand-gold/30 hover:scale-105 transition flex items-center justify-center gap-3">
-          <i class="fa-solid fa-book-open"></i> Explore 50 SOP Books
-        </a>
-        <a href="#share-section" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-white/10 hover:bg-white/15 border border-white/20 text-white font-semibold text-sm transition flex items-center justify-center gap-3">
-          <i class="fa-brands fa-whatsapp text-emerald-400 text-lg"></i> Share with Church
-        </a>
-      </div>
-
-      <!-- Quick Proof Numbers -->
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto pt-8 border-t border-white/10 text-center">
-        <div class="p-4">
-          <div class="text-3xl sm:text-4xl font-extrabold gold-gradient-text font-heading">50</div>
-          <div class="text-xs uppercase tracking-widest text-slate-400 mt-1">EGW Volumes</div>
+      <!-- Left: Description & Value -->
+      <div class="lg:col-span-6 space-y-6">
+        <div class="inline-flex items-center gap-2 text-brand-gold text-xs uppercase font-bold tracking-widest">
+          <i class="fa-solid fa-music animate-pulse"></i> Complete Worship Companion
         </div>
-        <div class="p-4">
-          <div class="text-3xl sm:text-4xl font-extrabold gold-gradient-text font-heading">100%</div>
-          <div class="text-xs uppercase tracking-widest text-slate-400 mt-1">Offline Accessible</div>
-        </div>
-        <div class="p-4">
-          <div class="text-3xl sm:text-4xl font-extrabold gold-gradient-text font-heading">M-PESA</div>
-          <div class="text-xs uppercase tracking-widest text-slate-400 mt-1">Instant Checkout</div>
-        </div>
-        <div class="p-4">
-          <div class="text-3xl sm:text-4xl font-extrabold gold-gradient-text font-heading">GLOBAL</div>
-          <div class="text-xs uppercase tracking-widest text-slate-400 mt-1">TikTok & YouTube Live</div>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- ========================================== -->
-  <!-- 📱 INTERACTIVE READER PREVIEW             -->
-  <!-- ========================================== -->
-  <section class="py-20 bg-brand-navy/60 border-y border-white/10 relative">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-        
-        <div class="lg:col-span-6 space-y-6">
-          <div class="inline-flex items-center gap-2 text-brand-gold text-xs uppercase font-bold tracking-widest">
-            <i class="fa-solid fa-sparkles"></i> World-Class Reading Experience
-          </div>
-          <h2 class="text-3xl sm:text-4xl font-heading font-bold text-white">
-            Designed for Reverent, Distraction-Free Study
-          </h2>
-          <p class="text-slate-300 font-serif leading-relaxed">
-            Every chapter of the Conflict of the Ages, Steps to Christ, Ministry of Healing, and Testimonies 1–9 has been meticulously formatted into authentic printed-page density (~280 words per page).
-          </p>
-
-          <div class="space-y-4 pt-2">
-            <div class="flex items-start gap-4">
-              <div class="w-10 h-10 rounded-lg bg-brand-gold/15 flex items-center justify-center text-brand-gold shrink-0">
-                <i class="fa-solid fa-file-lines"></i>
-              </div>
-              <div>
-                <h4 class="font-bold text-white text-sm">Genuine Page-by-Page Flip & Scrubber</h4>
-                <p class="text-xs text-slate-400 mt-0.5">Swipe naturally through pages with "Page X of Y" indicators and instant page jump.</p>
-              </div>
-            </div>
-
-            <div class="flex items-start gap-4">
-              <div class="w-10 h-10 rounded-lg bg-brand-gold/15 flex items-center justify-center text-brand-gold shrink-0">
-                <i class="fa-solid fa-moon"></i>
-              </div>
-              <div>
-                <h4 class="font-bold text-white text-sm">4 Eye-Care Themes (Night, Sepia, Cream, Light)</h4>
-                <p class="text-xs text-slate-400 mt-0.5">Read comfortably in low light with AMOLED pure black or warm paper tones.</p>
-              </div>
-            </div>
-
-            <div class="flex items-start gap-4">
-              <div class="w-10 h-10 rounded-lg bg-brand-gold/15 flex items-center justify-center text-brand-gold shrink-0">
-                <i class="fa-solid fa-headphones"></i>
-              </div>
-              <div>
-                <h4 class="font-bold text-white text-sm">Audio Read-Aloud Narration</h4>
-                <p class="text-xs text-slate-400 mt-0.5">Listen to the inspired writings while traveling, cooking, or resting.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Phone Frame Preview Mockup -->
-        <div class="lg:col-span-6 flex justify-center">
-          <div class="relative w-80 sm:w-96 rounded-[40px] bg-slate-900 p-4 shadow-2xl border-4 border-slate-700/80">
-            <!-- Camera pill -->
-            <div class="absolute top-6 left-1/2 -translate-x-1/2 w-24 h-4 bg-black rounded-full z-20"></div>
-
-            <!-- Screen Content -->
-            <div class="rounded-[32px] bg-[#FBF0D9] text-[#2C2416] p-6 pt-10 font-serif relative overflow-hidden shadow-inner">
-              <div class="flex justify-between items-center text-[10px] text-amber-900/60 pb-3 border-b border-amber-900/20">
-                <span>The Desire of Ages</span>
-                <span>Page 1 of 8</span>
-              </div>
-              
-              <h3 class="font-heading font-bold text-lg text-[#1A140B] text-center my-4">
-                "God With Us"
-              </h3>
-
-              <p class="text-xs leading-relaxed mb-4">
-                “His name shall be called Immanuel, ... God with us.” The light of the knowledge of the glory of God is seen in the face of Jesus Christ. From the days of eternity the Lord Jesus Christ was one with the Father; He was “the image of God,” the image of His greatness and majesty.
-              </p>
-
-              <p class="text-xs leading-relaxed mb-4">
-                By coming to dwell with us, Jesus was to reveal God both to men and to angels. He was the Word of God,—God’s thought made audible.
-              </p>
-
-              <!-- Scripture Card -->
-              <div class="bg-amber-100/70 border-l-4 border-amber-600 p-2.5 rounded text-[11px] italic mb-4">
-                "And they shall call his name Emmanuel, which being interpreted is, God with us." — Matthew 1:23
-              </div>
-
-              <!-- Reader Control Bar Mock -->
-              <div class="mt-4 pt-3 border-t border-amber-900/20 flex justify-between items-center text-xs text-amber-900">
-                <i class="fa-solid fa-chevron-left"></i>
-                <div class="flex gap-3">
-                  <span class="w-5 h-5 rounded-full bg-white border border-amber-900/30 inline-block"></span>
-                  <span class="w-5 h-5 rounded-full bg-[#121212] border border-amber-900/30 inline-block"></span>
-                  <span class="w-5 h-5 rounded-full bg-[#FBF0D9] border-2 border-amber-800 inline-block"></span>
-                </div>
-                <i class="fa-solid fa-chevron-right"></i>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- ========================================== -->
-  <!-- 📚 50 SPIRIT OF PROPHECY BOOKS SHELF       -->
-  <!-- ========================================== -->
-  <section id="sop-library" class="py-24 bg-brand-dark relative">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      
-      <div class="text-center max-w-3xl mx-auto mb-16">
-        <span class="text-brand-gold text-xs uppercase tracking-widest font-bold">Unrivaled Prophetic Library</span>
-        <h2 class="text-3xl sm:text-5xl font-heading font-extrabold text-white mt-2">
-          All 50 Primary Ellen G. White Books
+        <h2 class="text-3xl sm:text-5xl font-heading font-extrabold text-white leading-tight">
+          All 695 SDA Hymns With Pure <span class="gold-gradient-text">Piano Accompaniment</span>
         </h2>
-        <p class="text-slate-400 font-serif text-sm sm:text-base mt-4">
-          From the cosmic conflict in the five-volume Conflict of the Ages to practical health reform, medical missionary work, and church administration.
+        <p class="text-slate-300 font-serif text-base leading-relaxed">
+          Worship anywhere without audio distractions. HARVION features the standard 1985 Seventh-day Adventist Hymnal with pure, reverent piano accompaniment tracks — allowing churches, small prayer groups, and families to sing along naturally.
         </p>
+
+        <div class="space-y-3.5 pt-2">
+          <div class="flex items-center gap-3 text-sm text-slate-200">
+            <div class="w-7 h-7 rounded-lg bg-brand-gold/20 flex items-center justify-center text-brand-gold shrink-0">
+              <i class="fa-solid fa-check text-xs"></i>
+            </div>
+            <span><strong>Full Lyrics & Refrains:</strong> Every stanza cleanly formatted with golden chorus highlights.</span>
+          </div>
+
+          <div class="flex items-center gap-3 text-sm text-slate-200">
+            <div class="w-7 h-7 rounded-lg bg-brand-gold/20 flex items-center justify-center text-brand-gold shrink-0">
+              <i class="fa-solid fa-check text-xs"></i>
+            </div>
+            <span><strong>Tempo & Speed Control:</strong> Adjust speed (0.8×, 1.0×, 1.2×) to match congregational singing pace.</span>
+          </div>
+
+          <div class="flex items-center gap-3 text-sm text-slate-200">
+            <div class="w-7 h-7 rounded-lg bg-brand-gold/20 flex items-center justify-center text-brand-gold shrink-0">
+              <i class="fa-solid fa-check text-xs"></i>
+            </div>
+            <span><strong>Instant Number Jump:</strong> Type any hymn number from 1 to 695 and jump instantly.</span>
+          </div>
+
+          <div class="flex items-center gap-3 text-sm text-slate-200">
+            <div class="w-7 h-7 rounded-lg bg-brand-gold/20 flex items-center justify-center text-brand-gold shrink-0">
+              <i class="fa-solid fa-check text-xs"></i>
+            </div>
+            <span><strong>Zero-Data Offline Caching:</strong> Save favorite songs to play in rural areas without internet.</span>
+          </div>
+        </div>
+
+        <div class="pt-4 flex flex-wrap gap-4">
+          <a href="/hymns.html" class="px-8 py-4 rounded-xl bg-gradient-to-r from-brand-gold to-yellow-400 text-brand-dark font-heading font-bold text-xs uppercase tracking-wider shadow-lg hover:brightness-110 transition flex items-center gap-2">
+            <i class="fa-solid fa-headphones"></i> Open 695 SDA Hymnal & Player <i class="fa-solid fa-arrow-right ml-1"></i>
+          </a>
+          <a href="/hymns.html?hymn=108" class="px-6 py-4 rounded-xl bg-white/10 hover:bg-white/15 border border-white/20 text-white font-semibold text-xs uppercase tracking-wider transition flex items-center gap-2">
+            Play Hymn 108: Amazing Grace
+          </a>
+        </div>
       </div>
 
-      <!-- Categories Shelf Grid -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        
-        <!-- Shelf 1: Conflict of the Ages -->
-        <div class="p-6 rounded-2xl bg-brand-navy/50 border border-brand-gold/20 hover:border-brand-gold/60 transition group">
-          <div class="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition">
-            <i class="fa-solid fa-shield-halved"></i>
+      <!-- Right: Interactive Live Hymnal Player Card Preview -->
+      <div class="lg:col-span-6">
+        <div class="bg-brand-navy p-6 sm:p-8 rounded-3xl gold-border shadow-2xl relative overflow-hidden">
+          
+          <div class="flex items-center justify-between pb-4 border-b border-white/10 mb-4">
+            <div class="flex items-center gap-2">
+              <span class="px-3 py-1 rounded-lg bg-brand-gold text-brand-dark font-heading font-black text-xs">
+                HYMN 108
+              </span>
+              <span class="text-xs uppercase tracking-wider text-brand-gold font-bold">
+                Grace / Assurance
+              </span>
+            </div>
+            <span class="text-xs text-emerald-400 font-semibold flex items-center gap-1">
+              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span> Live Piano Audio
+            </span>
           </div>
-          <h3 class="font-heading font-bold text-lg text-white mb-2">Conflict of the Ages</h3>
-          <p class="text-xs text-slate-400 mb-4 leading-relaxed">The 5 foundational volumes from Creation to the New Earth.</p>
-          <ul class="text-xs text-slate-300 space-y-2">
-            <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-brand-gold text-[10px]"></i> Patriarchs and Prophets</li>
-            <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-brand-gold text-[10px]"></i> Prophets and Kings</li>
-            <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-brand-gold text-[10px]"></i> The Desire of Ages</li>
-            <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-brand-gold text-[10px]"></i> The Acts of the Apostles</li>
-            <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-brand-gold text-[10px]"></i> The Great Controversy</li>
-          </ul>
-        </div>
 
-        <!-- Shelf 2: Practical Christian Living -->
-        <div class="p-6 rounded-2xl bg-brand-navy/50 border border-brand-gold/20 hover:border-brand-gold/60 transition group">
-          <div class="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition">
-            <i class="fa-solid fa-person-walking-arrow-right"></i>
+          <h3 class="font-heading font-extrabold text-2xl sm:text-3xl text-white mb-1">
+            Amazing Grace
+          </h3>
+          <p class="text-xs text-slate-400 font-serif mb-4">
+            Tune: NEW BRITAIN • Author: John Newton (1779) • Scripture: 1 Chron. 17:16-17
+          </p>
+
+          <!-- Audio Player Mockup -->
+          <div class="p-4 rounded-2xl bg-brand-dark border border-brand-gold/30 mb-6 shadow-inner">
+            <div class="flex items-center justify-between text-xs text-slate-300 mb-2">
+              <span class="flex items-center gap-1.5 font-bold text-brand-gold">
+                <i class="fa-solid fa-piano"></i> Instrumental Piano Rendition
+              </span>
+              <span class="text-[11px] text-slate-400">Key: G Major</span>
+            </div>
+            <audio controls class="w-full h-10 rounded">
+              <source src="https://hymnal.pro/sda-hymnal/mp3/108.mp3" type="audio/mpeg">
+            </audio>
           </div>
-          <h3 class="font-heading font-bold text-lg text-white mb-2">Christian Living</h3>
-          <p class="text-xs text-slate-400 mb-4 leading-relaxed">Spiritual walk, character development, and salvation.</p>
-          <ul class="text-xs text-slate-300 space-y-2">
-            <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-emerald-400 text-[10px]"></i> Steps to Christ</li>
-            <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-emerald-400 text-[10px]"></i> Mount of Blessing</li>
-            <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-emerald-400 text-[10px]"></i> Christ's Object Lessons</li>
-            <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-emerald-400 text-[10px]"></i> Messages to Young People</li>
-            <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-emerald-400 text-[10px]"></i> The Sanctified Life</li>
-          </ul>
-        </div>
 
-        <!-- Shelf 3: Health & Healing -->
-        <div class="p-6 rounded-2xl bg-brand-navy/50 border border-brand-gold/20 hover:border-brand-gold/60 transition group">
-          <div class="w-12 h-12 rounded-xl bg-rose-500/10 text-rose-400 flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition">
-            <i class="fa-solid fa-heart-pulse"></i>
+          <!-- Lyrics Snippet -->
+          <div class="font-serif text-sm text-slate-200 space-y-3 bg-brand-dark/50 p-4 rounded-xl border border-white/5">
+            <div>
+              <span class="font-bold text-xs text-brand-gold uppercase">Stanza 1</span>
+              <p class="mt-0.5 leading-relaxed">
+                Amazing grace! how sweet the sound<br>
+                That saved a wretch like me!<br>
+                I once was lost, but now am found;<br>
+                Was blind, but now I see.
+              </p>
+            </div>
+            <div class="pt-2 border-t border-white/5">
+              <span class="font-bold text-xs text-brand-gold uppercase">Stanza 2</span>
+              <p class="mt-0.5 leading-relaxed">
+                ’Twas grace that taught my heart to fear,<br>
+                And grace my fears relieved;<br>
+                How precious did that grace appear<br>
+                The hour I first believed!
+              </p>
+            </div>
           </div>
-          <h3 class="font-heading font-bold text-lg text-white mb-2">Health & Temperance</h3>
-          <p class="text-xs text-slate-400 mb-4 leading-relaxed">The right arm of the message for physical and spiritual vigor.</p>
-          <ul class="text-xs text-slate-300 space-y-2">
-            <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-rose-400 text-[10px]"></i> The Ministry of Healing</li>
-            <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-rose-400 text-[10px]"></i> Counsels on Diet and Foods</li>
-            <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-rose-400 text-[10px]"></i> Medical Ministry</li>
-            <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-rose-400 text-[10px]"></i> Temperance</li>
-            <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-rose-400 text-[10px]"></i> Counsels on Health</li>
-          </ul>
-        </div>
 
-        <!-- Shelf 4: Church & Home -->
-        <div class="p-6 rounded-2xl bg-brand-navy/50 border border-brand-gold/20 hover:border-brand-gold/60 transition group">
-          <div class="w-12 h-12 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition">
-            <i class="fa-solid fa-house-chimney-window"></i>
+          <div class="mt-6 pt-4 border-t border-white/10 text-center">
+            <a href="/hymns.html" class="text-xs text-brand-gold hover:underline font-bold uppercase tracking-wider flex items-center justify-center gap-1.5">
+              View All 695 Hymns in Dedicated Reading Desk <i class="fa-solid fa-arrow-right text-xs"></i>
+            </a>
           </div>
-          <h3 class="font-heading font-bold text-lg text-white mb-2">Home & Testimonies</h3>
-          <p class="text-xs text-slate-400 mb-4 leading-relaxed">Divine blueprints for families, ministers, and churches.</p>
-          <ul class="text-xs text-slate-300 space-y-2">
-            <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-purple-400 text-[10px]"></i> The Adventist Home</li>
-            <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-purple-400 text-[10px]"></i> Child Guidance & Education</li>
-            <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-purple-400 text-[10px]"></i> Testimonies for Church (1-9)</li>
-            <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-purple-400 text-[10px]"></i> Colporteur Ministry</li>
-            <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-purple-400 text-[10px]"></i> Testimonies to Ministers</li>
-          </ul>
+
         </div>
-
-      </div>
-
-      <div class="text-center mt-12">
-        <a href="/books.html" class="inline-flex items-center gap-3 px-8 py-4 rounded-xl bg-gradient-to-r from-brand-gold to-yellow-400 text-brand-dark font-heading font-bold text-sm uppercase tracking-wider hover:brightness-110 shadow-xl shadow-brand-gold/25 transition">
-          <i class="fa-solid fa-book-bible text-base"></i> Browse Complete 50 Spirit of Prophecy Library <i class="fa-solid fa-arrow-right"></i>
-        </a>
       </div>
 
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- ========================================== -->
-  <!-- 💼 COLPORTEUR & LITERATURE EVANGELISM       -->
-  <!-- ========================================== -->
-  <section id="colporteur" class="py-24 bg-gradient-to-b from-brand-dark to-brand-navy/80 border-t border-white/10">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-        
-        <div>
-          <span class="text-brand-gold text-xs uppercase font-bold tracking-widest">Publishing Ministry Revolution</span>
-          <h2 class="text-3xl sm:text-5xl font-heading font-extrabold text-white mt-2 leading-tight">
-            Empowering Literature Evangelists & Camp Meeting Sales
-          </h2>
-          <p class="text-slate-300 font-serif mt-4 leading-relaxed">
-            “The canvassing work should no longer be languishing... Let canvassers go forth with our publications, to do a work similar to that done by Philip and the Ethiopian.” — Testimonies, Vol. 6
-          </p>
-
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8">
-            <div class="p-4 rounded-xl bg-white/5 border border-white/10">
-              <i class="fa-solid fa-location-dot text-brand-gold text-xl mb-2"></i>
-              <h4 class="font-bold text-white text-sm">Camp Meeting Locator</h4>
-              <p class="text-xs text-slate-400 mt-1">Colporteurs post their real-time booth locations so members can come purchase hard copies.</p>
-            </div>
-
-            <div class="p-4 rounded-xl bg-white/5 border border-white/10">
-              <i class="fa-solid fa-mobile-screen-button text-brand-gold text-xl mb-2"></i>
-              <h4 class="font-bold text-white text-sm">M-Pesa STK Push</h4>
-              <p class="text-xs text-slate-400 mt-1">Seamless mobile payments for physical delivery and instant ebook unlocks.</p>
-            </div>
-
-            <div class="p-4 rounded-xl bg-white/5 border border-white/10">
-              <i class="fa-solid fa-ticket text-brand-gold text-xl mb-2"></i>
-              <h4 class="font-bold text-white text-sm">Referral Codes & Commission</h4>
-              <p class="text-xs text-slate-400 mt-1">Evangelists share custom discount codes and track customer leads automatically.</p>
-            </div>
-
-            <div class="p-4 rounded-xl bg-white/5 border border-white/10">
-              <i class="fa-solid fa-book-bookmark text-brand-gold text-xl mb-2"></i>
-              <h4 class="font-bold text-white text-sm">Digital Missionary Tracts</h4>
-              <p class="text-xs text-slate-400 mt-1">Shareable tracts covering the Sabbath, the Sanctuary, and the Three Angels.</p>
-            </div>
-          </div>
+<!-- ========================================== -->
+<!-- 📱 INTERACTIVE SOP READER PREVIEW          -->
+<!-- ========================================== -->
+<section class="py-24 bg-brand-navy/60 border-b border-white/10 relative">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+      
+      <div class="lg:col-span-6 space-y-6">
+        <div class="inline-flex items-center gap-2 text-brand-gold text-xs uppercase font-bold tracking-widest">
+          <i class="fa-solid fa-sparkles"></i> World-Class Reading Experience
         </div>
+        <h2 class="text-3xl sm:text-4xl font-heading font-bold text-white">
+          Designed for Reverent, Distraction-Free Study
+        </h2>
+        <p class="text-slate-300 font-serif leading-relaxed">
+          Every chapter of the Conflict of the Ages, Steps to Christ, Ministry of Healing, and Testimonies 1–9 has been meticulously formatted into authentic printed-page density (~280 words per page).
+        </p>
 
-        <!-- Colporteur Quote Box -->
-        <div class="p-8 sm:p-12 rounded-3xl bg-brand-navy border border-brand-gold/30 shadow-2xl relative">
-          <i class="fa-solid fa-quote-left text-brand-gold/20 text-6xl absolute top-6 right-8"></i>
-          <h3 class="font-heading font-bold text-xl text-brand-gold mb-4">A Sacred Work</h3>
-          <blockquote class="text-slate-200 font-serif text-base sm:text-lg italic leading-relaxed mb-6">
-            “The church must give her attention to the canvassing work. This is one way in which she is to shine in the world. Then will she go forth ‘fair as the moon, clear as the sun, and terrible as an army with banners.’”
-          </blockquote>
-          <div class="flex items-center gap-4">
-            <div class="w-12 h-12 rounded-full bg-brand-gold/20 flex items-center justify-center text-brand-gold font-bold">
-              EGW
+        <div class="space-y-4 pt-2">
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-lg bg-brand-gold/15 flex items-center justify-center text-brand-gold shrink-0">
+              <i class="fa-solid fa-file-lines"></i>
             </div>
             <div>
-              <div class="font-bold text-white text-sm">Ellen G. White</div>
-              <div class="text-xs text-slate-400">Colporteur Ministry, p. 7</div>
+              <h4 class="font-bold text-white text-sm">Genuine Page-by-Page Flip & Scrubber</h4>
+              <p class="text-xs text-slate-400 mt-0.5">Swipe naturally through pages with "Page X of Y" indicators and instant page jump.</p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-lg bg-brand-gold/15 flex items-center justify-center text-brand-gold shrink-0">
+              <i class="fa-solid fa-moon"></i>
+            </div>
+            <div>
+              <h4 class="font-bold text-white text-sm">4 Eye-Care Themes (Night, Sepia, Cream, Light)</h4>
+              <p class="text-xs text-slate-400 mt-0.5">Read comfortably in low light with AMOLED pure black or warm paper tones.</p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-lg bg-brand-gold/15 flex items-center justify-center text-brand-gold shrink-0">
+              <i class="fa-solid fa-box-archive"></i>
+            </div>
+            <div>
+              <h4 class="font-bold text-white text-sm">Certified Hardcopy Delivery Across East Africa</h4>
+              <p class="text-xs text-slate-400 mt-0.5">Order physical books with doorstep courier deliveries via Maxwell Adventist Centre.</p>
             </div>
           </div>
         </div>
 
-      </div>
-    </div>
-  </section>
-
-  <!-- ========================================== -->
-  <!-- 🔴 LIVESTREAMS & GLOBAL EVANGELISM         -->
-  <!-- ========================================== -->
-  <section id="livestreams" class="py-24 bg-brand-dark border-t border-white/10">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      
-      <div class="text-center max-w-3xl mx-auto mb-16">
-        <span class="text-brand-gold text-xs uppercase font-bold tracking-widest">Reach The Modern Generation</span>
-        <h2 class="text-3xl sm:text-5xl font-heading font-extrabold text-white mt-2">
-          Global Livestreams & TikTok Evangelism
-        </h2>
-        <p class="text-slate-400 font-serif text-sm sm:text-base mt-4">
-          Connect sermons and youth outreach across TikTok Live, YouTube, and Facebook Live directly within HARVION with full Christian reverence and code of conduct.
-        </p>
+        <div class="pt-2">
+          <a href="/books.html" class="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-gradient-to-r from-brand-gold to-yellow-400 text-brand-dark font-bold text-xs uppercase tracking-wider shadow-lg hover:brightness-110 transition">
+            <i class="fa-solid fa-book-open"></i> Browse All 50 Volumes
+          </a>
+        </div>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        
-        <div class="p-6 rounded-2xl bg-brand-navy/60 border border-white/10 hover:border-brand-gold/40 transition">
-          <div class="flex items-center justify-between mb-4">
-            <span class="px-3 py-1 rounded-full bg-rose-500/20 text-rose-400 text-xs font-bold uppercase tracking-wider flex items-center gap-1.5">
-              <span class="w-2 h-2 rounded-full bg-rose-500 animate-ping"></span> Live Now
-            </span>
-            <i class="fa-brands fa-tiktok text-2xl text-slate-300"></i>
-          </div>
-          <h4 class="font-heading font-bold text-lg text-white mb-1">Youth Prophecy Series</h4>
-          <p class="text-xs text-brand-gold mb-3">Pastor J. Mwangi • English / Swahili</p>
-          <p class="text-xs text-slate-400 leading-relaxed mb-4">
-            Unpacking Daniel 2 & 7 for teenagers and young adults on modern social channels.
-          </p>
-          <div class="text-[11px] text-slate-500 italic border-t border-white/10 pt-3">
-            Code of Conduct: Reverence, Christ-centered fellowship, no profanity.
+      <!-- Phone Frame Preview Mockup -->
+      <div class="lg:col-span-6 flex justify-center">
+        <div class="relative w-80 sm:w-96 rounded-[40px] bg-slate-900 p-4 shadow-2xl border-4 border-slate-700/80">
+          <!-- Camera pill -->
+          <div class="absolute top-6 left-1/2 -translate-x-1/2 w-24 h-4 bg-black rounded-full z-20"></div>
+
+          <!-- Screen Content -->
+          <div class="rounded-[32px] bg-[#FBF0D9] text-[#2C2416] p-6 pt-10 font-serif relative overflow-hidden shadow-inner">
+            <div class="flex justify-between items-center text-[10px] text-amber-900/60 pb-3 border-b border-amber-900/20">
+              <span>The Desire of Ages</span>
+              <span>Page 1 of 8</span>
+            </div>
+            
+            <h3 class="font-heading font-bold text-lg text-[#1A140B] text-center my-4">
+              "God With Us"
+            </h3>
+
+            <p class="text-xs leading-relaxed mb-4">
+              “His name shall be called Immanuel, ... God with us.” The light of the knowledge of the glory of God is seen in the face of Jesus Christ. From the days of eternity the Lord Jesus Christ was one with the Father; He was “the image of God,” the image of His greatness and majesty.
+            </p>
+
+            <p class="text-xs leading-relaxed mb-4">
+              By coming to dwell with us, Jesus was to reveal God both to men and to angels. He was the Word of God,—God’s thought made audible.
+            </p>
+
+            <!-- Scripture Card -->
+            <div class="bg-amber-100/70 border-l-4 border-amber-600 p-2.5 rounded text-[11px] italic mb-4">
+              "And they shall call his name Emmanuel, which being interpreted is, God with us." — Matthew 1:23
+            </div>
+
+            <!-- Reader Control Bar Mock -->
+            <div class="mt-4 pt-3 border-t border-amber-900/20 flex justify-between items-center text-xs text-amber-900">
+              <i class="fa-solid fa-chevron-left"></i>
+              <div class="flex gap-3">
+                <span class="w-5 h-5 rounded-full bg-white border border-amber-900/30 inline-block"></span>
+                <span class="w-5 h-5 rounded-full bg-[#121212] border border-amber-900/30 inline-block"></span>
+                <span class="w-5 h-5 rounded-full bg-[#FBF0D9] border-2 border-amber-800 inline-block"></span>
+              </div>
+              <i class="fa-solid fa-chevron-right"></i>
+            </div>
           </div>
         </div>
-
-        <div class="p-6 rounded-2xl bg-brand-navy/60 border border-white/10 hover:border-brand-gold/40 transition">
-          <div class="flex items-center justify-between mb-4">
-            <span class="px-3 py-1 rounded-full bg-blue-500/20 text-blue-400 text-xs font-bold uppercase tracking-wider">
-              Weekly Sabbath
-            </span>
-            <i class="fa-brands fa-youtube text-2xl text-red-500"></i>
-          </div>
-          <h4 class="font-heading font-bold text-lg text-white mb-1">Sabbath School Discussion</h4>
-          <p class="text-xs text-brand-gold mb-3">Elder D. Omwenga • English</p>
-          <p class="text-xs text-slate-400 leading-relaxed mb-4">
-            Interactive quarterly lesson panel discussing the Sanctuary and the Final Judgment.
-          </p>
-          <div class="text-[11px] text-slate-500 italic border-t border-white/10 pt-3">
-            Code of Conduct: Biblical Berean study, kindness, uplifting speech.
-          </div>
-        </div>
-
-        <div class="p-6 rounded-2xl bg-brand-navy/60 border border-white/10 hover:border-brand-gold/40 transition">
-          <div class="flex items-center justify-between mb-4">
-            <span class="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-bold uppercase tracking-wider">
-              Health Hour
-            </span>
-            <i class="fa-solid fa-satellite-dish text-2xl text-emerald-400"></i>
-          </div>
-          <h4 class="font-heading font-bold text-lg text-white mb-1">Natural Remedies & Cooking</h4>
-          <p class="text-xs text-brand-gold mb-3">Medical Missionary Team</p>
-          <p class="text-xs text-slate-400 leading-relaxed mb-4">
-            Live demonstration of whole-food plant-based recipes, hydrotherapy, and immune support.
-          </p>
-          <div class="text-[11px] text-slate-500 italic border-t border-white/10 pt-3">
-            Code of Conduct: Temperance, practical health ministry, God's healing laws.
-          </div>
-        </div>
-
       </div>
 
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- ========================================== -->
-  <!-- 📢 VIRAL SHARE & MARKETING WIDGET          -->
-  <!-- ========================================== -->
-  <section id="share-section" class="py-20 bg-gradient-to-r from-brand-royal via-brand-navy to-brand-dark border-t border-brand-gold/30">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-      
-      <div class="w-16 h-16 rounded-2xl bg-brand-gold/20 text-brand-gold flex items-center justify-center text-3xl mx-auto mb-6 shadow-lg shadow-brand-gold/20">
-        <i class="fa-solid fa-bullhorn"></i>
-      </div>
-
-      <h2 class="text-3xl sm:text-4xl font-heading font-bold text-white mb-4">
-        Share HARVION With Your Church & Family
-      </h2>
-      <p class="text-slate-300 font-serif max-w-2xl mx-auto mb-8 text-sm sm:text-base">
-        Help literature evangelists and believers discover this comprehensive Seventh-day Adventist resource. Share in one click to your church WhatsApp group, Telegram channel, or Facebook.
-      </p>
-
-      <!-- Viral Sharing Buttons -->
-      <div class="flex flex-wrap items-center justify-center gap-3">
-        
-        <!-- WhatsApp Share -->
-        <a id="share-wa" href="https://api.whatsapp.com/send?text=Brethren%2C%20explore%20HARVION%20%E2%80%94%20the%20complete%20Seventh-day%20Adventist%20ecosystem%20with%20all%2050%20Spirit%20of%20Prophecy%20books%20paginated%2C%20literature%20evangelism%2C%20daily%20devotionals%2C%20and%20livestreams%3A%20https%3A%2F%2Fharvion.delstarfordworks.co.ke%2F" class="px-6 py-3.5 rounded-xl bg-[#25D366] hover:bg-[#20ba59] text-white font-bold text-xs uppercase tracking-wider flex items-center gap-2.5 shadow-lg transition">
-          <i class="fa-brands fa-whatsapp text-lg"></i> Share on WhatsApp
-        </a>
-
-        <!-- Telegram Share -->
-        <a id="share-tg" href="https://t.me/share/url?url=https%3A%2F%2Fharvion.delstarfordworks.co.ke%2F&text=HARVION%20%E2%80%94%20Complete%20Adventist%20Ecosystem%20with%2050%20Spirit%20of%20Prophecy%20Books%20and%20Literature%20Evangelism" class="px-6 py-3.5 rounded-xl bg-[#0088cc] hover:bg-[#0077b3] text-white font-bold text-xs uppercase tracking-wider flex items-center gap-2.5 shadow-lg transition">
-          <i class="fa-brands fa-telegram text-lg"></i> Share on Telegram
-        </a>
-
-        <!-- Facebook Share -->
-        <a id="share-fb" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fharvion.delstarfordworks.co.ke%2F" class="px-6 py-3.5 rounded-xl bg-[#1877F2] hover:bg-[#166fe5] text-white font-bold text-xs uppercase tracking-wider flex items-center gap-2.5 shadow-lg transition">
-          <i class="fa-brands fa-facebook text-lg"></i> Share on Facebook
-        </a>
-
-        <!-- Copy Link Button -->
-        <button onclick="copyShareLink()" class="px-6 py-3.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-xs uppercase tracking-wider flex items-center gap-2.5 transition">
-          <i class="fa-solid fa-link" id="copy-icon"></i> <span id="copy-text">Copy Link</span>
-        </button>
-
-      </div>
-
-      <!-- Live Copy Toast Notification -->
-      <div id="copy-toast" class="hidden mt-4 inline-block px-4 py-2 bg-emerald-500/90 text-white text-xs font-semibold rounded-lg shadow-lg">
-        ✓ Link copied to clipboard! Share it with your friends.
-      </div>
-
-    </div>
-  </section>
-
-  <!-- ========================================== -->
-  <!-- ⬇️ DOWNLOAD & INSTALLATION SECTION         -->
-  <!-- ========================================== -->
-  <section id="download-section" class="py-24 bg-brand-dark border-t border-white/10">
-    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-      
-      <span class="text-brand-gold text-xs uppercase font-bold tracking-widest">Get Started Today</span>
+<!-- ========================================== -->
+<!-- 📚 50 SPIRIT OF PROPHECY 4 SHELVES         -->
+<!-- ========================================== -->
+<section id="sop-library" class="py-24 bg-brand-dark relative">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    
+    <div class="text-center max-w-3xl mx-auto mb-16">
+      <span class="text-brand-gold text-xs uppercase tracking-widest font-bold">Unrivaled Prophetic Library</span>
       <h2 class="text-3xl sm:text-5xl font-heading font-extrabold text-white mt-2">
-        Experience HARVION On Any Device
+        All 50 Primary Ellen G. White Books
       </h2>
-      <p class="text-slate-400 font-serif max-w-2xl mx-auto mt-4 text-sm sm:text-base">
-        Available as an Android mobile app, progressive web app, and high-speed API server.
+      <p class="text-slate-400 font-serif text-sm sm:text-base mt-4">
+        From the cosmic conflict in the five-volume Conflict of the Ages to practical health reform, medical missionary work, and church administration.
       </p>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12 text-left">
-        
-        <div class="p-6 rounded-2xl bg-brand-navy/50 border border-white/10">
-          <div class="w-12 h-12 rounded-xl bg-emerald-500/15 text-emerald-400 flex items-center justify-center text-2xl mb-4">
-            <i class="fa-brands fa-android"></i>
-          </div>
-          <h4 class="font-bold text-white text-base">Android Application</h4>
-          <p class="text-xs text-slate-400 mt-2 mb-4 leading-relaxed">
-            Full offline reading for all 50 books, local Hive database, audio synthesis narration, and M-Pesa payments.
-          </p>
-          <a href="#" class="text-xs font-bold text-brand-gold uppercase tracking-wider hover:underline flex items-center gap-1.5">
-            Download APK File <i class="fa-solid fa-arrow-down"></i>
-          </a>
-        </div>
-
-        <div class="p-6 rounded-2xl bg-brand-navy/50 border border-brand-gold/30 relative">
-          <span class="absolute top-4 right-4 px-2 py-0.5 rounded bg-brand-gold text-brand-dark text-[10px] font-extrabold uppercase">Instant</span>
-          <div class="w-12 h-12 rounded-xl bg-brand-gold/15 text-brand-gold flex items-center justify-center text-2xl mb-4">
-            <i class="fa-solid fa-globe"></i>
-          </div>
-          <h4 class="font-bold text-white text-base">Web Application (PWA)</h4>
-          <p class="text-xs text-slate-400 mt-2 mb-4 leading-relaxed">
-            Access through Chrome, Safari, or Edge without downloading anything. Install to your home screen with one tap.
-          </p>
-          <a href="/home.html" class="text-xs font-bold text-brand-gold uppercase tracking-wider hover:underline flex items-center gap-1.5">
-            Launch Web App <i class="fa-solid fa-arrow-right"></i>
-          </a>
-        </div>
-
-        <div class="p-6 rounded-2xl bg-brand-navy/50 border border-white/10">
-          <div class="w-12 h-12 rounded-xl bg-blue-500/15 text-blue-400 flex items-center justify-center text-2xl mb-4">
-            <i class="fa-solid fa-server"></i>
-          </div>
-          <h4 class="font-bold text-white text-base">Cloud Backend API</h4>
-          <p class="text-xs text-slate-400 mt-2 mb-4 leading-relaxed">
-            Python Flask serverless API deployed on Vercel with Google Cloud Firestore, M-Pesa Daraja, and real-time syncing.
-          </p>
-          <a href="/api/health" target="_blank" class="text-xs font-bold text-brand-gold uppercase tracking-wider hover:underline flex items-center gap-1.5">
-            View Live Health Status <i class="fa-solid fa-arrow-up-right-from-square"></i>
-          </a>
-        </div>
-
-      </div>
-
     </div>
-  </section>
 
-  <!-- ========================================== -->
-  <!-- ⚓ FOOTER                                  -->
-  <!-- ========================================== -->
-  <footer class="bg-black/90 border-t border-white/10 py-16 text-slate-400 text-xs">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Categories Shelf Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
-        <div class="space-y-3">
-          <div class="flex items-center space-x-2">
-            <div class="w-8 h-8 rounded-lg bg-brand-gold flex items-center justify-center text-brand-dark">
-              <i class="fa-solid fa-book-bible text-base"></i>
-            </div>
-            <span class="font-heading font-extrabold text-lg text-white">HARVION</span>
+      <!-- Shelf 1: Conflict of the Ages -->
+      <div class="p-6 rounded-2xl bg-brand-navy/50 border border-brand-gold/20 hover:border-brand-gold/60 transition group">
+        <div class="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition">
+          <i class="fa-solid fa-shield-halved"></i>
+        </div>
+        <h3 class="font-heading font-bold text-lg text-white mb-2">Conflict of the Ages</h3>
+        <p class="text-xs text-slate-400 mb-4 leading-relaxed">The 5 foundational volumes from Creation to the New Earth.</p>
+        <ul class="text-xs text-slate-300 space-y-2">
+          <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-brand-gold text-[10px]"></i> Patriarchs and Prophets</li>
+          <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-brand-gold text-[10px]"></i> Prophets and Kings</li>
+          <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-brand-gold text-[10px]"></i> The Desire of Ages</li>
+          <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-brand-gold text-[10px]"></i> The Acts of the Apostles</li>
+          <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-brand-gold text-[10px]"></i> The Great Controversy</li>
+        </ul>
+      </div>
+
+      <!-- Shelf 2: Practical Christian Living -->
+      <div class="p-6 rounded-2xl bg-brand-navy/50 border border-brand-gold/20 hover:border-brand-gold/60 transition group">
+        <div class="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition">
+          <i class="fa-solid fa-person-walking-arrow-right"></i>
+        </div>
+        <h3 class="font-heading font-bold text-lg text-white mb-2">Christian Living</h3>
+        <p class="text-xs text-slate-400 mb-4 leading-relaxed">Spiritual walk, character development, and salvation in Christ.</p>
+        <ul class="text-xs text-slate-300 space-y-2">
+          <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-emerald-400 text-[10px]"></i> Steps to Christ</li>
+          <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-emerald-400 text-[10px]"></i> Mount of Blessing</li>
+          <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-emerald-400 text-[10px]"></i> Christ's Object Lessons</li>
+          <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-emerald-400 text-[10px]"></i> Messages to Young People</li>
+          <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-emerald-400 text-[10px]"></i> The Sanctified Life</li>
+        </ul>
+      </div>
+
+      <!-- Shelf 3: Health & Healing -->
+      <div class="p-6 rounded-2xl bg-brand-navy/50 border border-brand-gold/20 hover:border-brand-gold/60 transition group">
+        <div class="w-12 h-12 rounded-xl bg-rose-500/10 text-rose-400 flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition">
+          <i class="fa-solid fa-heart-pulse"></i>
+        </div>
+        <h3 class="font-heading font-bold text-lg text-white mb-2">Health & Temperance</h3>
+        <p class="text-xs text-slate-400 mb-4 leading-relaxed">The right arm of the message for physical and spiritual vigor.</p>
+        <ul class="text-xs text-slate-300 space-y-2">
+          <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-rose-400 text-[10px]"></i> The Ministry of Healing</li>
+          <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-rose-400 text-[10px]"></i> Counsels on Diet and Foods</li>
+          <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-rose-400 text-[10px]"></i> Medical Ministry</li>
+          <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-rose-400 text-[10px]"></i> Temperance</li>
+          <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-rose-400 text-[10px]"></i> Counsels on Health</li>
+        </ul>
+      </div>
+
+      <!-- Shelf 4: Church & Home -->
+      <div class="p-6 rounded-2xl bg-brand-navy/50 border border-brand-gold/20 hover:border-brand-gold/60 transition group">
+        <div class="w-12 h-12 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition">
+          <i class="fa-solid fa-house-chimney-window"></i>
+        </div>
+        <h3 class="font-heading font-bold text-lg text-white mb-2">Home & Testimonies</h3>
+        <p class="text-xs text-slate-400 mb-4 leading-relaxed">Divine blueprints for families, ministers, and churches.</p>
+        <ul class="text-xs text-slate-300 space-y-2">
+          <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-purple-400 text-[10px]"></i> The Adventist Home</li>
+          <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-purple-400 text-[10px]"></i> Child Guidance & Education</li>
+          <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-purple-400 text-[10px]"></i> Testimonies for Church (1-9)</li>
+          <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-purple-400 text-[10px]"></i> Colporteur Ministry</li>
+          <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-purple-400 text-[10px]"></i> Testimonies to Ministers</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="text-center mt-12">
+      <a href="/books.html" class="inline-flex items-center gap-3 px-8 py-4 rounded-xl bg-gradient-to-r from-brand-gold to-yellow-400 text-brand-dark font-heading font-bold text-sm uppercase tracking-wider hover:brightness-110 shadow-xl shadow-brand-gold/25 transition">
+        <i class="fa-solid fa-book-bible text-base"></i> Browse Complete 50 Spirit of Prophecy Library <i class="fa-solid fa-arrow-right"></i>
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<!-- ========================================== -->
+<!-- 💼 COLPORTEUR & LITERATURE EVANGELISM       -->
+<!-- ========================================== -->
+<section id="colporteur" class="py-24 bg-gradient-to-b from-brand-dark to-brand-navy/80 border-t border-white/10">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      
+      <div>
+        <span class="text-brand-gold text-xs uppercase font-bold tracking-widest">Publishing Ministry Revolution</span>
+        <h2 class="text-3xl sm:text-5xl font-heading font-extrabold text-white mt-2 leading-tight">
+          Empowering Literature Evangelists & Camp Meeting Sales
+        </h2>
+        <p class="text-slate-300 font-serif mt-4 leading-relaxed">
+          “The canvassing work should no longer be languishing... Let canvassers go forth with our publications, to do a work similar to that done by Philip and the Ethiopian.” — <em>Testimonies, Vol. 6</em>
+        </p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8">
+          <div class="p-4 rounded-xl bg-white/5 border border-white/10">
+            <i class="fa-solid fa-location-dot text-brand-gold text-xl mb-2"></i>
+            <h4 class="font-bold text-white text-sm">Camp Meeting Locator</h4>
+            <p class="text-xs text-slate-400 mt-1">Colporteurs post their real-time booth locations so members can come purchase hard copies.</p>
           </div>
-          <p class="font-serif leading-relaxed text-slate-400">
-            Dedicated to publishing the Everlasting Gospel, preserving the Spirit of Prophecy, and supporting Literature Evangelism worldwide.
-          </p>
+
+          <div class="p-4 rounded-xl bg-white/5 border border-white/10">
+            <i class="fa-solid fa-mobile-screen-button text-brand-gold text-xl mb-2"></i>
+            <h4 class="font-bold text-white text-sm">M-Pesa STK Push</h4>
+            <p class="text-xs text-slate-400 mt-1">Seamless mobile payments for physical delivery and instant book unlocks.</p>
+          </div>
+
+          <div class="p-4 rounded-xl bg-white/5 border border-white/10">
+            <i class="fa-solid fa-ticket text-brand-gold text-xl mb-2"></i>
+            <h4 class="font-bold text-white text-sm">Wholesale Margins</h4>
+            <p class="text-xs text-slate-400 mt-1">Student evangelists receive up to 40% discount margins to support their school fees.</p>
+          </div>
+
+          <div class="p-4 rounded-xl bg-white/5 border border-white/10">
+            <i class="fa-solid fa-book-bookmark text-brand-gold text-xl mb-2"></i>
+            <h4 class="font-bold text-white text-sm">Digital Missionary Tracts</h4>
+            <p class="text-xs text-slate-400 mt-1">Shareable tracts covering the Sabbath, the Sanctuary, and the Three Angels.</p>
+          </div>
         </div>
 
-        <div>
-          <h5 class="font-bold text-white uppercase tracking-wider text-xs mb-3">Spirit of Prophecy</h5>
-          <ul class="space-y-2">
-            <li><a href="#sop-library" class="hover:text-brand-gold transition">Conflict of the Ages</a></li>
-            <li><a href="#sop-library" class="hover:text-brand-gold transition">Steps to Christ</a></li>
-            <li><a href="#sop-library" class="hover:text-brand-gold transition">The Ministry of Healing</a></li>
-            <li><a href="#sop-library" class="hover:text-brand-gold transition">Testimonies Volumes 1-9</a></li>
-          </ul>
-        </div>
-
-        <div>
-          <h5 class="font-bold text-white uppercase tracking-wider text-xs mb-3">Ministries</h5>
-          <ul class="space-y-2">
-            <li><a href="#colporteur" class="hover:text-brand-gold transition">Colporteur Portal</a></li>
-            <li><a href="#livestreams" class="hover:text-brand-gold transition">TikTok & YouTube Live</a></li>
-            <li><a href="/about.html" class="hover:text-brand-gold transition">Pillars of Adventist Faith</a></li>
-            <li><a href="/about.html#health" class="hover:text-brand-gold transition">Health & Natural Remedies</a></li>
-          </ul>
-        </div>
-
-        <div>
-          <h5 class="font-bold text-white uppercase tracking-wider text-xs mb-3">Legal & Faith Declaration</h5>
-          <p class="text-slate-400 leading-relaxed font-serif">
-            HARVION is an independent educational and missionary technology platform created in faithful harmony with Seventh-day Adventist doctrines and the Three Angels' Messages.
-          </p>
+        <div class="mt-8">
+          <a href="/contact.html?type=colporteur" class="px-6 py-3.5 rounded-xl bg-gradient-to-r from-brand-gold to-yellow-400 text-brand-dark font-bold text-xs uppercase tracking-wider shadow-lg hover:brightness-110 transition inline-flex items-center gap-2">
+            <i class="fa-solid fa-user-plus"></i> Join as a Literature Evangelist
+          </a>
         </div>
       </div>
 
-      <div class="pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-[12px]">
-        <div>
-          © 2026 HARVION SDA Ministry. All Rights Reserved. • Developed by <a href="https://www.delstarfordworks.co.ke" class="text-brand-gold hover:underline font-semibold">Delstarford Works</a>
-        </div>
-        <div class="flex items-center space-x-6">
-          <a href="/home.html" class="hover:text-brand-gold">Home</a>
-          <a href="/about.html" class="hover:text-brand-gold">About Platform</a>
-          <a href="/support.html" class="hover:text-brand-gold">Support Work</a>
-          <a href="/contact.html" class="hover:text-brand-gold">Contact Us</a>
-          <a href="/api/health" class="hover:text-brand-gold">Status: Online</a>
+      <!-- Colporteur Quote Box -->
+      <div class="p-8 sm:p-12 rounded-3xl bg-brand-navy border border-brand-gold/30 shadow-2xl relative">
+        <i class="fa-solid fa-quote-left text-brand-gold/20 text-6xl absolute top-6 right-8"></i>
+        <h3 class="font-heading font-bold text-xl text-brand-gold mb-4">A Sacred Work</h3>
+        <blockquote class="text-slate-200 font-serif text-base sm:text-lg italic leading-relaxed mb-6">
+          “The church must give her attention to the canvassing work. This is one way in which she is to shine in the world. Then will she go forth ‘fair as the moon, clear as the sun, and terrible as an army with banners.’”
+        </blockquote>
+        <div class="flex items-center gap-4">
+          <div class="w-12 h-12 rounded-full bg-brand-gold/20 flex items-center justify-center text-brand-gold font-bold">
+            EGW
+          </div>
+          <div>
+            <div class="font-bold text-white text-sm">Ellen G. White</div>
+            <div class="text-xs text-slate-400">Colporteur Ministry, p. 7</div>
+          </div>
         </div>
       </div>
 
     </div>
-  </footer>
+  </div>
+</section>
 
-  <!-- Scripts -->
-  <script>
-    function toggleMobileMenu() {
-      const menu = document.getElementById('mobile-menu');
-      const icon = document.getElementById('menu-icon');
-      menu.classList.toggle('hidden');
-      if (menu.classList.contains('hidden')) {
-        icon.className = 'fa-solid fa-bars';
-      } else {
-        icon.className = 'fa-solid fa-xmark';
+<!-- ========================================== -->
+<!-- 📢 VIRAL SHARE & MARKETING WIDGET          -->
+<!-- ========================================== -->
+<section id="share-section" class="py-20 bg-gradient-to-r from-brand-royal via-brand-navy to-brand-dark border-t border-brand-gold/30">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    
+    <div class="w-16 h-16 rounded-2xl bg-brand-gold/20 text-brand-gold flex items-center justify-center text-3xl mx-auto mb-6 shadow-lg shadow-brand-gold/20">
+      <i class="fa-solid fa-bullhorn"></i>
+    </div>
+
+    <h2 class="text-3xl sm:text-4xl font-heading font-bold text-white mb-4">
+      Share HARVION With Your Church & Family
+    </h2>
+    <p class="text-slate-300 font-serif max-w-2xl mx-auto mb-8 text-sm sm:text-base">
+      Help literature evangelists, youth, and believers discover this comprehensive Seventh-day Adventist resource. Share in one click to your church WhatsApp group, Telegram channel, or Facebook.
+    </p>
+
+    <!-- Viral Sharing Buttons -->
+    <div class="flex flex-wrap items-center justify-center gap-3">
+      
+      <!-- WhatsApp Share -->
+      <a href="https://api.whatsapp.com/send?text=Brethren%2C%20explore%20HARVION%20%E2%80%94%20the%20complete%20Seventh-day%20Adventist%20ecosystem%20with%20all%20695%20hymns%20piano%20audio%20and%2050%20Spirit%20of%20Prophecy%20books%3A%20https%3A%2F%2Fharvion.delstarfordworks.co.ke%2Fhome.html" target="_blank" rel="noopener" class="px-6 py-3.5 rounded-xl bg-[#25D366] hover:bg-[#20ba59] text-white font-bold text-xs uppercase tracking-wider flex items-center gap-2.5 shadow-lg transition">
+        <i class="fa-brands fa-whatsapp text-lg"></i> Share on WhatsApp
+      </a>
+
+      <!-- Telegram Share -->
+      <a href="https://t.me/share/url?url=https%3A%2F%2Fharvion.delstarfordworks.co.ke%2Fhome.html&text=HARVION%20%E2%80%94%20Complete%20Adventist%20Ecosystem%20with%20695%20SDA%20Hymnal%20and%2050%20Spirit%20of%20Prophecy%20Books" target="_blank" rel="noopener" class="px-6 py-3.5 rounded-xl bg-[#0088cc] hover:bg-[#0077b3] text-white font-bold text-xs uppercase tracking-wider flex items-center gap-2.5 shadow-lg transition">
+        <i class="fa-brands fa-telegram text-lg"></i> Share on Telegram
+      </a>
+
+      <!-- Facebook Share -->
+      <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fharvion.delstarfordworks.co.ke%2Fhome.html" target="_blank" rel="noopener" class="px-6 py-3.5 rounded-xl bg-[#1877F2] hover:bg-[#166fe5] text-white font-bold text-xs uppercase tracking-wider flex items-center gap-2.5 shadow-lg transition">
+        <i class="fa-brands fa-facebook text-lg"></i> Share on Facebook
+      </a>
+
+      <!-- Copy Link Button -->
+      <button onclick="copyPortalLink()" class="px-6 py-3.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-xs uppercase tracking-wider flex items-center gap-2.5 transition">
+        <i class="fa-solid fa-link" id="copy-icon"></i> <span id="copy-btn-label">Copy Portal Link</span>
+      </button>
+
+    </div>
+
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  function copyPortalLink() {
+    const url = 'https://harvion.delstarfordworks.co.ke/home.html';
+    navigator.clipboard.writeText(url).then(() => {
+      showToast('Portal link copied to clipboard!');
+      const label = document.getElementById('copy-btn-label');
+      if (label) {
+        label.innerText = 'Copied!';
+        setTimeout(() => label.innerText = 'Copy Portal Link', 3000);
       }
-    }
-
-    function copyShareLink() {
-      const url = window.location.origin + '/home.html';
-      navigator.clipboard.writeText(url).then(() => {
-        const toast = document.getElementById('copy-toast');
-        const btnText = document.getElementById('copy-text');
-        btnText.innerText = 'Copied!';
-        toast.classList.remove('hidden');
-        setTimeout(() => {
-          btnText.innerText = 'Copy Link';
-          toast.classList.add('hidden');
-        }, 3000);
-      });
-    }
-  </script>
-</body>
-</html>
-
+    });
+  }
+</script>
+{% endblock %}

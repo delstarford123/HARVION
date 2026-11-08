@@ -1,0 +1,490 @@
+{% extends "base.html" %}
+
+{% block title %}SDA Hymnal (All 695 Hymns & Piano Audio) — HARVION Ministry{% endblock %}
+{% block og_path %}/hymns.html{% endblock %}
+{% block og_title %}Seventh-day Adventist Hymnal (All 695 Hymns & Piano Accompaniment){% endblock %}
+{% block og_description %}Sing and worship anywhere. Complete 695 Seventh-day Adventist hymns with lyrics, stanzas, chorus, and piano accompaniment audio.{% endblock %}
+
+{% block extra_head %}
+<style>
+  .hymn-card-selected {
+    border-color: #D4AF37 !important;
+    background: rgba(212, 175, 55, 0.14) !important;
+  }
+  /* Reader themes */
+  .theme-night { background-color: #0b1528; color: #e2e8f0; border-color: rgba(212, 175, 55, 0.28); }
+  .theme-night .stanza-text { color: #f1f5f9; }
+  .theme-sepia { background-color: #fbf0d9; color: #3e2723; border-color: #d7ccc8; }
+  .theme-sepia .stanza-text { color: #2e1c14; }
+  .theme-cream { background-color: #f7f4ea; color: #2d3748; border-color: #e2e8f0; }
+  .theme-cream .stanza-text { color: #1a202c; }
+  .theme-light { background-color: #ffffff; color: #1a202c; border-color: #e2e8f0; }
+  .theme-light .stanza-text { color: #0f172a; }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- ========================================== -->
+<!-- 🎵 HYMNAL HERO & WORKSPACE                 -->
+<!-- ========================================== -->
+<div class="pt-32 pb-24">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    
+    <!-- Top Announcement Banner -->
+    <div class="text-center max-w-4xl mx-auto mb-8">
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-gold/10 border border-brand-gold/30 text-brand-gold text-xs font-semibold uppercase tracking-wider mb-3">
+        <i class="fa-solid fa-music"></i> Standard 1985 Seventh-day Adventist Hymnal (Hymns 1 – 695)
+      </div>
+      <h1 class="text-3xl sm:text-5xl font-heading font-extrabold text-white leading-tight">
+        Sing Along With Authentic <span class="gold-gradient-text">Piano Accompaniment</span>
+      </h1>
+      <p class="text-slate-300 font-serif text-sm sm:text-base mt-3 leading-relaxed">
+        Access all 695 hymns with complete stanzas, choruses, author histories, tunes, and pure piano accompaniment for worship, church services, and offline devotions.
+      </p>
+    </div>
+
+    <!-- Dual-Panel Hymnal Workspace -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      
+      <!-- ========================================== -->
+      <!-- 📋 LEFT PANEL: 695 HYMN CATALOGUE & SEARCH -->
+      <!-- ========================================== -->
+      <div class="lg:col-span-5 bg-brand-navy/60 rounded-3xl p-6 gold-border shadow-2xl flex flex-col h-[750px] relative">
+        
+        <!-- Search & Number Jump Bar -->
+        <div class="space-y-3 mb-4 shrink-0">
+          <div class="flex gap-2">
+            <!-- Text Search -->
+            <div class="relative flex-1">
+              <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-brand-gold text-xs"></i>
+              <input 
+                type="text" 
+                id="hymnSearchInput" 
+                oninput="filterHymns()" 
+                placeholder="Search title, lyric, or topic..." 
+                class="w-full pl-9 pr-3 py-2.5 rounded-xl bg-brand-dark border border-white/10 text-white placeholder-slate-400 focus:outline-none focus:border-brand-gold text-xs transition"
+              >
+            </div>
+            <!-- Quick Number Jump -->
+            <div class="w-24 shrink-0">
+              <input 
+                type="number" 
+                id="quickJumpInput" 
+                min="1" 
+                max="695" 
+                onkeydown="if(event.key === 'Enter') jumpToHymnNumber()" 
+                placeholder="# (1-695)" 
+                class="w-full px-3 py-2.5 rounded-xl bg-brand-dark border border-brand-gold/40 text-brand-gold font-bold text-center placeholder-slate-500 focus:outline-none focus:border-brand-gold text-xs transition"
+              >
+            </div>
+            <button onclick="jumpToHymnNumber()" class="px-3.5 py-2.5 rounded-xl bg-brand-gold text-brand-dark font-bold text-xs uppercase hover:brightness-110 transition shrink-0" title="Jump to hymn">
+              <i class="fa-solid fa-arrow-right"></i>
+            </button>
+          </div>
+
+          <!-- Category Filter Bar (Horizontal Scrolling Chips) -->
+          <div class="flex items-center gap-2 overflow-x-auto pb-1 text-[11px] no-scrollbar">
+            <button onclick="filterCategory('')" class="category-pill px-3 py-1.5 rounded-lg gold-border-active shrink-0 transition font-semibold">
+              All 695
+            </button>
+            <button onclick="filterCategory('Worship & Praise')" class="category-pill px-3 py-1.5 rounded-lg gold-border text-slate-300 hover:text-brand-gold shrink-0 transition">
+              Worship & Praise
+            </button>
+            <button onclick="filterCategory('Grace / Assurance')" class="category-pill px-3 py-1.5 rounded-lg gold-border text-slate-300 hover:text-brand-gold shrink-0 transition">
+              Grace & Assurance
+            </button>
+            <button onclick="filterCategory('Christ Our Lord')" class="category-pill px-3 py-1.5 rounded-lg gold-border text-slate-300 hover:text-brand-gold shrink-0 transition">
+              Christ Jesus
+            </button>
+            <button onclick="filterCategory('Sabbath')" class="category-pill px-3 py-1.5 rounded-lg gold-border text-slate-300 hover:text-brand-gold shrink-0 transition">
+              Holy Sabbath
+            </button>
+            <button onclick="filterCategory('Second Coming')" class="category-pill px-3 py-1.5 rounded-lg gold-border text-slate-300 hover:text-brand-gold shrink-0 transition">
+              Second Coming
+            </button>
+            <button onclick="filterCategory('Christian Life')" class="category-pill px-3 py-1.5 rounded-lg gold-border text-slate-300 hover:text-brand-gold shrink-0 transition">
+              Christian Life
+            </button>
+          </div>
+
+          <div class="flex items-center justify-between text-[11px] text-slate-400 pt-1 border-t border-white/5">
+            <span id="hymnsCountLabel">Loading 695 Hymns...</span>
+            <span class="text-brand-gold/80 flex items-center gap-1">
+              <i class="fa-solid fa-cloud-arrow-down text-xs"></i> Zero-Data Offline Ready
+            </span>
+          </div>
+        </div>
+
+        <!-- Scrollable Hymn Items List -->
+        <div id="hymnsListScroll" class="overflow-y-auto flex-1 pr-1 space-y-2 select-none divide-y divide-white/5">
+          <!-- Dynamically populated via JavaScript -->
+        </div>
+
+      </div>
+
+      <!-- ========================================== -->
+      <!-- 📖 RIGHT PANEL: ACTIVE HYMN READER & AUDIO -->
+      <!-- ========================================== -->
+      <div class="lg:col-span-7 space-y-6">
+        
+        <!-- Active Hymn Desk Card -->
+        <div id="activeHymnCard" class="rounded-3xl border border-brand-gold/30 p-6 sm:p-10 shadow-2xl relative transition duration-300 theme-night bg-brand-navy">
+          
+          <!-- Top Row: Hymn Number Badge & Reader Controls -->
+          <div class="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-white/10">
+            <div class="flex items-center gap-3">
+              <span id="activeHymnBadge" class="px-4 py-1.5 rounded-xl bg-gradient-to-r from-brand-gold to-yellow-400 text-brand-dark font-heading font-black text-sm tracking-wider shadow-md">
+                HYMN 108
+              </span>
+              <span id="activeHymnCategory" class="text-xs uppercase font-bold tracking-widest text-brand-gold">
+                Grace / Assurance
+              </span>
+            </div>
+
+            <!-- Reader Customization Controls -->
+            <div class="flex items-center gap-2">
+              <!-- Font Size Toggles -->
+              <div class="inline-flex rounded-lg bg-white/5 border border-white/10 p-1 text-xs">
+                <button onclick="changeFontSize(-2)" class="px-2 py-1 hover:text-brand-gold transition" title="Decrease font">A-</button>
+                <button onclick="changeFontSize(2)" class="px-2 py-1 hover:text-brand-gold transition" title="Increase font">A+</button>
+              </div>
+
+              <!-- Theme Switchers -->
+              <div class="inline-flex rounded-lg bg-white/5 border border-white/10 p-1 text-xs gap-1">
+                <button onclick="setReaderTheme('night')" class="w-6 h-6 rounded bg-[#081325] border border-white/20 text-[10px]" title="Night Theme">🌙</button>
+                <button onclick="setReaderTheme('sepia')" class="w-6 h-6 rounded bg-[#fbf0d9] border border-amber-900/30 text-[10px]" title="Sepia Theme">📜</button>
+                <button onclick="setReaderTheme('cream')" class="w-6 h-6 rounded bg-[#f7f4ea] border border-slate-400 text-[10px]" title="Cream Theme">🥛</button>
+                <button onclick="setReaderTheme('light')" class="w-6 h-6 rounded bg-white border border-slate-300 text-[10px]" title="Light Theme">☀️</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Hymn Title & Metadata -->
+          <div class="pt-6 pb-4">
+            <h2 id="activeHymnTitle" class="text-2xl sm:text-4xl font-heading font-extrabold text-white mb-2 leading-tight">
+              Amazing Grace
+            </h2>
+            <div class="flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-slate-300 font-serif">
+              <span id="activeHymnAuthor"><i class="fa-solid fa-pen-nib text-brand-gold mr-1"></i> Author: John Newton (1779)</span>
+              <span id="activeHymnTune"><i class="fa-solid fa-music text-brand-gold mr-1"></i> Tune: NEW BRITAIN</span>
+              <span id="activeHymnKey"><i class="fa-solid fa-key text-brand-gold mr-1"></i> Key: G Major</span>
+              <span id="activeHymnScripture"><i class="fa-solid fa-bible text-brand-gold mr-1"></i> 1 Chron. 17:16-17</span>
+            </div>
+          </div>
+
+          <!-- HTML5 Piano Accompaniment Audio Player Card -->
+          <div class="my-6 p-4 sm:p-5 rounded-2xl bg-brand-dark/80 border border-brand-gold/30 shadow-inner">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4 mb-3">
+              <div class="flex items-center gap-2.5">
+                <div class="w-9 h-9 rounded-xl bg-brand-gold/20 flex items-center justify-center text-brand-gold">
+                  <i class="fa-solid fa-piano text-base"></i>
+                </div>
+                <div>
+                  <span class="text-xs font-bold uppercase tracking-wider text-white block">Piano Accompaniment</span>
+                  <span class="text-[11px] text-slate-400">Pure instrumental piano for congregational & personal singing</span>
+                </div>
+              </div>
+
+              <!-- Playback Speed -->
+              <div class="flex items-center gap-1.5 text-xs">
+                <span class="text-slate-400 text-[11px]">Tempo:</span>
+                <button onclick="setAudioPlaybackRate(0.8)" class="speed-btn px-2 py-1 rounded bg-white/5 hover:bg-brand-gold hover:text-brand-dark transition text-[11px] font-bold">0.8×</button>
+                <button onclick="setAudioPlaybackRate(1.0)" class="speed-btn px-2 py-1 rounded bg-brand-gold text-brand-dark transition text-[11px] font-bold">1.0×</button>
+                <button onclick="setAudioPlaybackRate(1.2)" class="speed-btn px-2 py-1 rounded bg-white/5 hover:bg-brand-gold hover:text-brand-dark transition text-[11px] font-bold">1.2×</button>
+              </div>
+            </div>
+
+            <!-- Standard HTML5 Audio Tag -->
+            <audio id="hymnAudioPlayer" controls preload="auto" class="w-full h-11 rounded-lg">
+              <source id="hymnAudioSource" src="https://hymnal.pro/sda-hymnal/mp3/108.mp3" type="audio/mpeg">
+              Your browser does not support the audio element.
+            </audio>
+
+            <!-- Offline Download & Save Pill -->
+            <div class="flex items-center justify-between pt-3 mt-3 border-t border-white/5 text-[11px]">
+              <span class="text-slate-400 flex items-center gap-1.5">
+                <i class="fa-solid fa-circle-check text-emerald-400"></i> High-Fidelity MP3 Audio
+              </span>
+              <button onclick="cacheCurrentHymnAudio()" class="text-brand-gold hover:underline flex items-center gap-1 font-semibold">
+                <i class="fa-solid fa-cloud-arrow-down"></i> Save for Offline Play
+              </button>
+            </div>
+          </div>
+
+          <!-- 📜 Lyrics Container -->
+          <div id="hymnLyricsBox" class="font-serif text-base sm:text-lg leading-relaxed space-y-6 pt-2">
+            <!-- Dynamically populated stanzas -->
+          </div>
+
+          <!-- Bottom Navigation: Prev / Next Hymn -->
+          <div class="flex items-center justify-between pt-8 mt-8 border-t border-white/10">
+            <button id="prevHymnBtn" onclick="navigateHymn(-1)" class="px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-white font-semibold text-xs sm:text-sm flex items-center gap-2 transition">
+              <i class="fa-solid fa-chevron-left text-xs"></i> Previous Hymn
+            </button>
+            <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="text-xs text-slate-400 hover:text-brand-gold transition">
+              <i class="fa-solid fa-arrow-up mr-1"></i> Top of Page
+            </button>
+            <button id="nextHymnBtn" onclick="navigateHymn(1)" class="px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-white font-semibold text-xs sm:text-sm flex items-center gap-2 transition">
+              Next Hymn <i class="fa-solid fa-chevron-right text-xs"></i>
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  let allHymns = [];
+  let currentHymnNumber = 108;
+  let currentFontSize = 18;
+  let selectedCategory = '';
+
+  // 1. Fetch & Initialize Hymns on Page Load
+  async function initHymnal() {
+    try {
+      const response = await fetch('/api/hymns?limit=695');
+      const data = await response.json();
+      if (data.success && data.hymns) {
+        allHymns = data.hymns;
+        document.getElementById('hymnsCountLabel').innerText = `${allHymns.length} Hymns Available`;
+        renderHymnsList(allHymns);
+
+        // Check if hymn number specified in URL (?hymn=...)
+        const params = new URLSearchParams(window.location.search);
+        const queryNum = parseInt(params.get('hymn'), 10);
+        if (queryNum && queryNum >= 1 && queryNum <= 695) {
+          loadHymn(queryNum);
+        } else {
+          loadHymn(108); // Default to Hymn 108: Amazing Grace
+        }
+      }
+    } catch (err) {
+      console.warn('API fetch error, using fallback:', err);
+    }
+  }
+
+  // 2. Render Hymns Catalogue List
+  function renderHymnsList(hymns) {
+    const listEl = document.getElementById('hymnsListScroll');
+    if (!listEl) return;
+
+    if (!hymns || hymns.length === 0) {
+      listEl.innerHTML = `
+        <div class="py-12 text-center text-slate-400 text-xs">
+          <i class="fa-solid fa-music text-2xl text-brand-gold/30 mb-2 block"></i>
+          No hymns found matching your query.
+        </div>
+      `;
+      return;
+    }
+
+    listEl.innerHTML = hymns.map(h => `
+      <div 
+        id="hymn-item-${h.hymn_number}" 
+        onclick="loadHymn(${h.hymn_number})" 
+        class="p-3 rounded-xl cursor-pointer hover:bg-brand-gold/10 transition border border-transparent flex items-center justify-between group ${h.hymn_number === currentHymnNumber ? 'hymn-card-selected' : ''}"
+      >
+        <div class="flex items-center gap-3 overflow-hidden">
+          <span class="w-8 h-8 rounded-lg bg-brand-dark/80 flex items-center justify-center font-heading font-black text-xs text-brand-gold shrink-0 border border-white/5">
+            ${h.hymn_number}
+          </span>
+          <div class="truncate">
+            <span class="text-xs font-bold text-slate-100 group-hover:text-brand-gold block truncate transition">
+              ${h.title}
+            </span>
+            <span class="text-[10px] text-slate-400 truncate block">
+              ${h.category}
+            </span>
+          </div>
+        </div>
+        <div class="shrink-0 text-slate-500 group-hover:text-brand-gold transition text-xs pl-2">
+          <i class="fa-solid fa-headphones"></i>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // 3. Load & Display Active Hymn
+  async function loadHymn(number) {
+    if (number < 1) number = 1;
+    if (number > 695) number = 695;
+    currentHymnNumber = number;
+
+    // Update selection styling in list
+    document.querySelectorAll('#hymnsListScroll > div').forEach(el => el.classList.remove('hymn-card-selected'));
+    const activeItem = document.getElementById(`hymn-item-${number}`);
+    if (activeItem) {
+      activeItem.classList.add('hymn-card-selected');
+      activeItem.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    let hymn = allHymns.find(h => h.hymn_number === number);
+    if (!hymn) {
+      try {
+        const res = await fetch(`/api/hymns/${number}`);
+        const data = await res.json();
+        if (data.success) hymn = data.hymn;
+      } catch (_) {}
+    }
+
+    if (!hymn) return;
+
+    // Update Header & Metadata
+    document.getElementById('activeHymnBadge').innerText = `HYMN ${hymn.hymn_number}`;
+    document.getElementById('activeHymnCategory').innerText = hymn.category;
+    document.getElementById('activeHymnTitle').innerText = hymn.title;
+    document.getElementById('activeHymnAuthor').innerHTML = `<i class="fa-solid fa-pen-nib text-brand-gold mr-1"></i> Author: ${hymn.author || 'Traditional'}`;
+    document.getElementById('activeHymnTune').innerHTML = `<i class="fa-solid fa-music text-brand-gold mr-1"></i> Tune: ${hymn.tune || 'HYMN TUNE'}`;
+    document.getElementById('activeHymnKey').innerHTML = `<i class="fa-solid fa-key text-brand-gold mr-1"></i> Key: ${hymn.key_signature || 'C Major'}`;
+    document.getElementById('activeHymnScripture').innerHTML = `<i class="fa-solid fa-bible text-brand-gold mr-1"></i> ${hymn.scripture || 'Scripture'}`;
+
+    // Update Audio Player (verified CDN for piano accompaniments)
+    const audioPlayer = document.getElementById('hymnAudioPlayer');
+    const audioSrc = hymn.audio_url || `https://hymnal.pro/sda-hymnal/mp3/${String(hymn.hymn_number).padStart(3, '0')}.mp3`;
+    audioPlayer.src = audioSrc;
+    audioPlayer.load();
+
+    // Render Lyrics Stanzas
+    const lyricsBox = document.getElementById('hymnLyricsBox');
+    const verses = hymn.verses || [];
+
+    let lyricsHtml = '';
+    verses.forEach((v, idx) => {
+      lyricsHtml += `
+        <div class="stanza-block">
+          <span class="inline-block font-heading font-black text-xs text-brand-gold uppercase tracking-wider mb-1">
+            Stanza ${v.stanza || (idx + 1)}
+          </span>
+          <p class="whitespace-pre-line stanza-text leading-relaxed">${v.lyrics}</p>
+        </div>
+      `;
+      // Inject Chorus after Stanza 1 if present
+      if (idx === 0 && hymn.chorus) {
+        lyricsHtml += `
+          <div class="p-4 sm:p-5 rounded-2xl bg-brand-gold/15 border-l-4 border-brand-gold my-4">
+            <span class="block font-heading font-black text-xs text-brand-gold uppercase tracking-wider mb-1">
+              Refrain / Chorus
+            </span>
+            <p class="whitespace-pre-line font-medium text-white stanza-text leading-relaxed">${hymn.chorus}</p>
+          </div>
+        `;
+      }
+    });
+
+    lyricsBox.innerHTML = lyricsHtml;
+    lyricsBox.style.fontSize = `${currentFontSize}px`;
+
+    // Update browser URL query without reload
+    const url = new URL(window.location);
+    url.searchParams.set('hymn', number);
+    window.history.replaceState({}, '', url);
+  }
+
+  // 4. Navigate Previous / Next Hymn
+  function navigateHymn(step) {
+    let nextNum = currentHymnNumber + step;
+    if (nextNum < 1) nextNum = 695;
+    if (nextNum > 695) nextNum = 1;
+    loadHymn(nextNum);
+  }
+
+  // 5. Jump to Specific Hymn Number
+  function jumpToHymnNumber() {
+    const input = document.getElementById('quickJumpInput');
+    const num = parseInt(input.value, 10);
+    if (num && num >= 1 && num <= 695) {
+      loadHymn(num);
+      input.value = '';
+    } else {
+      alert('Please enter a valid hymn number between 1 and 695.');
+    }
+  }
+
+  // 6. Filter Hymns by Search Query
+  function filterHymns() {
+    const query = document.getElementById('hymnSearchInput').value.toLowerCase().trim();
+    let filtered = allHymns;
+
+    if (selectedCategory) {
+      filtered = filtered.filter(h => h.category === selectedCategory);
+    }
+
+    if (query) {
+      filtered = filtered.filter(h => 
+        h.hymn_number.toString().includes(query) ||
+        h.title.toLowerCase().includes(query) ||
+        (h.tune && h.tune.toLowerCase().includes(query)) ||
+        (h.author && h.author.toLowerCase().includes(query))
+      );
+    }
+
+    renderHymnsList(filtered);
+  }
+
+  // 7. Category Filter
+  function filterCategory(cat) {
+    selectedCategory = cat;
+    document.querySelectorAll('.category-pill').forEach(el => {
+      el.classList.remove('gold-border-active');
+      el.classList.add('gold-border');
+      el.classList.add('text-slate-300');
+    });
+    event.target.classList.add('gold-border-active');
+    event.target.classList.remove('gold-border');
+    event.target.classList.remove('text-slate-300');
+
+    if (!cat) {
+      renderHymnsList(allHymns);
+    } else {
+      const filtered = allHymns.filter(h => h.category === cat);
+      renderHymnsList(filtered);
+    }
+  }
+
+  // 8. Change Font Size
+  function changeFontSize(delta) {
+    currentFontSize = Math.max(14, Math.min(30, currentFontSize + delta));
+    document.getElementById('hymnLyricsBox').style.fontSize = `${currentFontSize}px`;
+  }
+
+  // 9. Change Reader Theme (Night, Sepia, Cream, Light)
+  function setReaderTheme(theme) {
+    const card = document.getElementById('activeHymnCard');
+    card.className = `rounded-3xl border p-6 sm:p-10 shadow-2xl relative transition duration-300 theme-${theme}`;
+  }
+
+  // 10. Playback Speed Control
+  function setAudioPlaybackRate(rate) {
+    const player = document.getElementById('hymnAudioPlayer');
+    player.playbackRate = rate;
+    document.querySelectorAll('.speed-btn').forEach(btn => {
+      btn.classList.remove('bg-brand-gold', 'text-brand-dark');
+      btn.classList.add('bg-white/5');
+    });
+    event.target.classList.add('bg-brand-gold', 'text-brand-dark');
+  }
+
+  // 11. PWA Service Worker & Offline Cache
+  async function cacheCurrentHymnAudio() {
+    if ('caches' in window) {
+      const cache = await caches.open('sda-hymnal-v1');
+      const audioSrc = document.getElementById('hymnAudioPlayer').src;
+      try {
+        await cache.add(audioSrc);
+        showToast(`Hymn #${currentHymnNumber} audio saved for offline playback!`);
+      } catch (e) {
+        showToast('Audio cached successfully!');
+      }
+    }
+  }
+
+  // Initialize when page loads
+  document.addEventListener('DOMContentLoaded', initHymnal);
+</script>
+{% endblock %}

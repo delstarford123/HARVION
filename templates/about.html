@@ -1,383 +1,229 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>About HARVION — Our Adventist Faith, Heritage & Literature Evangelism Mission</title>
-  
-  <!-- Social Media & Open Graph Marketing Meta Tags -->
-  <meta name="description" content="Discover how HARVION is built upon the solid foundation of Seventh-day Adventist faith, the Holy Bible, the Spirit of Prophecy (Ellen G. White), and Literature Evangelism.">
-  <meta property="og:type" content="article">
-  <meta property="og:url" content="https://harvion.delstarfordworks.co.ke/about.html">
-  <meta property="og:title" content="About HARVION — Adventist Truth & Literature Evangelism">
-  <meta property="og:description" content="Discover the faith, history, and mission behind HARVION. Empowering believers with all 50 Spirit of Prophecy books, literature evangelism, and family life.">
-  <meta property="og:image" content="https://images.unsplash.com/photo-1519791883288-dc8bd696e667?w=1200&q=80">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="About HARVION — Pillars of Our Faith">
-  <meta name="twitter:description" content="Dedicated to the Three Angels' Messages, Spirit of Prophecy, and health evangelism worldwide.">
-  <meta name="twitter:image" content="https://images.unsplash.com/photo-1519791883288-dc8bd696e667?w=1200&q=80">
+{% extends "base.html" %}
 
-  <!-- Favicon -->
-  <link rel="icon" href="https://img.icons8.com/color/96/holy-bible.png" type="image/png">
+{% block title %}About HARVION — Our Adventist Faith, Heritage & Literature Evangelism Mission{% endblock %}
+{% block og_path %}/about.html{% endblock %}
+{% block og_title %}About HARVION — Adventist Truth & Literature Evangelism{% endblock %}
+{% block og_description %}Discover the faith, history, and mission behind HARVION. Empowering believers with all 50 Spirit of Prophecy books, 695 SDA Hymnal, and literature evangelism.{% endblock %}
 
-  <!-- Google Fonts & Font Awesome 6 Icons -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Inter:wght@300;400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            brand: {
-              dark: '#081325',
-              navy: '#0F2347',
-              royal: '#1A365D',
-              gold: '#D4AF37',
-              goldHover: '#B89628',
-              goldLight: '#FBF4DB',
-              cream: '#FDFBF7'
-            }
-          },
-          fontFamily: {
-            heading: ['Cinzel', 'serif'],
-            body: ['Inter', 'sans-serif'],
-            serif: ['Lora', 'serif'],
-          }
-        }
-      }
-    }
-  </script>
+{% block content %}
+<!-- ========================================== -->
+<!-- 📖 ABOUT HERO SECTION                     -->
+<!-- ========================================== -->
+<section class="pt-36 pb-20 md:pt-48 md:pb-28 bg-gradient-to-b from-brand-dark via-brand-navy to-brand-dark border-b border-white/10 relative">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    
+    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-gold/10 border border-brand-gold/30 text-brand-gold text-xs font-semibold uppercase tracking-wider mb-6">
+      <i class="fa-solid fa-scroll"></i>
+      <span>Rooted in Holy Scripture & Prophetic Guidance</span>
+    </div>
 
-  <style>
-    html { scroll-behavior: smooth; }
-    .glass-nav {
-      background: rgba(8, 19, 37, 0.88);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-    }
-    .gold-gradient-text {
-      background: linear-gradient(135deg, #FFF1C5 0%, #D4AF37 50%, #AA8010 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-  </style>
-</head>
-<body class="bg-brand-dark text-slate-100 font-body antialiased selection:bg-brand-gold selection:text-brand-dark">
+    <h1 class="text-3xl sm:text-5xl lg:text-6xl font-heading font-extrabold text-white leading-tight mb-6">
+      The Mission & Adventist Heritage of <span class="gold-gradient-text">HARVION</span>
+    </h1>
 
-  <!-- ========================================== -->
-  <!-- 📌 NAVIGATION BAR                         -->
-  <!-- ========================================== -->
-  <nav class="fixed top-0 left-0 w-full z-50 glass-nav border-b border-white/10 transition duration-300">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+    <p class="text-base sm:text-xl text-slate-300 font-serif leading-relaxed max-w-3xl mx-auto">
+      “We have nothing to fear for the future, except as we shall forget the way the Lord has led us, and His teaching in our past history.” — <em>Life Sketches of Ellen G. White</em>
+    </p>
+
+  </div>
+</section>
+
+<!-- ========================================== -->
+<!-- 🏛️ THE SIX PILLARS OF OUR ADVENTIST FAITH   -->
+<!-- ========================================== -->
+<section class="py-24 bg-brand-navy/60 relative">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    
+    <div class="text-center max-w-3xl mx-auto mb-16">
+      <div class="inline-flex items-center gap-2 text-brand-gold text-xs uppercase font-bold tracking-widest mb-2">
+        <i class="fa-solid fa-shield-halved"></i> Unshakable Foundation
+      </div>
+      <h2 class="text-3xl sm:text-4xl font-heading font-bold text-white">
+        The Six Pillars of Present Truth
+      </h2>
+      <p class="text-slate-300 font-serif mt-3 text-sm sm:text-base">
+        HARVION stands firmly upon the historic landmarks of the Seventh-day Adventist Church, established through diligent Bible study under the guidance of the Holy Spirit.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
       
-      <!-- Brand Logo -->
-      <a href="/home.html" class="flex items-center space-x-3 group">
-        <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-brand-gold to-yellow-200 flex items-center justify-center shadow-lg shadow-brand-gold/20 group-hover:scale-105 transition">
-          <img src="/assets/images/harvion_logo.png" alt="HARVION Logo" class="w-full h-full object-contain rounded-xl p-0.5 bg-white">
+      <!-- Pillar 1: Sola Scriptura -->
+      <div class="bg-brand-navy rounded-2xl p-8 gold-border hover:bg-brand-navy/80 transition duration-300 shadow-xl">
+        <div class="w-12 h-12 rounded-xl bg-brand-gold/15 flex items-center justify-center text-brand-gold text-2xl mb-6">
+          <i class="fa-solid fa-book-bible"></i>
         </div>
-        <div>
-          <span class="font-heading font-extrabold text-2xl tracking-wider gold-gradient-text block leading-none">HARVION</span>
-          <span class="text-[10px] uppercase tracking-widest text-brand-gold/80 font-semibold">SDA Ministry Ecosystem</span>
+        <h3 class="font-heading font-bold text-xl text-white mb-3">1. Sola Scriptura</h3>
+        <p class="text-slate-300 font-serif text-sm leading-relaxed mb-4">
+          The Holy Scriptures of the Old and New Testaments are the inspired Word of God, the authoritative revealer of doctrines, and the unerring standard of character.
+        </p>
+        <span class="text-xs text-brand-gold font-semibold uppercase tracking-wider block">2 Timothy 3:16-17 • Isaiah 8:20</span>
+      </div>
+
+      <!-- Pillar 2: Spirit of Prophecy -->
+      <div class="bg-brand-navy rounded-2xl p-8 gold-border hover:bg-brand-navy/80 transition duration-300 shadow-xl">
+        <div class="w-12 h-12 rounded-xl bg-brand-gold/15 flex items-center justify-center text-brand-gold text-2xl mb-6">
+          <i class="fa-solid fa-dove"></i>
         </div>
+        <h3 class="font-heading font-bold text-xl text-white mb-3">2. The Spirit of Prophecy</h3>
+        <p class="text-slate-300 font-serif text-sm leading-relaxed mb-4">
+          One of the gifts of the Holy Spirit is prophecy. This gift is an identifying mark of the remnant church and was manifested in the ministry and writings of Ellen G. White.
+        </p>
+        <span class="text-xs text-brand-gold font-semibold uppercase tracking-wider block">Revelation 12:17 • Revelation 19:10</span>
+      </div>
+
+      <!-- Pillar 3: Seventh-day Sabbath -->
+      <div class="bg-brand-navy rounded-2xl p-8 gold-border hover:bg-brand-navy/80 transition duration-300 shadow-xl">
+        <div class="w-12 h-12 rounded-xl bg-brand-gold/15 flex items-center justify-center text-brand-gold text-2xl mb-6">
+          <i class="fa-solid fa-calendar-check"></i>
+        </div>
+        <h3 class="font-heading font-bold text-xl text-white mb-3">3. The Seventh-Day Sabbath</h3>
+        <p class="text-slate-300 font-serif text-sm leading-relaxed mb-4">
+          The beneficent Creator, after the six days of Creation, rested on the seventh day and instituted the Sabbath for all people as a memorial of Creation and a sign of sanctification.
+        </p>
+        <span class="text-xs text-brand-gold font-semibold uppercase tracking-wider block">Genesis 2:1-3 • Exodus 20:8-11</span>
+      </div>
+
+      <!-- Pillar 4: Sanctuary & Judgment -->
+      <div class="bg-brand-navy rounded-2xl p-8 gold-border hover:bg-brand-navy/80 transition duration-300 shadow-xl">
+        <div class="w-12 h-12 rounded-xl bg-brand-gold/15 flex items-center justify-center text-brand-gold text-2xl mb-6">
+          <i class="fa-solid fa-church"></i>
+        </div>
+        <h3 class="font-heading font-bold text-xl text-white mb-3">4. Christ's Heavenly Ministry</h3>
+        <p class="text-slate-300 font-serif text-sm leading-relaxed mb-4">
+          There is a sanctuary in heaven, the true tabernacle which the Lord set up. In 1844, at the end of the 2300 prophetic days, Christ entered the Most Holy Place to begin the investigative judgment.
+        </p>
+        <span class="text-xs text-brand-gold font-semibold uppercase tracking-wider block">Hebrews 8:1-2 • Daniel 8:14</span>
+      </div>
+
+      <!-- Pillar 5: Three Angels' Messages -->
+      <div class="bg-brand-navy rounded-2xl p-8 gold-border hover:bg-brand-navy/80 transition duration-300 shadow-xl">
+        <div class="w-12 h-12 rounded-xl bg-brand-gold/15 flex items-center justify-center text-brand-gold text-2xl mb-6">
+          <i class="fa-solid fa-bullhorn"></i>
+        </div>
+        <h3 class="font-heading font-bold text-xl text-white mb-3">5. The Three Angels' Messages</h3>
+        <p class="text-slate-300 font-serif text-sm leading-relaxed mb-4">
+          The proclamation of the Everlasting Gospel, the call to worship the Creator, the warning against Babylon's fall, and the mark of the beast, preparing a people for the Second Advent.
+        </p>
+        <span class="text-xs text-brand-gold font-semibold uppercase tracking-wider block">Revelation 14:6-12</span>
+      </div>
+
+      <!-- Pillar 6: Health Reform -->
+      <div class="bg-brand-navy rounded-2xl p-8 gold-border hover:bg-brand-navy/80 transition duration-300 shadow-xl">
+        <div class="w-12 h-12 rounded-xl bg-brand-gold/15 flex items-center justify-center text-brand-gold text-2xl mb-6">
+          <i class="fa-solid fa-heart-pulse"></i>
+        </div>
+        <h3 class="font-heading font-bold text-xl text-white mb-3">6. Health & Christian Temperance</h3>
+        <p class="text-slate-300 font-serif text-sm leading-relaxed mb-4">
+          Our bodies are the temples of the Holy Spirit. We advocate a wholesome lifestyle, vegetarianism, the 8 laws of health (NEWSTART), and total abstinence from harmful substances.
+        </p>
+        <span class="text-xs text-brand-gold font-semibold uppercase tracking-wider block">1 Corinthians 6:19-20 • 3 John 1:2</span>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- ========================================== -->
+<!-- 💼 LITERATURE EVANGELISM & COLPORTEUR WORK -->
+<!-- ========================================== -->
+<section class="py-24 bg-brand-dark relative border-t border-white/10">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+      
+      <div class="lg:col-span-6 space-y-6">
+        <div class="inline-flex items-center gap-2 text-brand-gold text-xs uppercase font-bold tracking-widest">
+          <i class="fa-solid fa-hand-holding-dollar"></i> Literature Evangelism
+        </div>
+        <h2 class="text-3xl sm:text-4xl font-heading font-bold text-white">
+          Reviving the Historic Colporteur Movement
+        </h2>
+        <p class="text-slate-300 font-serif leading-relaxed">
+          In <em>Colporteur Ministry</em>, Ellen White wrote: “The canvassing work should no longer be languidly prosecuted... Let the books be given a large circulation. Let the light of truth shine forth.”
+        </p>
+        <p class="text-slate-300 font-serif leading-relaxed">
+          HARVION provides literature evangelists with digital catalog tools, wholesale discount margins (up to 40%), camp meeting order tracking, and instant M-Pesa STK push checkout to equip students and lay workers across Kenya and beyond.
+        </p>
+
+        <div class="pt-4 flex flex-wrap gap-4">
+          <a href="/books.html" class="px-6 py-3 rounded-xl bg-gradient-to-r from-brand-gold to-yellow-400 text-brand-dark font-bold text-xs uppercase tracking-wider shadow-lg transition hover:brightness-110">
+            <i class="fa-solid fa-book mr-2"></i> Browse 50 SOP Catalog
+          </a>
+          <a href="/contact.html?type=colporteur" class="px-6 py-3 rounded-xl bg-white/10 text-white font-semibold text-xs uppercase tracking-wider border border-white/20 hover:bg-white/15 transition">
+            <i class="fa-solid fa-user-plus mr-2"></i> Join as a Literature Evangelist
+          </a>
+        </div>
+      </div>
+
+      <div class="lg:col-span-6">
+        <div class="bg-brand-navy p-8 sm:p-10 rounded-3xl gold-border shadow-2xl relative">
+          <div class="text-brand-gold text-4xl mb-4 font-serif">“</div>
+          <p class="text-lg sm:text-xl text-slate-200 font-serif italic leading-relaxed mb-6">
+            Publications upon health and truth are to be scattered like the leaves of autumn. Let the books be carried to every family, and let the voice of truth be heard.
+          </p>
+          <div class="flex items-center gap-4 pt-4 border-t border-white/10">
+            <div class="w-12 h-12 rounded-full bg-brand-gold/20 flex items-center justify-center text-brand-gold font-heading font-bold text-lg">
+              EGW
+            </div>
+            <div>
+              <h4 class="font-heading font-bold text-white text-base">Ellen G. White</h4>
+              <p class="text-xs text-brand-gold/80 font-serif">The Publishing Ministry & Testimonies for the Church</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ========================================== -->
+<!-- 📢 VIRAL SHARE & MARKETING WIDGET          -->
+<!-- ========================================== -->
+<section class="py-20 bg-brand-navy border-t border-brand-gold/30 text-center">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    
+    <h2 class="text-3xl font-heading font-bold text-white mb-3">
+      Share Our Mission With Believers Everywhere
+    </h2>
+    <p class="text-slate-300 font-serif text-sm max-w-xl mx-auto mb-8">
+      Help fellow church members, youth, and pastors learn about the foundational truths and literature ministry of HARVION.
+    </p>
+
+    <div class="flex flex-wrap items-center justify-center gap-3">
+      <a href="https://api.whatsapp.com/send?text=Explore%20the%20mission%20and%20Adventist%20heritage%20behind%20HARVION%3A%20https%3A%2F%2Fharvion.delstarfordworks.co.ke%2Fabout.html" target="_blank" rel="noopener" class="px-5 py-3 rounded-xl bg-[#25D366] hover:bg-[#20ba59] text-white font-bold text-xs uppercase tracking-wider flex items-center gap-2 shadow-lg transition">
+        <i class="fa-brands fa-whatsapp text-lg"></i> Share on WhatsApp
       </a>
 
-      <!-- Desktop Links -->
-      <div class="hidden md:flex items-center space-x-8 text-sm font-medium text-slate-300">
-        <a href="/home.html" class="hover:text-brand-gold transition">Home</a>
-        <a href="/books.html" class="hover:text-brand-gold transition">50 SOP Books</a>
-        <a href="/about.html" class="text-brand-gold font-bold transition">About & Faith</a>
-        <a href="/support.html" class="hover:text-brand-gold transition">Support Work</a>
-        <a href="/contact.html" class="hover:text-brand-gold transition">Contact Us</a>
-      </div>
+      <a href="https://t.me/share/url?url=https%3A%2F%2Fharvion.delstarfordworks.co.ke%2Fabout.html&text=HARVION%20%E2%80%94%20Adventist%20Faith%2C%20Spirit%20of%20Prophecy%2C%20and%20Literature%20Evangelism" target="_blank" rel="noopener" class="px-5 py-3 rounded-xl bg-[#0088cc] hover:bg-[#0077b3] text-white font-bold text-xs uppercase tracking-wider flex items-center gap-2 shadow-lg transition">
+        <i class="fa-brands fa-telegram text-lg"></i> Share on Telegram
+      </a>
 
-      <!-- Action Buttons -->
-      <div class="hidden md:flex items-center space-x-4">
-        <a href="/support.html" class="px-5 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider bg-gradient-to-r from-brand-gold to-yellow-400 text-brand-dark hover:brightness-110 shadow-lg shadow-brand-gold/25 transition flex items-center gap-1.5">
-          <i class="fa-solid fa-hand-holding-heart"></i> Support Ministry
-        </a>
-      </div>
+      <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fharvion.delstarfordworks.co.ke%2Fabout.html" target="_blank" rel="noopener" class="px-5 py-3 rounded-xl bg-[#1877F2] hover:bg-[#166fe5] text-white font-bold text-xs uppercase tracking-wider flex items-center gap-2 shadow-lg transition">
+        <i class="fa-brands fa-facebook text-lg"></i> Share on Facebook
+      </a>
 
-      <!-- Mobile Menu Button -->
-      <button onclick="toggleMobileMenu()" class="md:hidden text-2xl text-brand-gold p-2">
-        <i class="fa-solid fa-bars" id="menu-icon"></i>
+      <button onclick="copyShareUrl()" class="px-5 py-3 rounded-xl bg-white/10 hover:bg-white/15 text-white font-bold text-xs uppercase tracking-wider flex items-center gap-2 border border-white/20 transition">
+        <i class="fa-solid fa-link text-brand-gold"></i> <span id="copy-btn-text">Copy Link</span>
       </button>
     </div>
 
-    <!-- Mobile Dropdown -->
-    <div id="mobile-menu" class="hidden md:hidden bg-brand-dark/95 border-b border-brand-gold/20 px-6 py-6 space-y-4 text-center">
-      <a href="/home.html" class="block text-slate-200 hover:text-brand-gold py-2 font-medium">Home</a>
-      <a href="/books.html" class="block text-slate-200 hover:text-brand-gold py-2 font-medium">50 SOP Books</a>
-      <a href="/about.html" class="block text-brand-gold font-bold py-2">About & Faith</a>
-      <a href="/support.html" class="block text-slate-200 hover:text-brand-gold py-2 font-medium">Support Work</a>
-      <a href="/contact.html" class="block text-slate-200 hover:text-brand-gold py-2 font-medium">Contact Us</a>
-      <a href="/support.html" class="block w-full py-3 rounded-lg bg-brand-gold text-brand-dark font-bold uppercase text-xs tracking-wider">Support Work</a>
-    </div>
-  </nav>
+  </div>
+</section>
+{% endblock %}
 
-  <!-- ========================================== -->
-  <!-- 📖 ABOUT HERO SECTION                     -->
-  <!-- ========================================== -->
-  <section class="pt-36 pb-20 md:pt-48 md:pb-28 bg-gradient-to-b from-brand-dark via-brand-navy to-brand-dark border-b border-white/10 relative">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-      
-      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-gold/10 border border-brand-gold/30 text-brand-gold text-xs font-semibold uppercase tracking-wider mb-6">
-        <i class="fa-solid fa-scroll"></i>
-        <span>Rooted in Holy Scripture & Prophetic Guidance</span>
-      </div>
-
-      <h1 class="text-3xl sm:text-5xl lg:text-6xl font-heading font-extrabold text-white leading-tight mb-6">
-        The Mission & Adventist Heritage of <span class="gold-gradient-text">HARVION</span>
-      </h1>
-
-      <p class="text-base sm:text-xl text-slate-300 font-serif leading-relaxed max-w-3xl mx-auto">
-        “We have nothing to fear for the future, except as we shall forget the way the Lord has led us, and His teaching in our past history.” — Life Sketches of Ellen G. White
-      </p>
-
-    </div>
-  </section>
-
-  <!-- ========================================== -->
-  <!-- 🏛️ THE PILLARS OF OUR ADVENTIST FAITH       -->
-  <!-- ========================================== -->
-  <section id="faith-pillars" class="py-24 bg-brand-dark">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      
-      <div class="text-center max-w-3xl mx-auto mb-16">
-        <span class="text-brand-gold text-xs uppercase tracking-widest font-bold">Unshakable Foundations</span>
-        <h2 class="text-3xl sm:text-4xl font-heading font-bold text-white mt-2">
-          How HARVION Aligns with Biblical Truth
-        </h2>
-        <p class="text-slate-400 font-serif text-sm sm:text-base mt-4">
-          HARVION was created specifically to safeguard, proclaim, and distribute the historic landmarks and distinctive truths entrusted to Seventh-day Adventists.
-        </p>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        
-        <!-- Pillar 1 -->
-        <div class="p-8 rounded-2xl bg-brand-navy/60 border border-white/10 hover:border-brand-gold/40 transition">
-          <div class="w-12 h-12 rounded-xl bg-amber-500/10 text-brand-gold flex items-center justify-center text-2xl mb-4">
-            <i class="fa-solid fa-bible"></i>
-          </div>
-          <h3 class="font-heading font-bold text-lg text-white mb-2">1. The Bible Only (Sola Scriptura)</h3>
-          <p class="text-xs text-slate-400 leading-relaxed font-serif">
-            The Holy Scriptures of the Old and New Testaments are the written Word of God, given by divine inspiration. The Bible is the authoritative standard for character, test of experience, and unerring revealer of doctrines.
-          </p>
-          <div class="mt-4 text-[11px] text-brand-gold font-mono">2 Timothy 3:16-17 • Isaiah 8:20</div>
-        </div>
-
-        <!-- Pillar 2 -->
-        <div class="p-8 rounded-2xl bg-brand-navy/60 border border-white/10 hover:border-brand-gold/40 transition">
-          <div class="w-12 h-12 rounded-xl bg-amber-500/10 text-brand-gold flex items-center justify-center text-2xl mb-4">
-            <i class="fa-solid fa-feather-pointed"></i>
-          </div>
-          <h3 class="font-heading font-bold text-lg text-white mb-2">2. The Spirit of Prophecy</h3>
-          <p class="text-xs text-slate-400 leading-relaxed font-serif">
-            One of the gifts of the Holy Spirit is prophecy. This gift is an identifying mark of the remnant church and was manifested in the life and ministry of Ellen G. White. Her writings are a continuing source of comfort, guidance, and correction.
-          </p>
-          <div class="mt-4 text-[11px] text-brand-gold font-mono">Revelation 12:17 • Revelation 19:10</div>
-        </div>
-
-        <!-- Pillar 3 -->
-        <div class="p-8 rounded-2xl bg-brand-navy/60 border border-white/10 hover:border-brand-gold/40 transition">
-          <div class="w-12 h-12 rounded-xl bg-amber-500/10 text-brand-gold flex items-center justify-center text-2xl mb-4">
-            <i class="fa-solid fa-calendar-check"></i>
-          </div>
-          <h3 class="font-heading font-bold text-lg text-white mb-2">3. The Seventh-day Sabbath</h3>
-          <p class="text-xs text-slate-400 leading-relaxed font-serif">
-            The gracious Creator, after the six days of Creation, rested on the seventh day and instituted the Sabbath for all people as a perpetual memorial of His creative work. It is the fourth commandment and the eternal sign of God's authority.
-          </p>
-          <div class="mt-4 text-[11px] text-brand-gold font-mono">Genesis 2:1-3 • Exodus 20:8-11</div>
-        </div>
-
-        <!-- Pillar 4 -->
-        <div class="p-8 rounded-2xl bg-brand-navy/60 border border-white/10 hover:border-brand-gold/40 transition">
-          <div class="w-12 h-12 rounded-xl bg-amber-500/10 text-brand-gold flex items-center justify-center text-2xl mb-4">
-            <i class="fa-solid fa-cloud-sun"></i>
-          </div>
-          <h3 class="font-heading font-bold text-lg text-white mb-2">4. The Heavenly Sanctuary & 1844</h3>
-          <p class="text-xs text-slate-400 leading-relaxed font-serif">
-            There is a sanctuary in heaven, the true tabernacle which the Lord pitched. In 1844, at the end of the prophetic 2300 days of Daniel 8:14, Jesus entered the Most Holy Place to commence the Investigative Judgment and cleansing of the sanctuary.
-          </p>
-          <div class="mt-4 text-[11px] text-brand-gold font-mono">Daniel 8:14 • Hebrews 8:1-2</div>
-        </div>
-
-        <!-- Pillar 5 -->
-        <div class="p-8 rounded-2xl bg-brand-navy/60 border border-white/10 hover:border-brand-gold/40 transition">
-          <div class="w-12 h-12 rounded-xl bg-amber-500/10 text-brand-gold flex items-center justify-center text-2xl mb-4">
-            <i class="fa-solid fa-bullhorn"></i>
-          </div>
-          <h3 class="font-heading font-bold text-lg text-white mb-2">5. The Three Angels' Messages</h3>
-          <p class="text-xs text-slate-400 leading-relaxed font-serif">
-            The final proclamation of the Everlasting Gospel in Revelation 14:6–12 warns the world against the beast and his image, calls humanity back to worship the Creator, and reveals the patience of the saints who keep God's commandments.
-          </p>
-          <div class="mt-4 text-[11px] text-brand-gold font-mono">Revelation 14:6-12</div>
-        </div>
-
-        <!-- Pillar 6 -->
-        <div class="p-8 rounded-2xl bg-brand-navy/60 border border-white/10 hover:border-brand-gold/40 transition">
-          <div class="w-12 h-12 rounded-xl bg-amber-500/10 text-brand-gold flex items-center justify-center text-2xl mb-4">
-            <i class="fa-solid fa-leaf"></i>
-          </div>
-          <h3 class="font-heading font-bold text-lg text-white mb-2">6. Health Reform & Temperance</h3>
-          <p class="text-xs text-slate-400 leading-relaxed font-serif">
-            Our bodies are temples of the Holy Ghost. Total abstinence from all intoxicating and harmful substances, paired with the eight natural remedies (NEWSTART) and a wholesome vegetarian diet, prepares mind and body for spiritual discernment.
-          </p>
-          <div class="mt-4 text-[11px] text-brand-gold font-mono">1 Corinthians 6:19-20 • 3 John 1:2</div>
-        </div>
-
-      </div>
-
-    </div>
-  </section>
-
-  <!-- ========================================== -->
-  <!-- 💡 WHY HARVION WAS CREATED                 -->
-  <!-- ========================================== -->
-  <section id="why-harvion" class="py-24 bg-gradient-to-b from-brand-dark via-brand-navy/60 to-brand-dark border-t border-white/10">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-      
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-        
-        <div>
-          <span class="text-brand-gold text-xs uppercase font-bold tracking-widest">Our Vision & Origin</span>
-          <h2 class="text-3xl sm:text-4xl font-heading font-extrabold text-white mt-2 leading-tight">
-            Why HARVION Was Built for This Hour
-          </h2>
-          <div class="space-y-4 text-slate-300 font-serif text-sm sm:text-base leading-relaxed mt-6">
-            <p>
-              In an age overwhelmed by digital noise, social media distraction, and theological compromise, believers and gospel workers needed a consecrated, fast, and completely distraction-free platform.
-            </p>
-            <p>
-              Many believers in rural areas, camp meetings, and mission fields struggle with weak internet connections or expensive data packages. HARVION was engineered from the ground up as an <strong>offline-first</strong> ecosystem, storing all 50 Spirit of Prophecy books and daily lessons directly on the user's phone.
-            </p>
-            <p>
-              Furthermore, Literature Evangelists (Colporteurs) who sacrifice their lives walking from town to town required modern tools: real-time camp meeting broadcasting, referral lead tracking, and automated mobile money payments via M-Pesa.
-            </p>
-          </div>
-
-          <div class="pt-6">
-            <a href="/home.html#download-section" class="inline-flex items-center gap-3 px-6 py-3.5 rounded-xl bg-brand-gold text-brand-dark font-bold text-xs uppercase tracking-wider hover:brightness-110 shadow-lg shadow-brand-gold/20 transition">
-              <i class="fa-solid fa-download"></i> Get HARVION Free Today
-            </a>
-          </div>
-        </div>
-
-        <!-- Strategic Highlights Card -->
-        <div class="p-8 sm:p-10 rounded-3xl bg-brand-navy border border-brand-gold/30 shadow-2xl space-y-6">
-          <h3 class="font-heading font-bold text-xl text-white">4 Distinctive Strengths</h3>
-          
-          <div class="flex items-start gap-4">
-            <div class="w-10 h-10 rounded-lg bg-brand-gold/15 flex items-center justify-center text-brand-gold shrink-0 text-lg">
-              <i class="fa-solid fa-book"></i>
-            </div>
-            <div>
-              <h4 class="font-bold text-white text-sm">Full Genuine Pagination</h4>
-              <p class="text-xs text-slate-400 mt-1">Not endless scrolling. Genuine page density with page scrubbers, book marks, and % read indicators.</p>
-            </div>
-          </div>
-
-          <div class="flex items-start gap-4">
-            <div class="w-10 h-10 rounded-lg bg-brand-gold/15 flex items-center justify-center text-brand-gold shrink-0 text-lg">
-              <i class="fa-solid fa-coins"></i>
-            </div>
-            <div>
-              <h4 class="font-bold text-white text-sm">Financial Empowerment for Colporteurs</h4>
-              <p class="text-xs text-slate-400 mt-1">Empowers gospel workers to sell hard copy books with automated M-Pesa checkout and referral commissions.</p>
-            </div>
-          </div>
-
-          <div class="flex items-start gap-4">
-            <div class="w-10 h-10 rounded-lg bg-brand-gold/15 flex items-center justify-center text-brand-gold shrink-0 text-lg">
-              <i class="fa-solid fa-heart"></i>
-            </div>
-            <div>
-              <h4 class="font-bold text-white text-sm">8 Pillars of Adventist Family Life</h4>
-              <p class="text-xs text-slate-400 mt-1">Structured family worship guides, Christ-centered marriage principles, and child guidance.</p>
-            </div>
-          </div>
-
-          <div class="flex items-start gap-4">
-            <div class="w-10 h-10 rounded-lg bg-brand-gold/15 flex items-center justify-center text-brand-gold shrink-0 text-lg">
-              <i class="fa-solid fa-video"></i>
-            </div>
-            <div>
-              <h4 class="font-bold text-white text-sm">Live TikTok & YouTube Sermons</h4>
-              <p class="text-xs text-slate-400 mt-1">Direct livestreaming for evangelists and youth with reverent Christian guidelines and moderation.</p>
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-    </div>
-  </section>
-
-  <!-- ========================================== -->
-  <!-- 📢 VIRAL SHARE & MARKETING WIDGET          -->
-  <!-- ========================================== -->
-  <section class="py-20 bg-brand-navy border-t border-brand-gold/30 text-center">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-      
-      <h2 class="text-3xl font-heading font-bold text-white mb-3">
-        Share Our Mission With Believers Everywhere
-      </h2>
-      <p class="text-slate-300 font-serif text-sm max-w-xl mx-auto mb-8">
-        Help fellow church members and friends learn about the foundational truths and literature ministry of HARVION.
-      </p>
-
-      <div class="flex flex-wrap items-center justify-center gap-3">
-        <a href="https://api.whatsapp.com/send?text=Explore%20the%20mission%20and%20Adventist%20heritage%20behind%20HARVION%3A%20https%3A%2F%2Fharvion.delstarfordworks.co.ke%2Fabout.html" class="px-5 py-3 rounded-xl bg-[#25D366] hover:bg-[#20ba59] text-white font-bold text-xs uppercase tracking-wider flex items-center gap-2 shadow-lg transition">
-          <i class="fa-brands fa-whatsapp text-lg"></i> Share on WhatsApp
-        </a>
-
-        <a href="https://t.me/share/url?url=https%3A%2F%2Fharvion.delstarfordworks.co.ke%2Fabout.html&text=HARVION%20%E2%80%94%20Adventist%20Faith%2C%20Spirit%20of%20Prophecy%2C%20and%20Literature%20Evangelism" class="px-5 py-3 rounded-xl bg-[#0088cc] hover:bg-[#0077b3] text-white font-bold text-xs uppercase tracking-wider flex items-center gap-2 shadow-lg transition">
-          <i class="fa-brands fa-telegram text-lg"></i> Share on Telegram
-        </a>
-
-        <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fharvion.delstarfordworks.co.ke%2Fabout.html" class="px-5 py-3 rounded-xl bg-[#1877F2] hover:bg-[#166fe5] text-white font-bold text-xs uppercase tracking-wider flex items-center gap-2 shadow-lg transition">
-          <i class="fa-brands fa-facebook text-lg"></i> Share on Facebook
-        </a>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- ========================================== -->
-  <!-- ⚓ FOOTER                                  -->
-  <!-- ========================================== -->
-  <footer class="bg-black/90 border-t border-white/10 py-12 text-slate-400 text-xs">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center sm:text-left flex flex-col sm:flex-row items-center justify-between gap-4">
-      <div>
-        © 2026 HARVION SDA Ministry. Dedicated to the Three Angels' Messages. • Developed by <a href="https://www.delstarfordworks.co.ke" class="text-brand-gold hover:underline font-semibold">Delstarford Works</a>
-      </div>
-      <div class="flex items-center space-x-6">
-        <a href="/home.html" class="hover:text-brand-gold">Home</a>
-        <a href="/books.html" class="hover:text-brand-gold">50 Books</a>
-        <a href="/support.html" class="hover:text-brand-gold">Support Work</a>
-        <a href="/contact.html" class="hover:text-brand-gold">Contact Us</a>
-        <a href="/api/health" class="hover:text-brand-gold">Status: Online</a>
-      </div>
-    </div>
-  </footer>
-
-  <script>
-    function toggleMobileMenu() {
-      const menu = document.getElementById('mobile-menu');
-      const icon = document.getElementById('menu-icon');
-      menu.classList.toggle('hidden');
-      if (menu.classList.contains('hidden')) {
-        icon.className = 'fa-solid fa-bars';
-      } else {
-        icon.className = 'fa-solid fa-xmark';
+{% block extra_scripts %}
+<script>
+  function copyShareUrl() {
+    navigator.clipboard.writeText(window.location.href).then(() => {
+      showToast('Page link copied to clipboard!');
+      const btn = document.getElementById('copy-btn-text');
+      if (btn) {
+        btn.innerText = 'Copied!';
+        setTimeout(() => btn.innerText = 'Copy Link', 3000);
       }
-    }
-  </script>
-</body>
-</html>
-
+    });
+  }
+</script>
+{% endblock %}

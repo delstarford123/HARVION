@@ -4,25 +4,31 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>50 Spirit of Prophecy Books Library — HARVION SDA Ministry</title>
-  
-  <!-- Marketing & Social Sharing Meta Tags -->
-  <meta name="description" content="Explore all 50 Spirit of Prophecy masterworks by Ellen G. White. Conflict of the Ages, Steps to Christ, Health and Temperance, Colporteur Ministry, and Prophecy.">
+
+  <!-- Marketing & Social Sharing Meta Tags (Open Graph & Twitter Cards) -->
+  <meta name="description" content="HARVION is an all-in-one Seventh-day Adventist digital ecosystem featuring all 50 Spirit of Prophecy books with full pagination, 695 SDA Hymnal with offline piano accompaniment, literature evangelism, and devotionals.">
+  <meta name="keywords" content="Seventh-day Adventist, Spirit of Prophecy, Ellen G. White, SDA Hymnal, 695 Hymns, Colporteur Ministry, Adventist Health, KJV Bible, Devotionals, HARVION, Literature Evangelism">
+  <meta name="author" content="HARVION SDA Ministry">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://harvion.delstarfordworks.co.ke/books.html">
   <meta property="og:title" content="50 Spirit of Prophecy Books — HARVION Literature Evangelism">
-  <meta property="og:description" content="Access all 50 Spirit of Prophecy volumes, read online, or order hardcopy deliveries across East Africa.">
-  <meta property="og:image" content="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=1200&q=80">
+  <meta property="og:description" content="Explore all 50 Spirit of Prophecy masterworks by Ellen G. White. Read online or order certified hardcopies delivered across East Africa.">
+  <meta property="og:image" content="https://images.unsplash.com/photo-1504052434569-70ad5836ab65?w=1200&q=80">
   <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="HARVION — Adventist Truth & Literature Evangelism">
+  <meta name="twitter:description" content="Read Ellen G. White books page-by-page, sing all 695 SDA hymns with piano accompaniment, order hard copies via M-Pesa, and study present truth.">
+  <meta name="twitter:image" content="https://images.unsplash.com/photo-1504052434569-70ad5836ab65?w=1200&q=80">
 
   <!-- Favicon -->
-  <link rel="icon" href="https://img.icons8.com/color/96/holy-bible.png" type="image/png">
+  <link rel="icon" href="/assets/images/harvion_logo.png" type="image/png">
+  <link rel="shortcut icon" href="/assets/images/harvion_logo.png" type="image/png">
 
   <!-- Google Fonts & Font Awesome 6 Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Inter:wght@300;400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Inter:wght@300;400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  
+
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -54,8 +60,12 @@
     html { scroll-behavior: smooth; }
     .glass-nav {
       background: rgba(8, 19, 37, 0.94);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+    .hero-gradient {
+      background: radial-gradient(circle at 50% 20%, rgba(212, 175, 55, 0.15) 0%, rgba(8, 19, 37, 0.98) 70%),
+                  linear-gradient(180deg, #081325 0%, #0F2347 100%);
     }
     .gold-gradient-text {
       background: linear-gradient(135deg, #FFF1C5 0%, #D4AF37 50%, #AA8010 100%);
@@ -70,170 +80,315 @@
       background: rgba(212, 175, 55, 0.15);
       color: #D4AF37;
     }
+    .gold-shadow {
+      box-shadow: 0 10px 30px -10px rgba(212, 175, 55, 0.3);
+    }
+    .nav-link-active {
+      color: #D4AF37 !important;
+      font-weight: 700 !important;
+      position: relative;
+    }
+    .nav-link-active::after {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: #D4AF37;
+      border-radius: 9999px;
+      box-shadow: 0 0 8px rgba(212, 175, 55, 0.6);
+    }
   </style>
+  
 </head>
 <body class="bg-brand-dark text-slate-100 font-body antialiased selection:bg-brand-gold selection:text-brand-dark min-h-screen flex flex-col justify-between">
 
   <!-- ========================================== -->
-  <!-- 📌 NAVIGATION BAR                         -->
+  <!-- 📌 UNIFIED GLOBAL HEADER & NAVIGATION       -->
   <!-- ========================================== -->
-  <nav class="fixed top-0 left-0 w-full z-50 glass-nav border-b border-white/10 transition duration-300">
+  <header class="fixed top-0 left-0 w-full z-50 glass-nav border-b border-white/10 transition duration-300">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
       
-      <!-- Brand Logo -->
+      <!-- Brand Logo & Title -->
       <a href="/home.html" class="flex items-center space-x-3 group">
-        <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-brand-gold to-yellow-200 flex items-center justify-center shadow-lg shadow-brand-gold/20 group-hover:scale-105 transition">
+        <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-brand-gold to-yellow-200 flex items-center justify-center shadow-lg shadow-brand-gold/20 group-hover:scale-105 transition overflow-hidden">
           <img src="/assets/images/harvion_logo.png" alt="HARVION Logo" class="w-full h-full object-contain rounded-xl p-0.5 bg-white">
         </div>
         <div>
           <span class="font-heading font-extrabold text-2xl tracking-wider gold-gradient-text block leading-none">HARVION</span>
-          <span class="text-[10px] uppercase tracking-widest text-brand-gold/80 font-semibold">SDA Ministry Ecosystem</span>
+          <span class="text-[10px] uppercase tracking-widest text-brand-gold/80 font-semibold block mt-0.5">SDA Ministry Ecosystem</span>
         </div>
       </a>
 
-      <!-- Desktop Links -->
-      <div class="hidden md:flex items-center space-x-8 text-sm font-medium text-slate-300">
-        <a href="/home.html" class="hover:text-brand-gold transition">Home</a>
-        <a href="/books.html" class="text-brand-gold font-bold transition">50 SOP Books</a>
-        <a href="/hymns.html" class="hover:text-brand-gold transition flex items-center gap-1.5"><i class="fa-solid fa-music text-xs text-brand-gold"></i> SDA Hymnal</a>
-        <a href="/about.html" class="hover:text-brand-gold transition">About & Faith</a>
-        <a href="/support.html" class="hover:text-brand-gold transition">Support Work</a>
-        <a href="/contact.html" class="hover:text-brand-gold transition">Contact Us</a>
-      </div>
+      <!-- Desktop Navigation Links -->
+      <nav class="hidden lg:flex items-center space-x-7 text-sm font-medium text-slate-300" id="desktop-nav">
+        <a href="/home.html" data-page="home" class="hover:text-brand-gold transition py-1">Home</a>
+        <a href="/books.html" data-page="books" class="hover:text-brand-gold transition py-1 flex items-center gap-1.5">
+          <i class="fa-solid fa-book-bible text-xs text-brand-gold"></i> 50 SOP Books
+        </a>
+        <a href="/hymns.html" data-page="hymns" class="hover:text-brand-gold transition py-1 flex items-center gap-1.5">
+          <i class="fa-solid fa-music text-xs text-brand-gold animate-pulse"></i> 695 SDA Hymnal
+        </a>
+        <a href="/about.html" data-page="about" class="hover:text-brand-gold transition py-1">About & Faith</a>
+        <a href="/support.html" data-page="support" class="hover:text-brand-gold transition py-1 flex items-center gap-1.5">
+          <i class="fa-solid fa-hand-holding-heart text-xs text-rose-400"></i> Support Work
+        </a>
+        <a href="/contact.html" data-page="contact" class="hover:text-brand-gold transition py-1">Contact Us</a>
+      </nav>
 
-      <!-- Action Button -->
-      <div class="hidden md:flex items-center space-x-4">
-        <a href="/support.html" class="px-5 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider bg-gradient-to-r from-brand-gold to-yellow-400 text-brand-dark hover:brightness-110 shadow-lg shadow-brand-gold/25 transition flex items-center gap-1.5">
-          <i class="fa-solid fa-hand-holding-heart"></i> Support Ministry
+      <!-- Desktop Action Buttons -->
+      <div class="hidden md:flex items-center space-x-3">
+        <a href="/hymns.html" class="px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-white/10 hover:bg-white/15 border border-brand-gold/40 text-brand-gold hover:text-white transition flex items-center gap-2">
+          <i class="fa-solid fa-headphones"></i> Sing Hymns
+        </a>
+        <a href="/support.html" class="px-5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider bg-gradient-to-r from-brand-gold via-yellow-400 to-brand-gold text-brand-dark hover:brightness-110 shadow-lg shadow-brand-gold/25 transition flex items-center gap-2">
+          <i class="fa-solid fa-mobile-screen-button"></i> M-Pesa Support
         </a>
       </div>
 
-      <!-- Mobile Menu Button -->
-      <button onclick="toggleMobileMenu()" class="md:hidden text-2xl text-brand-gold p-2">
+      <!-- Mobile Menu Toggle Button -->
+      <button onclick="toggleMobileMenu()" class="lg:hidden text-2xl text-brand-gold p-2 focus:outline-none" aria-label="Toggle Navigation">
         <i class="fa-solid fa-bars" id="menu-icon"></i>
       </button>
     </div>
 
-    <!-- Mobile Dropdown -->
-    <div id="mobile-menu" class="hidden md:hidden bg-brand-dark/95 border-b border-brand-gold/20 px-6 py-6 space-y-4 text-center">
-      <a href="/home.html" class="block text-slate-200 hover:text-brand-gold py-2 font-medium">Home</a>
-      <a href="/books.html" class="block text-brand-gold font-bold py-2">50 SOP Books</a>
-      <a href="/hymns.html" class="block text-slate-200 hover:text-brand-gold py-2 font-medium flex items-center justify-center gap-1.5"><i class="fa-solid fa-music text-xs text-brand-gold"></i> 695 SDA Hymnal</a>
-      <a href="/about.html" class="block text-slate-200 hover:text-brand-gold py-2 font-medium">About & Faith</a>
-      <a href="/support.html" class="block text-slate-200 hover:text-brand-gold py-2 font-medium">Support Work</a>
-      <a href="/contact.html" class="block text-slate-200 hover:text-brand-gold py-2 font-medium">Contact Us</a>
-      <a href="/support.html" class="block w-full py-3 rounded-lg bg-brand-gold text-brand-dark font-bold uppercase text-xs tracking-wider">Support Work</a>
+    <!-- Mobile Dropdown Navigation -->
+    <div id="mobile-menu" class="hidden lg:hidden bg-brand-dark/98 border-b border-brand-gold/20 px-6 py-6 space-y-4 text-center backdrop-blur-xl">
+      <a href="/home.html" data-page="home" onclick="toggleMobileMenu()" class="block text-slate-200 hover:text-brand-gold py-2 font-medium">Home</a>
+      <a href="/books.html" data-page="books" onclick="toggleMobileMenu()" class="block text-slate-200 hover:text-brand-gold py-2 font-medium flex items-center justify-center gap-2">
+        <i class="fa-solid fa-book-bible text-xs text-brand-gold"></i> 50 Spirit of Prophecy Books
+      </a>
+      <a href="/hymns.html" data-page="hymns" onclick="toggleMobileMenu()" class="block text-slate-200 hover:text-brand-gold py-2 font-medium flex items-center justify-center gap-2">
+        <i class="fa-solid fa-music text-xs text-brand-gold"></i> 695 SDA Hymnal (Piano & Lyrics)
+      </a>
+      <a href="/about.html" data-page="about" onclick="toggleMobileMenu()" class="block text-slate-200 hover:text-brand-gold py-2 font-medium">About & Faith Heritage</a>
+      <a href="/support.html" data-page="support" onclick="toggleMobileMenu()" class="block text-slate-200 hover:text-brand-gold py-2 font-medium flex items-center justify-center gap-2">
+        <i class="fa-solid fa-hand-holding-heart text-xs text-rose-400"></i> Support Ministry (M-Pesa)
+      </a>
+      <a href="/contact.html" data-page="contact" onclick="toggleMobileMenu()" class="block text-slate-200 hover:text-brand-gold py-2 font-medium">Contact & Prayer Requests</a>
+      <div class="pt-2 flex flex-col gap-2">
+        <a href="/hymns.html" class="w-full py-3 rounded-xl bg-white/10 text-brand-gold border border-brand-gold/40 font-bold uppercase text-xs tracking-wider flex items-center justify-center gap-2">
+          <i class="fa-solid fa-headphones"></i> Open 695 SDA Hymnal
+        </a>
+        <a href="/support.html" class="w-full py-3 rounded-xl bg-gradient-to-r from-brand-gold to-yellow-400 text-brand-dark font-bold uppercase text-xs tracking-wider flex items-center justify-center gap-2 shadow-lg">
+          <i class="fa-solid fa-mobile-screen-button"></i> Support via M-Pesa STK Push
+        </a>
+      </div>
     </div>
-  </nav>
+  </header>
 
   <!-- ========================================== -->
-  <!-- 📖 HERO HEADER & SEARCH                     -->
+  <!-- 📖 MAIN PAGE CONTENT INJECTION             -->
   <!-- ========================================== -->
-  <main class="flex-grow pt-32 pb-24">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      
-      <!-- Header -->
-      <div class="text-center max-w-3xl mx-auto mb-10">
-        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-gold/10 border border-brand-gold/30 text-brand-gold text-xs font-semibold uppercase tracking-wider mb-4">
-          <i class="fa-solid fa-book-bible"></i> Complete Adventist Heritage Collection
-        </div>
-        <h1 class="text-4xl sm:text-5xl font-heading font-extrabold text-white leading-tight">
-          50 Spirit of Prophecy Masterworks
-        </h1>
-        <p class="text-slate-300 font-serif text-base mt-4 leading-relaxed">
-          Inspired writings by Ellen G. White for spiritual edification, prophetic clarity, health, and literature ministry. Read online or order certified hardcopies.
-        </p>
+  <main class="flex-grow">
+    
+<!-- ========================================== -->
+<!-- 📖 HERO HEADER & SEARCH                     -->
+<!-- ========================================== -->
+<div class="pt-36 pb-24">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    
+    <!-- Header -->
+    <div class="text-center max-w-3xl mx-auto mb-10">
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-gold/10 border border-brand-gold/30 text-brand-gold text-xs font-semibold uppercase tracking-wider mb-4">
+        <i class="fa-solid fa-book-bible"></i> Complete Adventist Heritage Collection
       </div>
-
-      <!-- Search & Category Filters -->
-      <div class="bg-brand-navy/60 rounded-3xl p-6 sm:p-8 gold-border shadow-2xl mb-12">
-        <div class="flex flex-col md:flex-row gap-4 items-center justify-between mb-6">
-          <div class="relative w-full md:w-96">
-            <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-brand-gold text-sm"></i>
-            <input 
-              type="text" 
-              id="book-search-input" 
-              oninput="filterBooks()" 
-              placeholder="Search by title, series, or keyword..." 
-              class="w-full pl-11 pr-4 py-3 rounded-xl bg-brand-dark border border-white/10 text-white placeholder-slate-400 focus:outline-none focus:border-brand-gold text-sm transition"
-            >
-          </div>
-          <div class="text-xs text-slate-300 font-semibold">
-            Showing <span id="visible-count" class="text-brand-gold font-bold text-sm">50</span> inspired volumes
-          </div>
-        </div>
-
-        <!-- Filter Pills -->
-        <div class="flex flex-wrap gap-2" id="filter-pills-container">
-          <button onclick="setCategoryFilter('all', this)" class="category-pill px-4 py-2 rounded-xl text-xs font-semibold gold-border-active transition">
-            All 50 Books
-          </button>
-          <button onclick="setCategoryFilter('Conflict of the Ages', this)" class="category-pill px-4 py-2 rounded-xl text-xs font-semibold gold-border text-slate-300 hover:text-brand-gold hover:border-brand-gold transition">
-            Conflict of the Ages
-          </button>
-          <button onclick="setCategoryFilter('Christian Living & Salvation', this)" class="category-pill px-4 py-2 rounded-xl text-xs font-semibold gold-border text-slate-300 hover:text-brand-gold hover:border-brand-gold transition">
-            Christian Living
-          </button>
-          <button onclick="setCategoryFilter('Health & Temperance', this)" class="category-pill px-4 py-2 rounded-xl text-xs font-semibold gold-border text-slate-300 hover:text-brand-gold hover:border-brand-gold transition">
-            Health & Temperance
-          </button>
-          <button onclick="setCategoryFilter('Family Life, Youth & Home', this)" class="category-pill px-4 py-2 rounded-xl text-xs font-semibold gold-border text-slate-300 hover:text-brand-gold hover:border-brand-gold transition">
-            Family & Youth
-          </button>
-          <button onclick="setCategoryFilter('Evangelism & Church Ministry', this)" class="category-pill px-4 py-2 rounded-xl text-xs font-semibold gold-border text-slate-300 hover:text-brand-gold hover:border-brand-gold transition">
-            Church & Colporteurs
-          </button>
-          <button onclick="setCategoryFilter('Prophecy & Historical', this)" class="category-pill px-4 py-2 rounded-xl text-xs font-semibold gold-border text-slate-300 hover:text-brand-gold hover:border-brand-gold transition">
-            Prophecy & Devotionals
-          </button>
-        </div>
-      </div>
-
-      <!-- Books Grid -->
-      <div id="books-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <!-- Rendered dynamically via JavaScript below -->
-      </div>
-
-      <!-- Ellen G. White Quote Banner -->
-      <div class="mt-16 bg-gradient-to-r from-brand-navy via-brand-dark to-brand-navy rounded-3xl p-8 sm:p-12 gold-border text-center relative overflow-hidden">
-        <i class="fa-solid fa-quote-left text-brand-gold/20 text-6xl absolute top-4 left-6"></i>
-        <p class="font-serif italic text-lg sm:text-xl text-slate-200 max-w-3xl mx-auto leading-relaxed relative z-10">
-          "The world is to receive the light of truth through an evangelizing ministry of the word in our books and periodicals. Let now every capability be brought into use to plant the truth in new fields."
-        </p>
-        <span class="block mt-4 text-brand-gold font-heading font-bold text-xs uppercase tracking-widest relative z-10">
-          — Ellen G. White, Testimonies for the Church, Vol. 9, p. 61
-        </span>
-      </div>
-
+      <h1 class="text-4xl sm:text-5xl font-heading font-extrabold text-white leading-tight">
+        50 Spirit of Prophecy Masterworks
+      </h1>
+      <p class="text-slate-300 font-serif text-base mt-4 leading-relaxed">
+        Inspired writings by Ellen G. White for spiritual edification, prophetic clarity, health, and literature ministry. Read online or order certified hardcopies.
+      </p>
     </div>
+
+    <!-- Search & Category Filters -->
+    <div class="bg-brand-navy/60 rounded-3xl p-6 sm:p-8 gold-border shadow-2xl mb-12">
+      <div class="flex flex-col md:flex-row gap-4 items-center justify-between mb-6">
+        <div class="relative w-full md:w-96">
+          <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-brand-gold text-sm"></i>
+          <input 
+            type="text" 
+            id="book-search-input" 
+            oninput="filterBooks()" 
+            placeholder="Search by title, series, or keyword..." 
+            class="w-full pl-11 pr-4 py-3 rounded-xl bg-brand-dark border border-white/10 text-white placeholder-slate-400 focus:outline-none focus:border-brand-gold text-sm transition"
+          >
+        </div>
+        <div class="text-xs text-slate-300 font-serif">
+          Showing <strong id="visible-count" class="text-brand-gold font-bold">50</strong> of 50 Inspired Volumes
+        </div>
+      </div>
+
+      <!-- Category Filter Pills -->
+      <div class="flex flex-wrap gap-2">
+        <button onclick="setCategoryFilter('all', this)" class="category-pill px-4 py-2 rounded-xl text-xs font-semibold gold-border-active transition">
+          All 50 Books
+        </button>
+        <button onclick="setCategoryFilter('Conflict of the Ages', this)" class="category-pill px-4 py-2 rounded-xl text-xs font-semibold gold-border text-slate-300 hover:text-brand-gold hover:border-brand-gold transition">
+          Conflict of the Ages (5)
+        </button>
+        <button onclick="setCategoryFilter('Christian Living & Salvation', this)" class="category-pill px-4 py-2 rounded-xl text-xs font-semibold gold-border text-slate-300 hover:text-brand-gold hover:border-brand-gold transition">
+          Christian Living & Steps to Christ
+        </button>
+        <button onclick="setCategoryFilter('Health & Temperance', this)" class="category-pill px-4 py-2 rounded-xl text-xs font-semibold gold-border text-slate-300 hover:text-brand-gold hover:border-brand-gold transition">
+          Health & Temperance
+        </button>
+        <button onclick="setCategoryFilter('Family Life, Youth & Home', this)" class="category-pill px-4 py-2 rounded-xl text-xs font-semibold gold-border text-slate-300 hover:text-brand-gold hover:border-brand-gold transition">
+          Family & Youth
+        </button>
+        <button onclick="setCategoryFilter('Evangelism & Church Ministry', this)" class="category-pill px-4 py-2 rounded-xl text-xs font-semibold gold-border text-slate-300 hover:text-brand-gold hover:border-brand-gold transition">
+          Church & Colporteurs
+        </button>
+        <button onclick="setCategoryFilter('Prophecy & Historical', this)" class="category-pill px-4 py-2 rounded-xl text-xs font-semibold gold-border text-slate-300 hover:text-brand-gold hover:border-brand-gold transition">
+          Prophecy & Historical
+        </button>
+      </div>
+    </div>
+
+    <!-- Books Grid -->
+    <div id="books-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Rendered dynamically via JavaScript below -->
+    </div>
+
+    <!-- Ellen G. White Quote Banner -->
+    <div class="mt-16 bg-gradient-to-r from-brand-navy via-brand-dark to-brand-navy rounded-3xl p-8 sm:p-12 gold-border text-center relative overflow-hidden">
+      <i class="fa-solid fa-quote-left text-brand-gold/20 text-6xl absolute top-4 left-6"></i>
+      <p class="font-serif italic text-lg sm:text-xl text-slate-200 max-w-3xl mx-auto leading-relaxed relative z-10">
+        "The world is to receive the light of truth through an evangelizing ministry of the word in our books and periodicals. Let now every capability be brought into use to plant the truth in new fields."
+      </p>
+      <span class="block mt-4 text-brand-gold font-heading font-bold text-xs uppercase tracking-widest relative z-10">
+        — Ellen G. White, Testimonies for the Church, Vol. 9, p. 61
+      </span>
+    </div>
+
+  </div>
+</div>
+
   </main>
 
   <!-- ========================================== -->
-  <!-- ⚓ FOOTER                                  -->
+  <!-- ⚓ UNIFIED GLOBAL FOOTER                     -->
   <!-- ========================================== -->
-  <footer class="bg-black/90 border-t border-white/10 py-12 text-slate-400 text-xs">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center sm:text-left flex flex-col sm:flex-row items-center justify-between gap-4">
-      <div>
-        © 2026 HARVION SDA Ministry. Dedicated to the Three Angels' Messages. • Developed by <a href="https://www.delstarfordworks.co.ke" class="text-brand-gold hover:underline font-semibold">Delstarford Works</a>
+  <footer class="bg-black/95 border-t border-white/10 pt-16 pb-12 text-slate-400 text-xs">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- Top 4 Columns -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
+        
+        <!-- Column 1: Ministry Info -->
+        <div class="space-y-4">
+          <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-gold to-yellow-200 flex items-center justify-center p-0.5 bg-white">
+              <img src="/assets/images/harvion_logo.png" alt="HARVION Logo" class="w-full h-full object-contain rounded-lg">
+            </div>
+            <div>
+              <span class="font-heading font-extrabold text-lg gold-gradient-text block leading-none">HARVION</span>
+              <span class="text-[9px] uppercase tracking-widest text-brand-gold/70 font-semibold">SDA Ministry Ecosystem</span>
+            </div>
+          </div>
+          <p class="font-serif leading-relaxed text-slate-400">
+            Dedicated to proclaiming the Three Angels' Messages (Revelation 14:6–12) through literature evangelism, the Spirit of Prophecy, sacred hymnody, and Christian health principles.
+          </p>
+          <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-[11px] font-semibold">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+            <span>All Systems Live • 695 Hymns • 50 Volumes</span>
+          </div>
+        </div>
+
+        <!-- Column 2: Spirit of Prophecy -->
+        <div>
+          <h4 class="font-heading font-bold text-white uppercase tracking-wider text-sm mb-4 text-brand-gold">
+            Spirit of Prophecy
+          </h4>
+          <ul class="space-y-2.5 font-serif text-[13px]">
+            <li><a href="/books.html" class="hover:text-brand-gold transition">Conflict of the Ages (5 Volumes)</a></li>
+            <li><a href="/books.html" class="hover:text-brand-gold transition">Steps to Christ</a></li>
+            <li><a href="/books.html" class="hover:text-brand-gold transition">The Ministry of Healing</a></li>
+            <li><a href="/books.html" class="hover:text-brand-gold transition">The Great Controversy</a></li>
+            <li><a href="/books.html" class="hover:text-brand-gold transition">Testimonies for the Church (Vol. 1–9)</a></li>
+            <li><a href="/books.html" class="hover:text-brand-gold transition">Colporteur Ministry</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 3: Ministry Resources -->
+        <div>
+          <h4 class="font-heading font-bold text-white uppercase tracking-wider text-sm mb-4 text-brand-gold">
+            Sacred Resources
+          </h4>
+          <ul class="space-y-2.5 font-serif text-[13px]">
+            <li><a href="/hymns.html" class="hover:text-brand-gold transition flex items-center gap-1.5"><i class="fa-solid fa-music text-xs text-brand-gold"></i> 695 SDA Hymnal (Piano & Lyrics)</a></li>
+            <li><a href="/home.html#colporteur" class="hover:text-brand-gold transition">Colporteur Literature Evangelism</a></li>
+            <li><a href="/home.html#features" class="hover:text-brand-gold transition">Daily Morning Devotionals</a></li>
+            <li><a href="/about.html" class="hover:text-brand-gold transition">Pillars of Adventist Faith</a></li>
+            <li><a href="/contact.html" class="hover:text-brand-gold transition">Prayer & Spiritual Inquiries</a></li>
+            <li><a href="/support.html" class="hover:text-brand-gold transition">Support Publishing Work (M-Pesa)</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 4: Contact & Heritage -->
+        <div>
+          <h4 class="font-heading font-bold text-white uppercase tracking-wider text-sm mb-4 text-brand-gold">
+            Ministry Headquarters
+          </h4>
+          <p class="font-serif text-slate-400 mb-3 leading-relaxed">
+            Nairobi, Kenya • Maxwell Adventist Centre Distribution Hub • Serving Believers Globally
+          </p>
+          <div class="space-y-2 text-[12px]">
+            <div class="flex items-center gap-2">
+              <i class="fa-solid fa-envelope text-brand-gold"></i>
+              <a href="mailto:harvion@delstarfordworks.co.ke" class="hover:text-brand-gold">harvion@delstarfordworks.co.ke</a>
+            </div>
+            <div class="flex items-center gap-2">
+              <i class="fa-solid fa-phone text-brand-gold"></i>
+              <a href="tel:0745090990" class="hover:text-brand-gold">0745090990 (Calls & WhatsApp)</a>
+            </div>
+            <div class="flex items-center gap-2">
+              <i class="fa-solid fa-globe text-brand-gold"></i>
+              <a href="https://harvion.delstarfordworks.co.ke" class="text-brand-gold hover:underline font-semibold">harvion.delstarfordworks.co.ke</a>
+            </div>
+          </div>
+        </div>
+
       </div>
-      <div class="flex items-center space-x-6">
-        <a href="/home.html" class="hover:text-brand-gold">Home</a>
-        <a href="/books.html" class="text-brand-gold font-bold">50 Books</a>
-        <a href="/about.html" class="hover:text-brand-gold">About Platform</a>
-        <a href="/support.html" class="hover:text-brand-gold">Support Work</a>
-        <a href="/contact.html" class="hover:text-brand-gold">Contact Us</a>
-        <a href="/api/health" class="hover:text-brand-gold">Status: Online</a>
+
+      <!-- Bottom Bar -->
+      <div class="pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-[12px]">
+        <div>
+          © 2026 HARVION SDA Ministry. All Rights Reserved. • Designed & Engineered by <a href="https://www.delstarfordworks.co.ke" class="text-brand-gold hover:underline font-semibold" target="_blank" rel="noopener">Delstarford Works</a>
+        </div>
+        <div class="flex flex-wrap items-center gap-5">
+          <a href="/home.html" class="hover:text-brand-gold transition">Home</a>
+          <a href="/books.html" class="hover:text-brand-gold transition">50 Books</a>
+          <a href="/hymns.html" class="hover:text-brand-gold transition">695 Hymns</a>
+          <a href="/about.html" class="hover:text-brand-gold transition">About Faith</a>
+          <a href="/support.html" class="hover:text-brand-gold transition">Support Work</a>
+          <a href="/contact.html" class="hover:text-brand-gold transition">Contact</a>
+          <a href="/api/health" class="text-emerald-400 hover:underline">API Health: Online</a>
+        </div>
       </div>
+
     </div>
   </footer>
 
-  <!-- ========================================== -->
-  <!-- 📜 JAVASCRIPT & 50 BOOKS DATABASE          -->
-  <!-- ========================================== -->
+  <!-- Floating Back to Top Button -->
+  <button id="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-6 right-6 z-40 w-11 h-11 rounded-xl bg-brand-gold text-brand-dark shadow-xl hover:scale-110 transition hidden items-center justify-center font-bold text-sm" aria-label="Back to Top">
+    <i class="fa-solid fa-arrow-up"></i>
+  </button>
+
+  <!-- Global Toast Notification -->
+  <div id="global-toast" class="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 hidden bg-brand-dark border-2 border-brand-gold px-6 py-3 rounded-2xl shadow-2xl text-sm font-semibold text-white flex items-center gap-3">
+    <i class="fa-solid fa-circle-check text-brand-gold text-lg" id="global-toast-icon"></i>
+    <span id="global-toast-message">Action successful!</span>
+  </div>
+
+  <!-- Global Core Scripts -->
   <script>
+    // 1. Mobile Menu Toggle
     function toggleMobileMenu() {
       const menu = document.getElementById('mobile-menu');
       const icon = document.getElementById('menu-icon');
+      if (!menu) return;
       menu.classList.toggle('hidden');
       if (menu.classList.contains('hidden')) {
         icon.className = 'fa-solid fa-bars';
@@ -242,154 +397,213 @@
       }
     }
 
-    const SOP_DATA = [
-      // Conflict of the Ages
-      { id: "sop_patriarchs_and_prophets", title: "Patriarchs and Prophets", author: "Ellen G. White", series: "Conflict of the Ages", url: "https://m.egwwritings.org/en/book/84.2", desc: "From creation and the fall of Lucifer to the reign of King David, tracing the great conflict between good and evil." },
-      { id: "sop_prophets_and_kings", title: "Prophets and Kings", author: "Ellen G. White", series: "Conflict of the Ages", url: "https://m.egwwritings.org/en/book/86.2", desc: "From the division of Solomon's kingdom, the ministries of Elijah and Jeremiah, to the coming Messiah." },
-      { id: "sop_desire_of_ages", title: "The Desire of Ages", author: "Ellen G. White", series: "Conflict of the Ages", url: "https://m.egwwritings.org/en/book/130.2", desc: "The supreme biography of Jesus Christ, His matchless love, earthly ministry, and ultimate cross sacrifice." },
-      { id: "sop_acts_of_the_apostles", title: "The Acts of the Apostles", author: "Ellen G. White", series: "Conflict of the Ages", url: "https://m.egwwritings.org/en/book/127.2", desc: "The early Christian church, Pentecost power, apostolic missionary journeys, and spreading the Gospel worldwide." },
-      { id: "sop_great_controversy", title: "The Great Controversy", author: "Ellen G. White", series: "Conflict of the Ages", url: "https://m.egwwritings.org/en/book/132.2", desc: "The cosmic drama from the destruction of Jerusalem, the Dark Ages, Reformation, to the glorious Earth Made New." },
+    // 2. Active Link Highlighting
+    function highlightActiveNavigation() {
+      const path = window.location.pathname.toLowerCase();
+      let pageKey = 'home';
+      if (path.includes('book') || path.includes('library')) pageKey = 'books';
+      else if (path.includes('hymn')) pageKey = 'hymns';
+      else if (path.includes('about')) pageKey = 'about';
+      else if (path.includes('support')) pageKey = 'support';
+      else if (path.includes('contact')) pageKey = 'contact';
+      else if (path === '/' || path.includes('home') || path.includes('index')) pageKey = 'home';
 
-      // Christian Living & Salvation
-      { id: "sop_steps_to_christ", title: "Steps to Christ", author: "Ellen G. White", series: "Christian Living & Salvation", url: "https://m.egwwritings.org/en/book/138.2", desc: "The timeless masterpiece guiding sinners through repentance, confession, faith, and joy in Christ." },
-      { id: "sop_christs_object_lessons", title: "Christ's Object Lessons", author: "Ellen G. White", series: "Christian Living & Salvation", url: "https://m.egwwritings.org/en/book/15.2", desc: "Profound spiritual insights drawn from Christ's parables of the kingdom, seed, and harvest." },
-      { id: "sop_mount_of_blessing", title: "Thoughts from the Mount of Blessing", author: "Ellen G. White", series: "Christian Living & Salvation", url: "https://m.egwwritings.org/en/book/140.2", desc: "Deep study into the Beatitudes and Jesus' divine Sermon on the Mount." },
-      { id: "sop_prayer", title: "Prayer", author: "Ellen G. White", series: "Christian Living & Salvation", url: "https://m.egwwritings.org/en/book/85.2", desc: "Encouragement and principles for prevailing, transformative personal and intercessory prayer." },
-      { id: "sop_sanctified_life", title: "The Sanctified Life", author: "Ellen G. White", series: "Christian Living & Salvation", url: "https://m.egwwritings.org/en/book/136.2", desc: "Biblical holiness exemplified through the lives of Daniel, John, and the character of Christ." },
-      { id: "sop_sons_and_daughters", title: "Sons and Daughters of God", author: "Ellen G. White", series: "Christian Living & Salvation", url: "https://m.egwwritings.org/en/book/137.2", desc: "Inspiring daily devotionals centering on adoption into the heavenly royal family." },
-      { id: "sop_our_high_calling", title: "Our High Calling", author: "Ellen G. White", series: "Christian Living & Salvation", url: "https://m.egwwritings.org/en/book/75.2", desc: "Daily spiritual counsel urging believers toward higher Christian standards and divine communion." },
-      { id: "sop_faith_i_live_by", title: "The Faith I Live By", author: "Ellen G. White", series: "Christian Living & Salvation", url: "https://m.egwwritings.org/en/book/131.2", desc: "Exposition of fundamental Adventist doctrines and Christian faith practical applications." },
-
-      // Health & Temperance
-      { id: "sop_ministry_of_healing", title: "The Ministry of Healing", author: "Ellen G. White", series: "Health & Temperance", url: "https://m.egwwritings.org/en/book/150.2", desc: "God's natural remedies, pure air, water, nutrition, mental peace, and practical medical missionary service." },
-      { id: "sop_counsels_on_diet_and_foods", title: "Counsels on Diet and Foods", author: "Ellen G. White", series: "Health & Temperance", url: "https://m.egwwritings.org/en/book/24.2", desc: "Comprehensive dietary counsels, plant-based principles, and physiological health laws." },
-      { id: "sop_temperance", title: "Temperance", author: "Ellen G. White", series: "Health & Temperance", url: "https://m.egwwritings.org/en/book/139.2", desc: "Overcoming addictions, tobacco, alcohol, and intemperance through divine grace and self-control." },
-      { id: "sop_medical_ministry", title: "Medical Ministry", author: "Ellen G. White", series: "Health & Temperance", url: "https://m.egwwritings.org/en/book/57.2", desc: "Manual for physicians, nurses, sanitariums, and gospel health workers in the closing work." },
-      { id: "sop_call_to_medical_evangelism", title: "A Call to Medical Evangelism", author: "Ellen G. White", series: "Health & Temperance", url: "https://m.egwwritings.org/en/book/13.2", desc: "How the health work serves as the entering wedge for the Three Angels' Messages." },
-
-      // Family Life, Youth & Home
-      { id: "sop_the_adventist_home", title: "The Adventist Home", author: "Ellen G. White", series: "Family Life, Youth & Home", url: "https://m.egwwritings.org/en/book/32.2", desc: "Principles for creating a peaceful, Christ-centered marriage and home that reflects heaven." },
-      { id: "sop_child_guidance", title: "Child Guidance", author: "Ellen G. White", series: "Family Life, Youth & Home", url: "https://m.egwwritings.org/en/book/14.2", desc: "Essential principles for parenting, early habit training, and spiritual character building in youth." },
-      { id: "sop_messages_to_young_people", title: "Messages to Young People", author: "Ellen G. White", series: "Family Life, Youth & Home", url: "https://m.egwwritings.org/en/book/58.2", desc: "Heartfelt appeals to Adventist youth regarding purity, courtship, mission, and life goals." },
-      { id: "sop_education", title: "Education", author: "Ellen G. White", series: "Family Life, Youth & Home", url: "https://m.egwwritings.org/en/book/29.2", desc: "The true nature of education — harmonious development of physical, mental, and spiritual powers." },
-      { id: "sop_counsels_to_parents", title: "Counsels to Parents, Teachers, and Students", author: "Ellen G. White", series: "Family Life, Youth & Home", url: "https://m.egwwritings.org/en/book/27.2", desc: "Christian school guidance, moral discipline, manual training, and academic standards." },
-
-      // Evangelism & Church Ministry
-      { id: "sop_colporteur_ministry", title: "Colporteur Ministry", author: "Ellen G. White", series: "Evangelism & Church Ministry", url: "https://m.egwwritings.org/en/book/20.2", desc: "The definitive guide for literature evangelists distributing physical truth-filled books door-to-door." },
-      { id: "sop_evangelism", title: "Evangelism", author: "Ellen G. White", series: "Evangelism & Church Ministry", url: "https://m.egwwritings.org/en/book/35.2", desc: "Practical handbook for city missions, public campaigns, pastoral evangelism, and Bible work." },
-      { id: "sop_gospel_workers", title: "Gospel Workers", author: "Ellen G. White", series: "Evangelism & Church Ministry", url: "https://m.egwwritings.org/en/book/44.2", desc: "Instruction and qualifications for ministers, elders, and leaders in church administration." },
-      { id: "sop_christian_service", title: "Christian Service", author: "Ellen G. White", series: "Evangelism & Church Ministry", url: "https://m.egwwritings.org/en/book/17.2", desc: "Mobilizing every lay member of the Seventh-day Adventist church for personal missionary work." },
-      { id: "sop_testimonies_to_ministers", title: "Testimonies to Ministers", author: "Ellen G. White", series: "Evangelism & Church Ministry", url: "https://m.egwwritings.org/en/book/142.2", desc: "Solemn appeals warning against ecclesiastical domination and lifting up righteousness by faith." },
-      { id: "sop_welfare_ministry", title: "Welfare Ministry", author: "Ellen G. White", series: "Evangelism & Church Ministry", url: "https://m.egwwritings.org/en/book/146.2", desc: "Ministering to the poor, sick, widows, and vulnerable as Christ's loving hands." },
-      { id: "sop_pastoral_ministry", title: "Pastoral Ministry", author: "Ellen G. White", series: "Evangelism & Church Ministry", url: "https://m.egwwritings.org/en/book/83.2", desc: "Counsel for pastors in church governance, visitation, pulpit ministry, and soul winning." },
-      { id: "sop_publishing_ministry", title: "The Publishing Ministry", author: "Ellen G. White", series: "Evangelism & Church Ministry", url: "https://m.egwwritings.org/en/book/88.2", desc: "History, divine purpose, and worldwide reach of Adventist publishing houses and books." },
-
-      // Testimonies for the Church (1-9)
-      { id: "sop_testimonies_vol1", title: "Testimonies for the Church, Vol. 1", author: "Ellen G. White", series: "Evangelism & Church Ministry", url: "https://m.egwwritings.org/en/book/118.2", desc: "Early experiences, vision reports, and foundational church development (1855-1868)." },
-      { id: "sop_testimonies_vol2", title: "Testimonies for the Church, Vol. 2", author: "Ellen G. White", series: "Evangelism & Church Ministry", url: "https://m.egwwritings.org/en/book/119.2", desc: "Counsels on health reform, sanctification, family duties, and church order (1868-1871)." },
-      { id: "sop_testimonies_vol3", title: "Testimonies for the Church, Vol. 3", author: "Ellen G. White", series: "Evangelism & Church Ministry", url: "https://m.egwwritings.org/en/book/120.2", desc: "Christian leadership, institutional integrity, and personal godliness (1872-1875)." },
-      { id: "sop_testimonies_vol4", title: "Testimonies for the Church, Vol. 4", author: "Ellen G. White", series: "Evangelism & Church Ministry", url: "https://m.egwwritings.org/en/book/121.2", desc: "Self-denial, sacrificial giving, and missionary enterprises (1876-1881)." },
-      { id: "sop_testimonies_vol5", title: "Testimonies for the Church, Vol. 5", author: "Ellen G. White", series: "Evangelism & Church Ministry", url: "https://m.egwwritings.org/en/book/122.2", desc: "The coming crisis, Sunday laws, shaking in the church, and divine guidance (1882-1889)." },
-      { id: "sop_testimonies_vol6", title: "Testimonies for the Church, Vol. 6", author: "Ellen G. White", series: "Evangelism & Church Ministry", url: "https://m.egwwritings.org/en/book/123.2", desc: "Christian education, camp meetings, medical evangelism, and tithe fidelity (1900)." },
-      { id: "sop_testimonies_vol7", title: "Testimonies for the Church, Vol. 7", author: "Ellen G. White", series: "Evangelism & Church Ministry", url: "https://m.egwwritings.org/en/book/124.2", desc: "Sanitarium establishment, publishing houses, and decentralized organization (1902)." },
-      { id: "sop_testimonies_vol8", title: "Testimonies for the Church, Vol. 8", author: "Ellen G. White", series: "Evangelism & Church Ministry", url: "https://m.egwwritings.org/en/book/125.2", desc: "Warning against pantheism, crisis in Battle Creek, and God's essential nature (1904)." },
-      { id: "sop_testimonies_vol9", title: "Testimonies for the Church, Vol. 9", author: "Ellen G. White", series: "Evangelism & Church Ministry", url: "https://m.egwwritings.org/en/book/126.2", desc: "The final crisis, city evangelism, health food work, and the triumph of God's church (1909)." },
-
-      // Prophecy & Historical
-      { id: "sop_early_writings", title: "Early Writings", author: "Ellen G. White", series: "Prophecy & Historical", url: "https://m.egwwritings.org/en/book/50.2", desc: "First visions of the heavenly sanctuary, the midnight cry, and the 1858 Great Controversy vision." },
-      { id: "sop_last_day_events", title: "Last Day Events", author: "Ellen G. White", series: "Prophecy & Historical", url: "https://m.egwwritings.org/en/book/135.2", desc: "Compilations outlining the national Sunday law, loud cry, seven last plagues, and Second Coming." },
-      { id: "sop_maranatha", title: "Maranatha — The Lord Is Coming", author: "Ellen G. White", series: "Prophecy & Historical", url: "https://m.egwwritings.org/en/book/56.2", desc: "Devotional insights on closing events, character perfection, and Jesus' soon return." },
-      { id: "sop_selected_messages_1", title: "Selected Messages, Book 1", author: "Ellen G. White", series: "Prophecy & Historical", url: "https://m.egwwritings.org/en/book/90.2", desc: "Inspiration of prophets, Christ's human nature, and justification by faith." },
-      { id: "sop_selected_messages_2", title: "Selected Messages, Book 2", author: "Ellen G. White", series: "Prophecy & Historical", url: "https://m.egwwritings.org/en/book/91.2", desc: "Spiritualism warnings, faith healing counterfeits, and true revival." },
-      { id: "sop_selected_messages_3", title: "Selected Messages, Book 3", author: "Ellen G. White", series: "Prophecy & Historical", url: "https://m.egwwritings.org/en/book/92.2", desc: "Church governance, historical clarifications, and guidance for Christian life." },
-      { id: "sop_spiritual_gifts_vol1", title: "Spiritual Gifts, Vol. 1", author: "Ellen G. White", series: "Prophecy & Historical", url: "https://m.egwwritings.org/en/book/105.2", desc: "The original 1858 vision accounts of the great controversy between Christ and Satan." },
-      { id: "sop_life_sketches", title: "Life Sketches of Ellen G. White", author: "Ellen G. White", series: "Prophecy & Historical", url: "https://m.egwwritings.org/en/book/55.2", desc: "Her childhood, 1844 disappointment, missionary travels in America, Europe, and Australia." }
-    ];
-
-    let currentCategory = 'all';
-
-    function renderBooks(books) {
-      const grid = document.getElementById('books-grid');
-      const countEl = document.getElementById('visible-count');
-      countEl.innerText = books.length;
-
-      if (books.length === 0) {
-        grid.innerHTML = `
-          <div class="col-span-full py-16 text-center text-slate-400">
-            <i class="fa-solid fa-book-open text-4xl text-brand-gold/40 mb-3 block"></i>
-            <p class="font-heading font-semibold text-base text-white">No books found matching your search</p>
-            <p class="text-xs text-slate-400 mt-1">Try another keyword or select "All 50 Books".</p>
-          </div>
-        `;
-        return;
-      }
-
-      grid.innerHTML = books.map(book => `
-        <div class="bg-brand-navy/60 rounded-2xl p-6 gold-border flex flex-col justify-between hover:bg-brand-navy/90 hover:scale-[1.01] transition shadow-xl group">
-          <div>
-            <div class="flex items-center justify-between mb-3">
-              <span class="text-[10px] uppercase font-bold tracking-widest px-2.5 py-1 rounded-full bg-brand-gold/15 text-brand-gold border border-brand-gold/30">
-                ${book.series}
-              </span>
-              <span class="text-[11px] text-slate-400 flex items-center gap-1">
-                <i class="fa-solid fa-feather-pointed text-brand-gold text-xs"></i> E.G. White
-              </span>
-            </div>
-
-            <h3 class="font-heading font-bold text-lg text-white group-hover:text-brand-gold transition leading-snug mb-2">
-              ${book.title}
-            </h3>
-
-            <p class="text-xs text-slate-300 font-serif leading-relaxed line-clamp-3 mb-6">
-              ${book.desc}
-            </p>
-          </div>
-
-          <div class="space-y-2 pt-4 border-t border-white/10">
-            <a href="${book.url}" class="w-full py-2.5 px-4 rounded-xl bg-brand-dark/90 hover:bg-brand-dark border border-brand-gold/40 hover:border-brand-gold text-brand-gold text-xs font-semibold uppercase tracking-wider flex items-center justify-center gap-2 transition">
-              <i class="fa-solid fa-book-open-reader"></i> Read Online (EGW Writings)
-            </a>
-            
-            <a href="/contact.html?book=${encodeURIComponent(book.title)}" class="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-brand-gold to-yellow-400 hover:brightness-110 text-brand-dark text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 shadow-md transition">
-              <i class="fa-solid fa-box-archive"></i> Order Hardcopy Delivery
-            </a>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    function setCategoryFilter(category, buttonEl) {
-      currentCategory = category;
-      const pills = document.querySelectorAll('.category-pill');
-      pills.forEach(pill => {
-        pill.className = 'category-pill px-4 py-2 rounded-xl text-xs font-semibold gold-border text-slate-300 hover:text-brand-gold hover:border-brand-gold transition';
+      document.querySelectorAll(`[data-page="${pageKey}"]`).forEach(link => {
+        link.classList.add('nav-link-active');
       });
-      buttonEl.className = 'category-pill px-4 py-2 rounded-xl text-xs font-semibold gold-border-active transition';
-      filterBooks();
     }
 
-    function filterBooks() {
-      const search = document.getElementById('book-search-input').value.toLowerCase().trim();
-      let filtered = SOP_DATA;
+    // 3. Back to Top Visibility
+    window.addEventListener('scroll', () => {
+      const btn = document.getElementById('back-to-top');
+      if (btn) {
+        if (window.scrollY > 400) {
+          btn.classList.remove('hidden');
+          btn.classList.add('flex');
+        } else {
+          btn.classList.add('hidden');
+          btn.classList.remove('flex');
+        }
+      }
+    });
 
-      if (currentCategory !== 'all') {
-        filtered = filtered.filter(b => b.series === currentCategory);
+    // 4. Global Toast Helper
+    function showToast(message, type = 'success') {
+      const toast = document.getElementById('global-toast');
+      const msg = document.getElementById('global-toast-message');
+      const icon = document.getElementById('global-toast-icon');
+      if (!toast || !msg) return;
+
+      msg.innerText = message;
+      if (type === 'success') {
+        icon.className = 'fa-solid fa-circle-check text-brand-gold text-lg';
+      } else if (type === 'info') {
+        icon.className = 'fa-solid fa-circle-info text-cyan-400 text-lg';
+      } else {
+        icon.className = 'fa-solid fa-triangle-exclamation text-amber-400 text-lg';
       }
 
-      if (search) {
-        filtered = filtered.filter(b => 
-          b.title.toLowerCase().includes(search) ||
-          b.series.toLowerCase().includes(search) ||
-          b.desc.toLowerCase().includes(search)
-        );
-      }
-
-      renderBooks(filtered);
+      toast.classList.remove('hidden');
+      setTimeout(() => {
+        toast.classList.add('hidden');
+      }, 3500);
     }
 
-    // Initial render
-    renderBooks(SOP_DATA);
+    document.addEventListener('DOMContentLoaded', highlightActiveNavigation);
   </script>
+
+  
+<script>
+  const SOP_DATA = [
+    // Conflict of the Ages
+    { id: "sop_patriarchs_and_prophets", title: "Patriarchs and Prophets", author: "Ellen G. White", series: "Conflict of the Ages", url: "https://m.egwwritings.org/en/book/84.2", desc: "From creation and the fall of Lucifer to the reign of King David, tracing the great conflict between good and evil." },
+    { id: "sop_prophets_and_kings", title: "Prophets and Kings", author: "Ellen G. White", series: "Conflict of the Ages", url: "https://m.egwwritings.org/en/book/86.2", desc: "From the division of Solomon's kingdom, the ministries of Elijah and Jeremiah, to the coming Messiah." },
+    { id: "sop_desire_of_ages", title: "The Desire of Ages", author: "Ellen G. White", series: "Conflict of the Ages", url: "https://m.egwwritings.org/en/book/130.2", desc: "The supreme biography of Jesus Christ, His matchless love, earthly ministry, and ultimate cross sacrifice." },
+    { id: "sop_acts_of_the_apostles", title: "The Acts of the Apostles", author: "Ellen G. White", series: "Conflict of the Ages", url: "https://m.egwwritings.org/en/book/127.2", desc: "The early Christian church, Pentecost power, apostolic missionary journeys, and spreading the Gospel worldwide." },
+    { id: "sop_great_controversy", title: "The Great Controversy", author: "Ellen G. White", series: "Conflict of the Ages", url: "https://m.egwwritings.org/en/book/132.2", desc: "The cosmic drama from the destruction of Jerusalem, the Dark Ages, Reformation, to the glorious Earth Made New." },
+
+    // Christian Living & Salvation
+    { id: "sop_steps_to_christ", title: "Steps to Christ", author: "Ellen G. White", series: "Christian Living & Salvation", url: "https://m.egwwritings.org/en/book/138.2", desc: "The timeless masterpiece guiding sinners through repentance, confession, faith, and joy in Christ." },
+    { id: "sop_christs_object_lessons", title: "Christ's Object Lessons", author: "Ellen G. White", series: "Christian Living & Salvation", url: "https://m.egwwritings.org/en/book/15.2", desc: "Profound spiritual insights drawn from Christ's parables of the kingdom, seed, and harvest." },
+    { id: "sop_mount_of_blessing", title: "Thoughts from the Mount of Blessing", author: "Ellen G. White", series: "Christian Living & Salvation", url: "https://m.egwwritings.org/en/book/140.2", desc: "Deep study into the Beatitudes and Jesus' divine Sermon on the Mount." },
+    { id: "sop_prayer", title: "Prayer", author: "Ellen G. White", series: "Christian Living & Salvation", url: "https://m.egwwritings.org/en/book/85.2", desc: "Encouragement and principles for prevailing, transformative personal and intercessory prayer." },
+    { id: "sop_sanctified_life", title: "The Sanctified Life", author: "Ellen G. White", series: "Christian Living & Salvation", url: "https://m.egwwritings.org/en/book/136.2", desc: "Biblical holiness exemplified through the lives of Daniel, John, and the character of Christ." },
+    { id: "sop_sons_and_daughters", title: "Sons and Daughters of God", author: "Ellen G. White", series: "Christian Living & Salvation", url: "https://m.egwwritings.org/en/book/137.2", desc: "Inspiring daily devotionals centering on adoption into the heavenly royal family." },
+    { id: "sop_our_high_calling", title: "Our High Calling", author: "Ellen G. White", series: "Christian Living & Salvation", url: "https://m.egwwritings.org/en/book/75.2", desc: "Daily spiritual counsel urging believers toward higher Christian standards and divine communion." },
+    { id: "sop_faith_i_live_by", title: "The Faith I Live By", author: "Ellen G. White", series: "Christian Living & Salvation", url: "https://m.egwwritings.org/en/book/131.2", desc: "Exposition of fundamental Adventist doctrines and Christian faith practical applications." },
+
+    // Health & Temperance
+    { id: "sop_ministry_of_healing", title: "The Ministry of Healing", author: "Ellen G. White", series: "Health & Temperance", url: "https://m.egwwritings.org/en/book/150.2", desc: "God's natural remedies, pure air, water, nutrition, mental peace, and practical medical missionary service." },
+    { id: "sop_counsels_on_diet_and_foods", title: "Counsels on Diet and Foods", author: "Ellen G. White", series: "Health & Temperance", url: "https://m.egwwritings.org/en/book/24.2", desc: "Comprehensive dietary counsels, plant-based principles, and physiological health laws." },
+    { id: "sop_temperance", title: "Temperance", author: "Ellen G. White", series: "Health & Temperance", url: "https://m.egwwritings.org/en/book/139.2", desc: "Overcoming addictions, tobacco, alcohol, and intemperance through divine grace and self-control." },
+    { id: "sop_medical_ministry", title: "Medical Ministry", author: "Ellen G. White", series: "Health & Temperance", url: "https://m.egwwritings.org/en/book/57.2", desc: "Manual for physicians, nurses, sanitariums, and gospel health workers in the closing work." },
+    { id: "sop_call_to_medical_evangelism", title: "A Call to Medical Evangelism", author: "Ellen G. White", series: "Health & Temperance", url: "https://m.egwwritings.org/en/book/13.2", desc: "How the health work serves as the entering wedge for the Three Angels' Messages." },
+
+    // Family Life, Youth & Home
+    { id: "sop_the_adventist_home", title: "The Adventist Home", author: "Ellen G. White", series: "Family Life, Youth & Home", url: "https://m.egwwritings.org/en/book/32.2", desc: "Principles for creating a peaceful, Christ-centered marriage and home that reflects heaven." },
+    { id: "sop_child_guidance", title: "Child Guidance", author: "Ellen G. White", series: "Family Life, Youth & Home", url: "https://m.egwwritings.org/en/book/14.2", desc: "Essential principles for parenting, early habit training, and spiritual character building in youth." },
+    { id: "sop_messages_to_young_people", title: "Messages to Young People", author: "Ellen G. White", series: "Family Life, Youth & Home", url: "https://m.egwwritings.org/en/book/58.2", desc: "Heartfelt appeals to Adventist youth regarding purity, courtship, mission, and life goals." },
+    { id: "sop_education", title: "Education", author: "Ellen G. White", series: "Family Life, Youth & Home", url: "https://m.egwwritings.org/en/book/29.2", desc: "The true nature of education — harmonious development of physical, mental, and spiritual powers." },
+    { id: "sop_counsels_to_parents", title: "Counsels to Parents, Teachers, and Students", author: "Ellen G. White", series: "Family Life, Youth & Home", url: "https://m.egwwritings.org/en/book/27.2", desc: "Christian school guidance, moral discipline, manual training, and academic standards." },
+
+    // Evangelism & Church Ministry
+    { id: "sop_colporteur_ministry", title: "Colporteur Ministry", author: "Ellen G. White", series: "Evangelism & Church Ministry", url: "https://m.egwwritings.org/en/book/20.2", desc: "The definitive guide for literature evangelists distributing physical truth-filled books door-to-door." },
+    { id: "sop_evangelism", title: "Evangelism", author: "Ellen G. White", series: "Evangelism & Church Ministry", url: "https://m.egwwritings.org/en/book/35.2", desc: "Practical handbook for city missions, public campaigns, pastoral evangelism, and Bible work." },
+    { id: "sop_gospel_workers", title: "Gospel Workers", author: "Ellen G. White", series: "Evangelism & Church Ministry", url: "https://m.egwwritings.org/en/book/44.2", desc: "Instruction and qualifications for ministers, elders, and leaders in church administration." },
+    { id: "sop_christian_service", title: "Christian Service", author: "Ellen G. White", series: "Evangelism & Church Ministry", url: "https://m.egwwritings.org/en/book/17.2", desc: "Mobilizing every lay member of the Seventh-day Adventist church for personal missionary work." },
+    { id: "sop_testimonies_to_ministers", title: "Testimonies to Ministers", author: "Ellen G. White", series: "Evangelism & Church Ministry", url: "https://m.egwwritings.org/en/book/142.2", desc: "Solemn appeals warning against ecclesiastical domination and lifting up righteousness by faith." },
+    { id: "sop_welfare_ministry", title: "Welfare Ministry", author: "Ellen G. White", series: "Evangelism & Church Ministry", url: "https://m.egwwritings.org/en/book/146.2", desc: "Ministering to the poor, sick, widows, and vulnerable as Christ's loving hands." },
+    { id: "sop_pastoral_ministry", title: "Pastoral Ministry", author: "Ellen G. White", series: "Evangelism & Church Ministry", url: "https://m.egwwritings.org/en/book/83.2", desc: "Counsel for pastors in church governance, visitation, pulpit ministry, and soul winning." },
+    { id: "sop_publishing_ministry", title: "The Publishing Ministry", author: "Ellen G. White", series: "Evangelism & Church Ministry", url: "https://m.egwwritings.org/en/book/88.2", desc: "History, divine purpose, and worldwide reach of Adventist publishing houses and books." },
+
+    // Testimonies for the Church (1-9)
+    { id: "sop_testimonies_vol1", title: "Testimonies for the Church, Vol. 1", author: "Ellen G. White", series: "Evangelism & Church Ministry", url: "https://m.egwwritings.org/en/book/118.2", desc: "Early experiences, vision reports, and foundational church development (1855-1868)." },
+    { id: "sop_testimonies_vol2", title: "Testimonies for the Church, Vol. 2", author: "Ellen G. White", series: "Evangelism & Church Ministry", url: "https://m.egwwritings.org/en/book/119.2", desc: "Counsels on health reform, sanctification, family duties, and church order (1868-1871)." },
+    { id: "sop_testimonies_vol3", title: "Testimonies for the Church, Vol. 3", author: "Ellen G. White", series: "Evangelism & Church Ministry", url: "https://m.egwwritings.org/en/book/120.2", desc: "Christian leadership, institutional integrity, and personal godliness (1872-1875)." },
+    { id: "sop_testimonies_vol4", title: "Testimonies for the Church, Vol. 4", author: "Ellen G. White", series: "Evangelism & Church Ministry", url: "https://m.egwwritings.org/en/book/121.2", desc: "Self-denial, sacrificial giving, and missionary enterprises (1876-1881)." },
+    { id: "sop_testimonies_vol5", title: "Testimonies for the Church, Vol. 5", author: "Ellen G. White", series: "Evangelism & Church Ministry", url: "https://m.egwwritings.org/en/book/122.2", desc: "The coming crisis, Sunday laws, shaking in the church, and divine guidance (1882-1889)." },
+    { id: "sop_testimonies_vol6", title: "Testimonies for the Church, Vol. 6", author: "Ellen G. White", series: "Evangelism & Church Ministry", url: "https://m.egwwritings.org/en/book/123.2", desc: "Christian education, camp meetings, medical evangelism, and tithe fidelity (1900)." },
+    { id: "sop_testimonies_vol7", title: "Testimonies for the Church, Vol. 7", author: "Ellen G. White", series: "Evangelism & Church Ministry", url: "https://m.egwwritings.org/en/book/124.2", desc: "Sanitarium establishment, publishing houses, and decentralized organization (1902)." },
+    { id: "sop_testimonies_vol8", title: "Testimonies for the Church, Vol. 8", author: "Ellen G. White", series: "Evangelism & Church Ministry", url: "https://m.egwwritings.org/en/book/125.2", desc: "Warning against pantheism, crisis in Battle Creek, and God's essential nature (1904)." },
+    { id: "sop_testimonies_vol9", title: "Testimonies for the Church, Vol. 9", author: "Ellen G. White", series: "Evangelism & Church Ministry", url: "https://m.egwwritings.org/en/book/126.2", desc: "The final crisis, city evangelism, health food work, and the triumph of God's church (1909)." },
+
+    // Prophecy & Historical
+    { id: "sop_early_writings", title: "Early Writings", author: "Ellen G. White", series: "Prophecy & Historical", url: "https://m.egwwritings.org/en/book/50.2", desc: "First visions of the heavenly sanctuary, the midnight cry, and the 1858 Great Controversy vision." },
+    { id: "sop_last_day_events", title: "Last Day Events", author: "Ellen G. White", series: "Prophecy & Historical", url: "https://m.egwwritings.org/en/book/135.2", desc: "Compilations outlining the national Sunday law, loud cry, seven last plagues, and Second Coming." },
+    { id: "sop_maranatha", title: "Maranatha — The Lord Is Coming", author: "Ellen G. White", series: "Prophecy & Historical", url: "https://m.egwwritings.org/en/book/56.2", desc: "Devotional insights on closing events, character perfection, and Jesus' soon return." },
+    { id: "sop_selected_messages_1", title: "Selected Messages, Book 1", author: "Ellen G. White", series: "Prophecy & Historical", url: "https://m.egwwritings.org/en/book/90.2", desc: "Inspiration of prophets, Christ's human nature, and justification by faith." },
+    { id: "sop_selected_messages_2", title: "Selected Messages, Book 2", author: "Ellen G. White", series: "Prophecy & Historical", url: "https://m.egwwritings.org/en/book/91.2", desc: "Spiritualism warnings, faith healing counterfeits, and true revival." },
+    { id: "sop_selected_messages_3", title: "Selected Messages, Book 3", author: "Ellen G. White", series: "Prophecy & Historical", url: "https://m.egwwritings.org/en/book/92.2", desc: "Church governance, historical clarifications, and guidance for Christian life." },
+    { id: "sop_spiritual_gifts_vol1", title: "Spiritual Gifts, Vol. 1", author: "Ellen G. White", series: "Prophecy & Historical", url: "https://m.egwwritings.org/en/book/105.2", desc: "The original 1858 vision accounts of the great controversy between Christ and Satan." },
+    { id: "sop_life_sketches", title: "Life Sketches of Ellen G. White", author: "Ellen G. White", series: "Prophecy & Historical", url: "https://m.egwwritings.org/en/book/55.2", desc: "Her childhood, 1844 disappointment, missionary travels in America, Europe, and Australia." }
+  ];
+
+  let currentCategory = 'all';
+
+  function renderBooks(books) {
+    const grid = document.getElementById('books-grid');
+    const countEl = document.getElementById('visible-count');
+    countEl.innerText = books.length;
+
+    if (books.length === 0) {
+      grid.innerHTML = `
+        <div class="col-span-full py-16 text-center text-slate-400">
+          <i class="fa-solid fa-book-open text-4xl text-brand-gold/40 mb-3 block"></i>
+          <p class="font-heading font-semibold text-base text-white">No books found matching your search</p>
+          <p class="text-xs text-slate-400 mt-1">Try another keyword or select "All 50 Books".</p>
+        </div>
+      `;
+      return;
+    }
+
+    grid.innerHTML = books.map(book => `
+      <div class="bg-brand-navy rounded-2xl p-6 gold-border hover:bg-brand-navy/80 transition duration-300 shadow-xl flex flex-col justify-between group">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-[10px] uppercase font-bold tracking-widest px-2.5 py-1 rounded-full bg-brand-gold/15 text-brand-gold border border-brand-gold/30">
+              ${book.series}
+            </span>
+            <span class="text-[11px] text-slate-400 flex items-center gap-1">
+              <i class="fa-solid fa-feather-pointed text-brand-gold text-xs"></i> E.G. White
+            </span>
+          </div>
+
+          <h3 class="font-heading font-bold text-lg text-white group-hover:text-brand-gold transition leading-snug mb-2">
+            ${book.title}
+          </h3>
+
+          <p class="text-xs text-slate-300 font-serif leading-relaxed line-clamp-3 mb-6">
+            ${book.desc}
+          </p>
+        </div>
+
+        <div class="space-y-2 pt-4 border-t border-white/10">
+          <a href="${book.url}" target="_blank" rel="noopener" class="w-full py-2.5 px-4 rounded-xl bg-brand-dark/90 hover:bg-brand-dark border border-brand-gold/40 hover:border-brand-gold text-brand-gold text-xs font-semibold uppercase tracking-wider flex items-center justify-center gap-2 transition">
+            <i class="fa-solid fa-book-open-reader"></i> Read Online (EGW Writings)
+          </a>
+          
+          <a href="/contact.html?book=${encodeURIComponent(book.title)}" class="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-brand-gold to-yellow-400 hover:brightness-110 text-brand-dark text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 shadow-md transition">
+            <i class="fa-solid fa-box-archive"></i> Order Hardcopy Delivery
+          </a>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function setCategoryFilter(category, buttonEl) {
+    currentCategory = category;
+    const pills = document.querySelectorAll('.category-pill');
+    pills.forEach(pill => {
+      pill.className = 'category-pill px-4 py-2 rounded-xl text-xs font-semibold gold-border text-slate-300 hover:text-brand-gold hover:border-brand-gold transition';
+    });
+    buttonEl.className = 'category-pill px-4 py-2 rounded-xl text-xs font-semibold gold-border-active transition';
+    filterBooks();
+  }
+
+  function filterBooks() {
+    const search = document.getElementById('book-search-input').value.toLowerCase().trim();
+    let filtered = SOP_DATA;
+
+    if (currentCategory !== 'all') {
+      filtered = filtered.filter(b => b.series === currentCategory);
+    }
+
+    if (search) {
+      filtered = filtered.filter(b => 
+        b.title.toLowerCase().includes(search) ||
+        b.series.toLowerCase().includes(search) ||
+        b.desc.toLowerCase().includes(search)
+      );
+    }
+
+    renderBooks(filtered);
+  }
+
+  // Initial render
+  document.addEventListener('DOMContentLoaded', () => {
+    renderBooks(SOP_DATA);
+  });
+</script>
+
 </body>
 </html>
-

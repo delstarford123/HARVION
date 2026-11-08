@@ -97,6 +97,7 @@ def serve_upload(filename):
 # ==========================================
 @app.route("/", methods=["GET"])
 @app.route("/home", methods=["GET"])
+@app.route("/home.html", methods=["GET"])
 @app.route("/index.html", methods=["GET"])
 def home():
     accepts_json = request.headers.get("Accept", "").startswith("application/json")
