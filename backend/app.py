@@ -118,6 +118,7 @@ def home():
                 "colporteurs": "/api/colporteurs",
                 "ministry": "/api/ministry",
                 "sop": "/api/sop/books",
+                "hymns": "/api/hymns",
             },
             "serverTime": datetime.datetime.now(datetime.timezone.utc).isoformat(),
             "message": "HARVION Literature Evangelism, Health & Truth Platform is active on HostPinnacle."
@@ -181,6 +182,20 @@ def books_library():
             return send_file(books_path)
         return send_file(os.path.join(PUBLIC_DIR, "index.html"))
 
+
+@app.route("/hymns", methods=["GET"])
+@app.route("/hymns.html", methods=["GET"])
+@app.route("/hymnal", methods=["GET"])
+@app.route("/hymnal.html", methods=["GET"])
+def hymns_library():
+    try:
+        return render_template("hymns.html")
+    except Exception:
+        hymns_path = os.path.join(PUBLIC_DIR, "hymns.html")
+        if os.path.exists(hymns_path):
+            return send_file(hymns_path)
+        return send_file(os.path.join(PUBLIC_DIR, "index.html"))
+
 # ==========================================
 # ⚡ API DISCOVERY & HEALTH CHECK
 # ==========================================
@@ -196,6 +211,8 @@ def api_discovery():
             "about": "/about.html",
             "support": "/support.html",
             "contact": "/contact.html",
+            "books": "/books.html",
+            "hymns": "/hymns.html",
         },
         "endpoints": {
             "books": "/api/books",
@@ -204,6 +221,7 @@ def api_discovery():
             "colporteurs": "/api/colporteurs",
             "ministry": "/api/ministry",
             "sop": "/api/sop/books",
+            "hymns": "/api/hymns",
         },
         "serverTime": datetime.datetime.now(datetime.timezone.utc).isoformat(),
     })
@@ -219,6 +237,7 @@ def health_check():
         "version": "2.0.0-FLASK",
         "firebaseConnected": db is not None,
         "firebaseProject": PROJECT_ID,
+        "hymnalAvailable": True,
         "time": datetime.datetime.now(datetime.timezone.utc).isoformat(),
     })
 
@@ -231,6 +250,7 @@ from blueprints.payments import payments_bp
 from blueprints.colporteurs import colporteurs_bp
 from blueprints.ministry import ministry_bp
 from blueprints.sop import sop_bp
+from blueprints.hymns import hymns_bp
 
 app.register_blueprint(books_bp, url_prefix="/api/books")
 app.register_blueprint(orders_bp, url_prefix="/api/orders")
@@ -238,6 +258,7 @@ app.register_blueprint(payments_bp, url_prefix="/api/payments")
 app.register_blueprint(colporteurs_bp, url_prefix="/api/colporteurs")
 app.register_blueprint(ministry_bp, url_prefix="/api/ministry")
 app.register_blueprint(sop_bp, url_prefix="/api/sop")
+app.register_blueprint(hymns_bp, url_prefix="/api/hymns")
 
 # ==========================================
 # 🛡️ 404 NOT FOUND HANDLER
