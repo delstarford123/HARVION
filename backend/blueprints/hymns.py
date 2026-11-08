@@ -103,9 +103,9 @@ def stream_hymn_audio(number: int):
         resp.headers["Cache-Control"] = "public, max-age=86400"
         return resp
 
-    # 3. Fallback to public archive audio
-    archive_url = f"https://archive.org/download/sda-hymnal-instrumental/{number:03d}.mp3"
-    return redirect(archive_url, code=302)
+    # 3. Fallback to high-quality piano audio
+    fallback_url = f"https://hymnal.pro/sda-hymnal/mp3/{number:03d}.mp3"
+    return redirect(fallback_url, code=302)
 
 
 # ==========================================

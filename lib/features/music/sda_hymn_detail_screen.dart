@@ -4,6 +4,8 @@ import 'package:just_audio/just_audio.dart';
 import 'package:share_plus/share_plus.dart';
 import '../../core/theme.dart';
 import 'sda_hymn_model.dart';
+import 'data/sda_hymnal_data.dart';
+import 'services/sda_hymn_audio_service.dart';
 
 class SdaHymnDetailScreen extends StatefulWidget {
   final SdaHymn hymn;
@@ -23,38 +25,162 @@ class _SdaHymnDetailScreenState extends State<SdaHymnDetailScreen> {
   bool _isLooping = false;
   double _lyricsFontSize = 17.0;
 
+  // Offline Download State
+  bool _isDownloaded = false;
+  bool _isDownloading = false;
+  double _downloadProgress = 0.0;
+
   @override
   void initState() {
     super.initState();
     _audioPlayer = AudioPlayer();
+    _checkOfflineStatus();
     _initPianoAudio();
+  }
+
+  Future<void> _checkOfflineStatus() async {
+    final downloaded = await SdaHymnAudioService().isHymnDownloaded(widget.hymn.number);
+    if (mounted) {
+      setState(() => _isDownloaded = downloaded);
+    }
   }
 
   Future<void> _initPianoAudio() async {
     try {
-      setState(() {
-        _isLoading = true;
-        _hasError = false;
-      });
-
-      // Load piano accompaniment track
-      final url = (widget.hymn.audioUrl != null && widget.hymn.audioUrl!.isNotEmpty)
-          ? widget.hymn.audioUrl!
-          : 'https://archive.org/download/sda-hymnal-instrumental/${widget.hymn.number.toString().padLeft(3, '0')}.mp3';
-      await _audioPlayer.setUrl(url);
-
       if (mounted) {
         setState(() {
-          _isLoading = false;
+          _isLoading = true;
+          _hasError = false;
         });
       }
+
+      final audioService = SdaHymnAudioService();
+      final isCached = await audioService.isHymnDownloaded(widget.hymn.number);
+
+      if (isCached) {
+        final file = await audioService.getLocalFile(widget.hymn.number);
+        await _audioPlayer.setFilePath(file.path);
+        if (mounted) {
+          setState(() {
+            _isDownloaded = true;
+            _isLoading = false;
+          });
+        }
+      } else {
+        // Stream verified high-quality instrumental piano accompaniment
+        final onlineUrl = audioService.getOnlineUrl(widget.hymn.number);
+        await _audioPlayer.setUrl(onlineUrl);
+        if (mounted) {
+          setState(() {
+            _isDownloaded = false;
+            _isLoading = false;
+          });
+        }
+      }
     } catch (e) {
-      debugPrint('[SDA Hymnal Piano Error] Failed to load audio: $e');
+      debugPrint('[SDA Hymnal Audio Error] Hymn #${widget.hymn.number}: $e');
       if (mounted) {
         setState(() {
           _isLoading = false;
           _hasError = true;
         });
+      }
+    }
+  }
+
+  Future<void> _downloadCurrentHymn() async {
+    if (_isDownloading) return;
+
+    setState(() {
+      _isDownloading = true;
+      _downloadProgress = 0.0;
+    });
+
+    final file = await SdaHymnAudioService().downloadHymn(
+      widget.hymn.number,
+      onProgress: (p) {
+        if (mounted) setState(() => _downloadProgress = p);
+      },
+    );
+
+    if (!mounted) return;
+
+    if (file != null && await file.exists()) {
+      setState(() {
+        _isDownloaded = true;
+        _isDownloading = false;
+      });
+
+      // Switch active player to local offline file
+      try {
+        final wasPlaying = _audioPlayer.playing;
+        final currentPos = _audioPlayer.position;
+        await _audioPlayer.setFilePath(file.path);
+        if (currentPos > Duration.zero) {
+          await _audioPlayer.seek(currentPos);
+        }
+        if (wasPlaying) {
+          _audioPlayer.play();
+        }
+      } catch (e) {
+        debugPrint('Seamless local switch notice: $e');
+      }
+
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Row(
+            children: [
+              const Icon(Icons.check_circle_rounded, color: Colors.white, size: 20),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  'Hymn #${widget.hymn.number} piano downloaded! Available 100% offline.',
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
+            ],
+          ),
+          backgroundColor: Colors.green.shade700,
+          behavior: SnackBarBehavior.floating,
+          duration: const Duration(seconds: 4),
+        ),
+      );
+    } else {
+      setState(() => _isDownloading = false);
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Download failed for Hymn #${widget.hymn.number}. Please check your internet connection.'),
+          backgroundColor: Colors.red.shade700,
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    }
+  }
+
+  Future<void> _deleteDownloadedHymn() async {
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Delete Offline Piano Track?'),
+        content: Text('Remove downloaded audio for Hymn #${widget.hymn.number}? You can re-download anytime.'),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Cancel')),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.red, foregroundColor: Colors.white),
+            onPressed: () => Navigator.pop(ctx, true),
+            child: const Text('Delete'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirm == true) {
+      await SdaHymnAudioService().deleteHymn(widget.hymn.number);
+      if (mounted) {
+        setState(() => _isDownloaded = false);
+        _initPianoAudio();
       }
     }
   }
@@ -92,6 +218,16 @@ class _SdaHymnDetailScreenState extends State<SdaHymnDetailScreen> {
     _audioPlayer.setLoopMode(_isLooping ? LoopMode.one : LoopMode.off);
   }
 
+  void _navigateToHymn(int targetNumber) {
+    final target = SdaHymnalData.getByNumber(targetNumber);
+    if (target != null) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => SdaHymnDetailScreen(hymn: target)),
+      );
+    }
+  }
+
   String _formatDuration(Duration? d) {
     if (d == null) return '0:00';
     final minutes = d.inMinutes;
@@ -101,6 +237,9 @@ class _SdaHymnDetailScreenState extends State<SdaHymnDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final canGoPrev = widget.hymn.number > 1;
+    final canGoNext = widget.hymn.number < 695;
+
     return Scaffold(
       backgroundColor: AppTheme.backgroundLight,
       appBar: AppBar(
@@ -112,6 +251,21 @@ class _SdaHymnDetailScreenState extends State<SdaHymnDetailScreen> {
           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
         ),
         actions: [
+          // Previous Hymn
+          if (canGoPrev)
+            IconButton(
+              tooltip: 'Previous Hymn (#${widget.hymn.number - 1})',
+              icon: const Icon(Icons.chevron_left_rounded),
+              onPressed: () => _navigateToHymn(widget.hymn.number - 1),
+            ),
+          // Next Hymn
+          if (canGoNext)
+            IconButton(
+              tooltip: 'Next Hymn (#${widget.hymn.number + 1})',
+              icon: const Icon(Icons.chevron_right_rounded),
+              onPressed: () => _navigateToHymn(widget.hymn.number + 1),
+            ),
+          // Lyrics Font Size
           IconButton(
             tooltip: 'Lyrics Size (A- / A+)',
             icon: const Icon(Icons.format_size_rounded),
@@ -121,6 +275,7 @@ class _SdaHymnDetailScreenState extends State<SdaHymnDetailScreen> {
               });
             },
           ),
+          // Copy Lyrics
           IconButton(
             tooltip: 'Copy Lyrics',
             icon: const Icon(Icons.copy_rounded),
@@ -136,6 +291,7 @@ class _SdaHymnDetailScreenState extends State<SdaHymnDetailScreen> {
               );
             },
           ),
+          // Share Hymn
           IconButton(
             tooltip: 'Share Hymn',
             icon: const Icon(Icons.share_rounded),
@@ -151,17 +307,17 @@ class _SdaHymnDetailScreenState extends State<SdaHymnDetailScreen> {
       ),
       bottomNavigationBar: _buildStickyPianoPlayerBar(),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.fromLTRB(16, 16, 16, 120),
+        padding: const EdgeInsets.fromLTRB(16, 16, 16, 140),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             // Hymn Header Card
             _buildHeaderCard(),
-            const SizedBox(height: 16),
+            const SizedBox(height: 14),
 
-            // Piano Accompaniment Status Banner
-            _buildPianoFeatureCard(),
-            const SizedBox(height: 20),
+            // Piano Accompaniment & Offline Download Feature Card
+            _buildPianoDownloadCard(),
+            const SizedBox(height: 18),
 
             // Section Divider
             Row(
@@ -282,13 +438,16 @@ class _SdaHymnDetailScreenState extends State<SdaHymnDetailScreen> {
     );
   }
 
-  Widget _buildPianoFeatureCard() {
+  Widget _buildPianoDownloadCard() {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppTheme.sacredGold.withValues(alpha: 0.5), width: 1.5),
+        border: Border.all(
+          color: _isDownloaded ? Colors.green.shade400 : AppTheme.sacredGold.withValues(alpha: 0.5),
+          width: 1.5,
+        ),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.04),
@@ -297,38 +456,135 @@ class _SdaHymnDetailScreenState extends State<SdaHymnDetailScreen> {
           ),
         ],
       ),
-      child: Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Container(
-            width: 48,
-            height: 48,
-            decoration: BoxDecoration(
-              color: AppTheme.sacredGold.withValues(alpha: 0.15),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: const Icon(Icons.piano, color: AppTheme.primaryBlue, size: 28),
+          Row(
+            children: [
+              Container(
+                width: 46,
+                height: 46,
+                decoration: BoxDecoration(
+                  color: _isDownloaded ? Colors.green.shade50 : AppTheme.sacredGold.withValues(alpha: 0.15),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Icon(
+                  _isDownloaded ? Icons.offline_pin_rounded : Icons.piano,
+                  color: _isDownloaded ? Colors.green.shade700 : AppTheme.primaryBlue,
+                  size: 26,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      _isDownloaded
+                          ? 'Offline Piano Ready'
+                          : 'Piano Accompaniment (Sing Along)',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                        color: _isDownloaded ? Colors.green.shade800 : AppTheme.primaryBlue,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      _isDownloaded
+                          ? 'Saved on device • Plays 100% offline without internet.'
+                          : 'Listen to the instrumental piano chords and sing along.',
+                      style: const TextStyle(fontSize: 11.5, color: Colors.black54),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
-          const SizedBox(width: 14),
-          const Expanded(
-            child: Column(
+          const SizedBox(height: 12),
+
+          // Download Progress Bar or Action Buttons
+          if (_isDownloading)
+            Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'Piano Accompaniment (Sing Along)',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14,
-                    color: AppTheme.primaryBlue,
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(6),
+                  child: LinearProgressIndicator(
+                    value: _downloadProgress > 0 ? _downloadProgress : null,
+                    backgroundColor: Colors.grey.shade200,
+                    valueColor: const AlwaysStoppedAnimation<Color>(AppTheme.primaryBlue),
+                    minHeight: 8,
                   ),
                 ),
-                SizedBox(height: 2),
-                Text(
-                  'Play the instrumental melody and sing along as you read the lyrics.',
-                  style: TextStyle(fontSize: 11.5, color: Colors.black54),
+                const SizedBox(height: 6),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'Downloading piano track for offline use...',
+                      style: TextStyle(fontSize: 11, color: AppTheme.primaryBlue, fontWeight: FontWeight.w600),
+                    ),
+                    Text(
+                      '${(_downloadProgress * 100).toInt()}%',
+                      style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AppTheme.primaryBlue),
+                    ),
+                  ],
                 ),
               ],
+            )
+          else if (_isDownloaded)
+            Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: Colors.green.shade50,
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(color: Colors.green.shade200),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.check_circle, size: 16, color: Colors.green.shade700),
+                        const SizedBox(width: 6),
+                        Text(
+                          'Downloaded for Offline Play',
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.green.shade800,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                IconButton(
+                  tooltip: 'Delete Offline Track',
+                  icon: Icon(Icons.delete_outline, color: Colors.red.shade400, size: 20),
+                  onPressed: _deleteDownloadedHymn,
+                ),
+              ],
+            )
+          else
+            ElevatedButton.icon(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppTheme.primaryBlue,
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(vertical: 11),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                elevation: 0,
+              ),
+              icon: const Icon(Icons.cloud_download_rounded, size: 19),
+              label: const Text(
+                'DOWNLOAD PIANO FOR OFFLINE PLAY',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12, letterSpacing: 0.5),
+              ),
+              onPressed: _downloadCurrentHymn,
             ),
-          ),
         ],
       ),
     );
@@ -367,10 +623,14 @@ class _SdaHymnDetailScreenState extends State<SdaHymnDetailScreen> {
                     Container(
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: AppTheme.sacredGold.withValues(alpha: 0.2),
+                        color: _isDownloaded ? Colors.green.withValues(alpha: 0.25) : AppTheme.sacredGold.withValues(alpha: 0.2),
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      child: const Icon(Icons.piano, color: AppTheme.sacredGold, size: 20),
+                      child: Icon(
+                        _isDownloaded ? Icons.offline_pin_rounded : Icons.piano,
+                        color: _isDownloaded ? Colors.greenAccent : AppTheme.sacredGold,
+                        size: 20,
+                      ),
                     ),
                     const SizedBox(width: 10),
                     Expanded(
@@ -388,11 +648,13 @@ class _SdaHymnDetailScreenState extends State<SdaHymnDetailScreen> {
                             overflow: TextOverflow.ellipsis,
                           ),
                           Text(
-                            isPlaying
-                                ? '🎹 Piano Playing • Sing Along'
-                                : (isBuffering ? '⏳ Loading Piano Accompaniment...' : '⏸ Piano Paused • Tap Play'),
+                            _hasError
+                                ? '⚠️ Offline / Connection error (Tap to retry)'
+                                : isPlaying
+                                    ? (_isDownloaded ? '✓ Playing Offline Piano • Sing Along' : '🎹 Streaming Piano • Sing Along')
+                                    : (isBuffering ? '⏳ Loading Piano Accompaniment...' : '⏸ Piano Paused • Tap Play'),
                             style: TextStyle(
-                              color: isPlaying ? AppTheme.sacredGold : Colors.white70,
+                              color: _hasError ? Colors.amberAccent : (isPlaying ? AppTheme.sacredGold : Colors.white70),
                               fontSize: 11,
                               fontWeight: isPlaying ? FontWeight.w600 : FontWeight.normal,
                             ),
@@ -578,10 +840,10 @@ class _SdaHymnDetailScreenState extends State<SdaHymnDetailScreen> {
                 widget.hymn.stanzas[stanzaIndex],
                 style: TextStyle(
                   fontSize: _lyricsFontSize,
-                  height: 1.75,
+                  height: 1.6,
+                  color: Colors.black87,
                   fontFamily: 'Serif',
-                  fontWeight: FontWeight.w400,
-                  color: Colors.grey.shade900,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
             ],
@@ -589,74 +851,61 @@ class _SdaHymnDetailScreenState extends State<SdaHymnDetailScreen> {
         ),
       );
 
-      items.add(const SizedBox(height: 14));
-
-      // Chorus Card (rendered after stanza 1 or as applicable)
-      if (widget.hymn.chorus.isNotEmpty && i == 0) {
+      // Sacred Golden Chorus Callout
+      if (widget.hymn.chorus.isNotEmpty) {
+        items.add(const SizedBox(height: 12));
         items.add(
           Container(
             padding: const EdgeInsets.all(18),
             decoration: BoxDecoration(
-              color: const Color(0xFFFBF8EE),
+              color: AppTheme.sacredGold.withValues(alpha: 0.12),
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(
-                color: AppTheme.sacredGold.withValues(alpha: 0.5),
-                width: 1.5,
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: AppTheme.sacredGold.withValues(alpha: 0.08),
-                  blurRadius: 8,
-                  offset: const Offset(0, 2),
-                ),
-              ],
+              border: Border.all(color: AppTheme.sacredGold.withValues(alpha: 0.6), width: 1.5),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
-                      decoration: BoxDecoration(
-                        color: AppTheme.sacredGold,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: const Text(
-                        'REFRAIN / CHORUS',
-                        style: TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                          letterSpacing: 1.0,
-                        ),
+                    const Icon(Icons.star_rounded, color: AppTheme.primaryBlue, size: 16),
+                    const SizedBox(width: 6),
+                    Text(
+                      'REFRAIN / CHORUS',
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w900,
+                        color: AppTheme.primaryBlue.withValues(alpha: 0.85),
+                        letterSpacing: 1.1,
                       ),
                     ),
-                    const Icon(Icons.music_note, color: AppTheme.sacredGold, size: 18),
                   ],
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: 10),
                 Text(
                   widget.hymn.chorus,
                   style: TextStyle(
-                    fontSize: _lyricsFontSize,
-                    height: 1.75,
-                    fontFamily: 'Serif',
+                    fontSize: _lyricsFontSize + 0.5,
                     fontStyle: FontStyle.italic,
                     fontWeight: FontWeight.w600,
+                    height: 1.55,
                     color: AppTheme.primaryBlue,
+                    fontFamily: 'Serif',
                   ),
                 ),
               ],
             ),
           ),
         );
+      }
 
+      if (i < widget.hymn.stanzas.length - 1) {
         items.add(const SizedBox(height: 14));
       }
     }
 
-    return Column(children: items);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: items,
+    );
   }
 }

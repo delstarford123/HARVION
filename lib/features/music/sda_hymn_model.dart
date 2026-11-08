@@ -17,6 +17,30 @@ class SdaHymn {
     this.audioUrl,
   });
 
+  factory SdaHymn.fromJson(Map<String, dynamic> json) {
+    return SdaHymn(
+      number: json['number'] as int? ?? 1,
+      title: json['title'] as String? ?? '',
+      category: json['category'] as String? ?? 'General',
+      keySignature: json['keySignature'] as String? ?? 'G Major',
+      stanzas: (json['stanzas'] as List<dynamic>?)?.map((e) => e.toString()).toList() ?? [],
+      chorus: json['chorus'] as String? ?? '',
+      audioUrl: json['audioUrl'] as String?,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'number': number,
+      'title': title,
+      'category': category,
+      'keySignature': keySignature,
+      'stanzas': stanzas,
+      'chorus': chorus,
+      'audioUrl': audioUrl,
+    };
+  }
+
   String get fullLyrics {
     final buffer = StringBuffer();
     for (int i = 0; i < stanzas.length; i++) {

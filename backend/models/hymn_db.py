@@ -532,7 +532,7 @@ def seed_all_695_hymns(force: bool = False):
                 time_sig = h.get("time_signature", "")
                 scripture = h.get("scripture", "")
                 chorus = h.get("chorus", "")
-                audio_url = h.get("audio_url", f"/static/audio/hymns/{num}.mp3")
+                audio_url = h.get("audio_url", f"https://hymnal.pro/sda-hymnal/mp3/{str(num).zfill(3)}.mp3")
                 verses_json = json.dumps(h.get("verses", []))
             else:
                 cat = determine_category_by_number(num)
@@ -544,7 +544,7 @@ def seed_all_695_hymns(force: bool = False):
                 time_sig = "4/4"
                 scripture = "Scripture Reference"
                 chorus = ""
-                audio_url = f"/static/audio/hymns/{num}.mp3"
+                audio_url = f"https://hymnal.pro/sda-hymnal/mp3/{str(num).zfill(3)}.mp3"
                 default_verses = [
                     {
                         "stanza": 1,

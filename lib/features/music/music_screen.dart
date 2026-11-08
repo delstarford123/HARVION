@@ -8,6 +8,7 @@ import 'audio_detail_screen.dart';
 import 'sda_hymn_model.dart';
 import 'data/sda_hymnal_data.dart';
 import 'sda_hymn_detail_screen.dart';
+import 'services/sda_hymn_audio_service.dart';
 
 class MusicScreen extends StatefulWidget {
   const MusicScreen({super.key});
@@ -23,11 +24,20 @@ class _MusicScreenState extends State<MusicScreen> with SingleTickerProviderStat
   final TextEditingController _hymnSearchController = TextEditingController();
   String _hymnSearchQuery = '';
   String _selectedCategory = 'All';
+  Set<int> _downloadedHymns = {};
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    _loadDownloadedHymns();
+  }
+
+  Future<void> _loadDownloadedHymns() async {
+    final downloaded = await SdaHymnAudioService().getDownloadedHymnNumbers();
+    if (mounted) {
+      setState(() => _downloadedHymns = downloaded);
+    }
   }
 
   @override
@@ -572,11 +582,12 @@ class _MusicScreenState extends State<MusicScreen> with SingleTickerProviderStat
         borderRadius: BorderRadius.circular(16),
         child: InkWell(
           borderRadius: BorderRadius.circular(16),
-          onTap: () {
-            Navigator.push(
+          onTap: () async {
+            await Navigator.push(
               context,
               MaterialPageRoute(builder: (_) => SdaHymnDetailScreen(hymn: hymn)),
             );
+            _loadDownloadedHymns();
           },
           child: Padding(
             padding: const EdgeInsets.all(14.0),
@@ -653,6 +664,32 @@ class _MusicScreenState extends State<MusicScreen> with SingleTickerProviderStat
                             '• ${hymn.stanzas.length} Stanzas',
                             style: TextStyle(fontSize: 11, color: Colors.grey.shade600),
                           ),
+                          if (_downloadedHymns.contains(hymn.number)) ...[
+                            const SizedBox(width: 6),
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1.5),
+                              decoration: BoxDecoration(
+                                color: Colors.green.shade50,
+                                borderRadius: BorderRadius.circular(4),
+                                border: Border.all(color: Colors.green.shade300, width: 0.8),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(Icons.check_circle, size: 10, color: Colors.green.shade700),
+                                  const SizedBox(width: 2),
+                                  Text(
+                                    'Offline',
+                                    style: TextStyle(
+                                      fontSize: 9,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.green.shade800,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ],
                       ),
                     ],
@@ -661,17 +698,20 @@ class _MusicScreenState extends State<MusicScreen> with SingleTickerProviderStat
 
                 // Piano Accompaniment (Sing Along) Button
                 IconButton(
-                  tooltip: 'Play Piano Accompaniment & Sing Along',
-                  icon: const Icon(
-                    Icons.piano,
-                    color: AppTheme.primaryBlue,
+                  tooltip: _downloadedHymns.contains(hymn.number)
+                      ? 'Play Offline Piano Accompaniment'
+                      : 'Play Piano Accompaniment & Sing Along',
+                  icon: Icon(
+                    _downloadedHymns.contains(hymn.number) ? Icons.offline_pin_rounded : Icons.piano,
+                    color: _downloadedHymns.contains(hymn.number) ? Colors.green.shade700 : AppTheme.primaryBlue,
                     size: 26,
                   ),
-                  onPressed: () {
-                    Navigator.push(
+                  onPressed: () async {
+                    await Navigator.push(
                       context,
                       MaterialPageRoute(builder: (_) => SdaHymnDetailScreen(hymn: hymn)),
                     );
+                    _loadDownloadedHymns();
                   },
                 ),
               ],

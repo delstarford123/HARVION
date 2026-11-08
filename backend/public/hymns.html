@@ -429,7 +429,7 @@
 
       // Update Audio Player
       const audioPlayer = document.getElementById('hymnAudioPlayer');
-      const audioSrc = hymn.audio_url || `/static/audio/hymns/${hymn.hymn_number}.mp3`;
+      const audioSrc = hymn.audio_url || `https://hymnal.pro/sda-hymnal/mp3/${String(hymn.hymn_number).padStart(3, '0')}.mp3`;
       audioPlayer.src = audioSrc;
       audioPlayer.load();
 
