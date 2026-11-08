@@ -12,3 +12,4 @@ from app import app
 
 # Vercel WSGI / Serverless handler
 handler = app
+

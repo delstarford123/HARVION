@@ -7,14 +7,19 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-PROJECT_ID = os.getenv("FIREBASE_PROJECT_ID", "vine-3e4ab")
-STORAGE_BUCKET = os.getenv("FIREBASE_STORAGE_BUCKET", "vine-3e4ab.firebasestorage.app")
+def clean_val(v, default=""):
+    if not v:
+        return default
+    return str(v).strip().replace("\ufeff", "").replace("\r", "")
+
+PROJECT_ID = clean_val(os.getenv("FIREBASE_PROJECT_ID"), "vine-3e4ab")
+STORAGE_BUCKET = clean_val(os.getenv("FIREBASE_STORAGE_BUCKET"), "vine-3e4ab.firebasestorage.app")
 SERVICE_ACCOUNT_PATH = os.getenv(
     "GOOGLE_APPLICATION_CREDENTIALS",
     os.path.join(os.path.dirname(__file__), "serviceAccountKey.json"),
 )
-SERVICE_ACCOUNT_RAW_JSON = os.getenv("FIREBASE_SERVICE_ACCOUNT")
-SERVICE_ACCOUNT_B64 = os.getenv("FIREBASE_SERVICE_ACCOUNT_BASE64")
+SERVICE_ACCOUNT_RAW_JSON = clean_val(os.getenv("FIREBASE_SERVICE_ACCOUNT"), "")
+SERVICE_ACCOUNT_B64 = clean_val(os.getenv("FIREBASE_SERVICE_ACCOUNT_BASE64"), "")
 
 db = None
 bucket = None

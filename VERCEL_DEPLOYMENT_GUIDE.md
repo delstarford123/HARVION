@@ -131,3 +131,4 @@ Your Flutter app in [lib/core/constants.dart](file:///c:/Users/Delstaford/vine/l
 static const String backendProductionUrl = 'https://harvion.delstarfordworks.co.ke/api';
 ```
 As soon as DNS propagation finishes, your mobile app will seamlessly connect to this high-speed, autoscaling Vercel serverless backend!
+

@@ -27,6 +27,38 @@ app = Flask(__name__, static_folder="public", static_url_path="")
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "harvion_sda_ministry_secret_key_2026")
 
 # ==========================================
+# 🚀 WSGI PATH NORMALIZATION MIDDLEWARE
+# ==========================================
+class VercelPathMiddleware:
+    def __init__(self, wsgi_app):
+        self.wsgi_app = wsgi_app
+
+    def __call__(self, environ, start_response):
+        # 1. Check for __vercel_route_path__ injected by vercel.json rewrite
+        query_string = environ.get("QUERY_STRING", "")
+        if "__vercel_route_path__=" in query_string:
+            from urllib.parse import parse_qs, urlencode
+            params = parse_qs(query_string, keep_blank_values=True)
+            if "__vercel_route_path__" in params:
+                raw_path = params.pop("__vercel_route_path__")[0]
+                # Clean up query string so Flask app doesn't see internal rewrite param
+                environ["QUERY_STRING"] = urlencode(params, doseq=True)
+                if not raw_path.startswith("/"):
+                    raw_path = "/" + raw_path
+                environ["PATH_INFO"] = raw_path
+
+        # 2. URL normalization for cPanel / Phusion Passenger subfolders
+        path = environ.get("PATH_INFO", "")
+        for prefix in ["/harvion_api", "/harvion-api", "/harvion", "/public_html"]:
+            if path.startswith(prefix):
+                environ["PATH_INFO"] = path[len(prefix):] or "/"
+                break
+
+        return self.wsgi_app(environ, start_response)
+
+app.wsgi_app = VercelPathMiddleware(app.wsgi_app)
+
+# ==========================================
 # 🌐 CORS MIDDLEWARE
 # ==========================================
 @app.after_request
@@ -37,19 +69,10 @@ def apply_cors_headers(response):
     return response
 
 @app.before_request
-def handle_options_and_url_normalization():
+def handle_options_requests():
     # Handle preflight CORS requests immediately
     if request.method == "OPTIONS":
         return "", 204
-
-    # URL normalization for cPanel / Phusion Passenger
-    path = request.path
-    # Strip cPanel application subfolder prefix if present in URL
-    for prefix in ["/harvion_api", "/harvion-api", "/harvion", "/public_html"]:
-        if path.startswith(prefix):
-            new_path = path[len(prefix):] or "/"
-            request.environ["PATH_INFO"] = new_path
-            break
 
 # ==========================================
 # 📁 STATIC UPLOADS SERVING
