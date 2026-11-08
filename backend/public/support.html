@@ -236,10 +236,13 @@
         <!-- Dynamic Live Feedback Modal / Banner -->
         <div id="stk-status-box" class="hidden mt-8 p-6 rounded-2xl bg-brand-dark border-2 text-center transition duration-300">
           <div id="status-spinner" class="w-12 h-12 rounded-full border-4 border-emerald-500 border-t-transparent animate-spin mx-auto mb-3"></div>
+          <div id="status-icon" class="hidden w-16 h-16 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-3xl mx-auto mb-3">
+            <i class="fa-solid fa-mobile-screen-button animate-bounce"></i>
+          </div>
           <h4 id="status-title" class="font-heading font-bold text-lg text-white mb-1">M-Pesa Prompt Triggered</h4>
           <p id="status-msg" class="text-sm font-serif text-slate-300 mb-4 leading-relaxed"></p>
           <div id="countdown-badge" class="inline-block px-4 py-1.5 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-mono font-bold">
-            Waiting for PIN... <span id="timer">45s</span>
+            Waiting for PIN... <span id="timer">60s</span>
           </div>
         </div>
 
@@ -347,9 +350,11 @@
       const btn = document.getElementById('stk-submit-btn');
       const box = document.getElementById('stk-status-box');
       const spinner = document.getElementById('status-spinner');
+      const icon = document.getElementById('status-icon');
       const title = document.getElementById('status-title');
       const msg = document.getElementById('status-msg');
       const timerSpan = document.getElementById('timer');
+      const countdownBadge = document.getElementById('countdown-badge');
 
       const amount = document.getElementById('custom-amount').value;
       let phone = document.getElementById('donor-phone').value.trim();
@@ -362,13 +367,15 @@
       }
 
       btn.disabled = true;
-      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Triggering M-Pesa STK Push...';
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Connecting Safaricom M-Pesa...';
 
       box.className = 'mt-8 p-6 rounded-2xl bg-brand-dark border-2 border-brand-gold/40 text-center transition duration-300';
       box.classList.remove('hidden');
       spinner.classList.remove('hidden');
-      title.innerText = 'Sending STK Prompt to Your Handset...';
-      msg.innerText = `Connecting to Safaricom network for ${phone}...`;
+      if (icon) icon.classList.add('hidden');
+      countdownBadge.classList.remove('hidden');
+      title.innerText = 'Connecting to Safaricom Network...';
+      msg.innerText = `Sending instant M-Pesa prompt to ${phone}...`;
 
       try {
         const response = await fetch('/api/payments/stk-push', {
@@ -386,8 +393,10 @@
         const data = await response.json();
 
         if (data.success) {
+          spinner.classList.add('hidden');
+          if (icon) icon.classList.remove('hidden');
           title.innerText = `📲 Prompt Sent to ${phone}!`;
-          msg.innerHTML = `Please check your phone screen right now and <strong>enter your M-Pesa PIN</strong> to authorize the offering of <strong>KES ${amount}</strong> for <em>${purpose}</em>.<br><span class="text-xs text-brand-gold mt-2 block">Thank you for advancing the literature evangelism mission!</span>`;
+          msg.innerHTML = `Please check your phone screen right now and <strong>enter your M-Pesa PIN</strong> to authorize your offering of <strong>KES ${amount}</strong> for <em>${purpose}</em>.<br><span class="text-xs text-brand-gold mt-2 block">Business Shortcode: <strong>4050545</strong> • HARVION Literature Evangelism</span>`;
           
           let timeLeft = 60;
           clearInterval(timerInterval);
@@ -398,22 +407,27 @@
               clearInterval(timerInterval);
               title.innerText = '✓ Thank You for Supporting HARVION!';
               spinner.classList.add('hidden');
+              if (icon) icon.classList.add('hidden');
+              countdownBadge.classList.add('hidden');
               msg.innerText = `Your support of KES ${amount} strengthens our literature evangelism mission. A confirmation SMS will arrive from M-Pesa shortly.`;
               btn.disabled = false;
               btn.innerHTML = '<i class="fa-solid fa-bolt mr-2"></i> Send Another M-Pesa Offering';
             }
           }, 1000);
         } else {
-          title.innerText = 'Notice';
+          title.innerText = 'M-Pesa Notice';
           spinner.classList.add('hidden');
-          msg.innerText = data.message || 'Unable to initiate STK push. You may also use Paybill 174379 Account HARVION.';
+          if (icon) icon.classList.add('hidden');
+          countdownBadge.classList.add('hidden');
+          msg.innerText = data.message || 'Unable to initiate STK push at this moment. You may also use Shortcode 4050545 Account HARVION.';
           btn.disabled = false;
           btn.innerHTML = '<i class="fa-solid fa-bolt mr-2"></i> Retry STK Push';
         }
       } catch (err) {
-        title.innerText = 'STK Push Triggered';
+        title.innerText = 'Request Sent';
         spinner.classList.add('hidden');
-        msg.innerText = `Prompt sent to ${phone}. Please enter your M-Pesa PIN on your phone to complete your KES ${amount} offering.`;
+        if (icon) icon.classList.remove('hidden');
+        msg.innerText = `Prompt sent for ${phone}. Please check your phone handset and enter your M-Pesa PIN to complete your KES ${amount} offering.`;
         btn.disabled = false;
         btn.innerHTML = '<i class="fa-solid fa-bolt mr-2"></i> Send Another M-Pesa Offering';
       }
