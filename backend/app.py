@@ -1,6 +1,6 @@
 import os
 import datetime
-from flask import Flask, request, jsonify, send_from_directory, send_file
+from flask import Flask, request, jsonify, send_from_directory, send_file, render_template
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -23,7 +23,7 @@ try:
 except Exception:
     pass
 
-app = Flask(__name__, static_folder="public", static_url_path="")
+app = Flask(__name__, static_folder="public", static_url_path="", template_folder="templates")
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "harvion_sda_ministry_secret_key_2026")
 
 # ==========================================
@@ -112,19 +112,25 @@ def home():
             "message": "HARVION Literature Evangelism, Health & Truth Platform is active on HostPinnacle."
         })
 
-    index_path = os.path.join(PUBLIC_DIR, "index.html")
-    if os.path.exists(index_path):
-        return send_file(index_path)
-    return "<h1>HARVION SDA Ministry Ecosystem (Python Flask)</h1>"
+    try:
+        return render_template("home.html")
+    except Exception:
+        index_path = os.path.join(PUBLIC_DIR, "index.html")
+        if os.path.exists(index_path):
+            return send_file(index_path)
+        return "<h1>HARVION SDA Ministry Ecosystem (Python Flask)</h1>"
 
 
 @app.route("/about", methods=["GET"])
 @app.route("/about.html", methods=["GET"])
 def about():
-    about_path = os.path.join(PUBLIC_DIR, "about.html")
-    if os.path.exists(about_path):
-        return send_file(about_path)
-    return send_file(os.path.join(PUBLIC_DIR, "index.html"))
+    try:
+        return render_template("about.html")
+    except Exception:
+        about_path = os.path.join(PUBLIC_DIR, "about.html")
+        if os.path.exists(about_path):
+            return send_file(about_path)
+        return send_file(os.path.join(PUBLIC_DIR, "index.html"))
 
 # ==========================================
 # ⚡ API DISCOVERY & HEALTH CHECK
