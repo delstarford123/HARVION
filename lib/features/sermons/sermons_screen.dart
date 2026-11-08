@@ -217,7 +217,7 @@ class SermonsScreen extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               SizedBox(
-                height: 115,
+                height: 125,
                 child: ListView.separated(
                   scrollDirection: Axis.horizontal,
                   itemCount: liveSermons.length,

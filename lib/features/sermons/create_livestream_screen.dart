@@ -346,6 +346,7 @@ class _CreateLiveStreamScreenState extends State<CreateLiveStreamScreen> {
                   Expanded(
                     child: DropdownButtonFormField<String>(
                       value: _language,
+                      isExpanded: true,
                       decoration: InputDecoration(
                         labelText: 'Language *',
                         prefixIcon: const Icon(Icons.translate, color: AppTheme.primaryBlue),
@@ -354,7 +355,7 @@ class _CreateLiveStreamScreenState extends State<CreateLiveStreamScreen> {
                         border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
                       ),
                       items: _languages.map((lang) {
-                        return DropdownMenuItem(value: lang, child: Text(lang));
+                        return DropdownMenuItem(value: lang, child: Text(lang, overflow: TextOverflow.ellipsis));
                       }).toList(),
                       onChanged: (val) {
                         if (val != null) setState(() => _language = val);
@@ -366,6 +367,7 @@ class _CreateLiveStreamScreenState extends State<CreateLiveStreamScreen> {
                   Expanded(
                     child: DropdownButtonFormField<String>(
                       value: _category,
+                      isExpanded: true,
                       decoration: InputDecoration(
                         labelText: 'Category *',
                         prefixIcon: const Icon(Icons.category, color: AppTheme.primaryBlue),

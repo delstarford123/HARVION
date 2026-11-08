@@ -340,7 +340,7 @@ class HomeScreen extends StatelessWidget {
         }
 
         return SizedBox(
-          height: 200,
+          height: 215,
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
             physics: const BouncingScrollPhysics(),

@@ -168,17 +168,22 @@ class _ColporteurPortalScreenState extends State<ColporteurPortalScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                            decoration: BoxDecoration(
-                              color: AppTheme.sacredGold,
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: const Text(
-                              'CERTIFIED LITERATURE EVANGELIST',
-                              style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.black),
+                          Flexible(
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                              decoration: BoxDecoration(
+                                color: AppTheme.sacredGold,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: const Text(
+                                'CERTIFIED LITERATURE EVANGELIST',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.black),
+                              ),
                             ),
                           ),
+                          const SizedBox(width: 8),
                           Text(
                             profile.leId,
                             style: const TextStyle(color: Colors.white70, fontSize: 11, fontWeight: FontWeight.w600),
@@ -269,29 +274,29 @@ class _ColporteurPortalScreenState extends State<ColporteurPortalScreen> {
                   children: [
                     Expanded(
                       child: _buildMetricCard(
-                        title: 'Total Commissions',
+                        title: 'Commissions',
                         value: 'Ksh ${profile.totalSalesCommission.toInt()}',
-                        subtitle: 'Earned & Available',
+                        subtitle: 'Earned funds',
                         icon: Icons.account_balance_wallet,
                         color: AppTheme.primaryGreen,
                       ),
                     ),
-                    const SizedBox(width: 12),
+                    const SizedBox(width: 8),
                     Expanded(
                       child: _buildMetricCard(
-                        title: 'Books Delivered',
+                        title: 'Delivered',
                         value: '${profile.booksDistributed}',
-                        subtitle: 'Spiritual seed sown',
+                        subtitle: 'Books sown',
                         icon: Icons.menu_book,
                         color: AppTheme.primaryBlue,
                       ),
                     ),
-                    const SizedBox(width: 12),
+                    const SizedBox(width: 8),
                     Expanded(
                       child: _buildMetricCard(
-                        title: 'Active Contacts',
+                        title: 'Contacts',
                         value: '${profile.activeCustomers}',
-                        subtitle: 'Prospects in care',
+                        subtitle: 'In care',
                         icon: Icons.groups,
                         color: AppTheme.sacredGold,
                       ),
@@ -547,7 +552,7 @@ class _ColporteurPortalScreenState extends State<ColporteurPortalScreen> {
     required Color color,
   }) {
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(14),
@@ -555,13 +560,18 @@ class _ColporteurPortalScreenState extends State<ColporteurPortalScreen> {
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, color: color, size: 22),
-          const SizedBox(height: 8),
-          Text(value, style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: color)),
+          Icon(icon, color: color, size: 20),
+          const SizedBox(height: 6),
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            alignment: Alignment.centerLeft,
+            child: Text(value, style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: color)),
+          ),
           const SizedBox(height: 2),
-          Text(title, style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600)),
-          Text(subtitle, style: TextStyle(fontSize: 9, color: Colors.grey.shade500)),
+          Text(title, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600)),
+          Text(subtitle, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 9, color: Colors.grey.shade500)),
         ],
       ),
     );

@@ -351,25 +351,33 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
                               children: [
                                 Icon(Icons.volunteer_activism, color: AppTheme.sacredGold, size: 18),
                                 SizedBox(width: 6),
-                                Text(
-                                  'TOTAL KINGDOM FUNDS COLLECTED',
-                                  style: TextStyle(
-                                    color: Colors.white70,
-                                    fontSize: 11,
-                                    fontWeight: FontWeight.bold,
-                                    letterSpacing: 0.8,
+                                Expanded(
+                                  child: Text(
+                                    'TOTAL KINGDOM FUNDS COLLECTED',
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      color: Colors.white70,
+                                      fontSize: 11,
+                                      fontWeight: FontWeight.bold,
+                                      letterSpacing: 0.8,
+                                    ),
                                   ),
                                 ),
                               ],
                             ),
                             const SizedBox(height: 6),
-                            Text(
-                              'Ksh ${combinedTotal.toStringAsFixed(0)}',
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 26,
-                                fontWeight: FontWeight.w900,
-                                letterSpacing: 0.5,
+                            FittedBox(
+                              fit: BoxFit.scaleDown,
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                'Ksh ${combinedTotal.toStringAsFixed(0)}',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 26,
+                                  fontWeight: FontWeight.w900,
+                                  letterSpacing: 0.5,
+                                ),
                               ),
                             ),
                             const SizedBox(height: 4),
@@ -380,8 +388,9 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
                           ],
                         ),
                       ),
+                      const SizedBox(width: 8),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
                         decoration: BoxDecoration(
                           color: AppTheme.sacredGold.withValues(alpha: 0.2),
                           borderRadius: BorderRadius.circular(12),
@@ -395,7 +404,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
                             ),
                             Text(
                               '${donationDocs.length} Offerings',
-                              style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold),
+                              style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
                             ),
                           ],
                         ),
@@ -415,7 +424,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
                         color: AppTheme.primaryGreen,
                       ),
                     ),
-                    const SizedBox(width: 12),
+                    const SizedBox(width: 10),
                     Expanded(
                       child: _buildMetricCard(
                         title: 'Ministry Support (KES)',
@@ -426,7 +435,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
                     ),
                   ],
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: 10),
                 Row(
                   children: [
                     Expanded(
@@ -437,7 +446,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
                         color: AppTheme.primaryBlue,
                       ),
                     ),
-                    const SizedBox(width: 12),
+                    const SizedBox(width: 8),
                     Expanded(
                       child: _buildMetricCard(
                         title: 'Delivered',
@@ -446,7 +455,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
                         color: AppTheme.primaryGreen,
                       ),
                     ),
-                    const SizedBox(width: 12),
+                    const SizedBox(width: 8),
                     Expanded(
                       child: _buildMetricCard(
                         title: 'Pending Dispatch',
@@ -573,7 +582,8 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
                         title: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(donor, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+                            Expanded(child: Text(donor, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14))),
+                            const SizedBox(width: 8),
                             Text('+ Ksh ${amount.toStringAsFixed(0)}',
                                 style: const TextStyle(fontWeight: FontWeight.w900, color: AppTheme.primaryGreen, fontSize: 15)),
                           ],
@@ -654,8 +664,14 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text('Order #${order.orderId}',
-                                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: AppTheme.primaryBlue)),
+                            Expanded(
+                              child: Text(
+                                'Order #${order.orderId}',
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: AppTheme.primaryBlue),
+                              ),
+                            ),
+                            const SizedBox(width: 8),
                             Container(
                               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                               decoration: BoxDecoration(
@@ -1215,19 +1231,32 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
       elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
       child: Padding(
-        padding: const EdgeInsets.all(14),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(title, style: TextStyle(fontSize: 11, color: Colors.grey.shade700, fontWeight: FontWeight.w600)),
-                Icon(icon, color: color, size: 20),
+                Expanded(
+                  child: Text(
+                    title,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(fontSize: 11, color: Colors.grey.shade700, fontWeight: FontWeight.w600),
+                  ),
+                ),
+                const SizedBox(width: 4),
+                Icon(icon, color: color, size: 18),
               ],
             ),
-            const SizedBox(height: 8),
-            Text(value, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: color)),
+            const SizedBox(height: 6),
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              alignment: Alignment.centerLeft,
+              child: Text(value, style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: color)),
+            ),
           ],
         ),
       ),
