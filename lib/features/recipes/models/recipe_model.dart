@@ -157,7 +157,7 @@ class HealthyRecipe {
           'High water content aids hydration in harmony with the 8 laws of health',
         ],
         linkedBookstoreBookId: 'farm_01',
-        linkedBookTitle: 'Edenic Stewardship & Country Living (Alfredo Onuko)',
+        linkedBookTitle: 'The Ministry of Healing (Ellen G. White)',
       ),
     ];
   }

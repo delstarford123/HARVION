@@ -3,6 +3,8 @@ import 'package:hive/hive.dart';
 import 'package:share_plus/share_plus.dart';
 import '../../core/constants.dart';
 import '../../core/theme.dart';
+import '../../core/services/sda_voice_narration_service.dart';
+import '../../core/widgets/sda_voice_audio_player_bar.dart';
 import 'book_model.dart';
 import 'data/sop_chapters_repository.dart';
 import 'services/online_reader_service.dart';
@@ -27,7 +29,6 @@ class _SopBookReaderScreenState extends State<SopBookReaderScreen> {
   String _fontFamily = 'Serif';
   ReaderTheme _readerTheme = ReaderTheme.light;
   ReaderViewMode _viewMode = ReaderViewMode.paginated;
-  bool _isPlayingAudio = false;
 
   final TextEditingController _chapterSearchController = TextEditingController();
   String _chapterSearchQuery = '';
@@ -35,6 +36,43 @@ class _SopBookReaderScreenState extends State<SopBookReaderScreen> {
 
   late final List<Map<String, dynamic>> _allChapters;
   final Set<String> _bookmarkedPages = {};
+
+  int _speakingParagraphIndex = -1;
+
+  void _startSopVoiceNarration([int startIndex = 0]) {
+    final currentChapter = _allChapters[_selectedChapterIndex];
+    final pages = SopChaptersRepository.getPagesForChapter(currentChapter);
+    final currentPageText = _currentPageIndex < pages.length ? pages[_currentPageIndex] : '';
+    final chapterTitle = currentChapter['title'] as String? ?? 'Chapter ${_selectedChapterIndex + 1}';
+
+    // Split page text into distinct paragraphs
+    final rawParagraphs = currentPageText.split(RegExp(r'\n+'));
+    final paragraphs = rawParagraphs
+        .map((p) => p.trim())
+        .where((p) => p.isNotEmpty && p.length > 3)
+        .toList();
+
+    if (paragraphs.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('No text on this page to narrate.')),
+      );
+      return;
+    }
+
+    final validIndex = (startIndex >= 0 && startIndex < paragraphs.length) ? startIndex : 0;
+
+    SdaVoiceNarrationService.instance.speakQueue(
+      segments: paragraphs,
+      title: '${widget.book.title}: $chapterTitle',
+      startIndex: validIndex,
+      onIndexChanged: (idx) {
+        if (mounted) setState(() => _speakingParagraphIndex = idx);
+      },
+      onComplete: () {
+        if (mounted) setState(() => _speakingParagraphIndex = -1);
+      },
+    );
+  }
 
   @override
   void initState() {
@@ -46,6 +84,7 @@ class _SopBookReaderScreenState extends State<SopBookReaderScreen> {
 
   @override
   void dispose() {
+    SdaVoiceNarrationService.instance.stop();
     _pageController.dispose();
     _chapterSearchController.dispose();
     super.dispose();
@@ -73,6 +112,24 @@ class _SopBookReaderScreenState extends State<SopBookReaderScreen> {
         if (savedBookmarks is List) {
           _bookmarkedPages.addAll(savedBookmarks.map((e) => e.toString()));
         }
+        final savedFontSize = box.get('sop_font_size');
+        if (savedFontSize is double) _fontSize = savedFontSize;
+        final savedFontFamily = box.get('sop_font_family');
+        if (savedFontFamily is String) _fontFamily = savedFontFamily;
+        final savedTheme = box.get('sop_reader_theme');
+        if (savedTheme is String) {
+          _readerTheme = ReaderTheme.values.firstWhere(
+            (e) => e.name == savedTheme,
+            orElse: () => ReaderTheme.light,
+          );
+        }
+        final savedViewMode = box.get('sop_view_mode');
+        if (savedViewMode is String) {
+          _viewMode = ReaderViewMode.values.firstWhere(
+            (e) => e.name == savedViewMode,
+            orElse: () => ReaderViewMode.paginated,
+          );
+        }
       }
     } catch (_) {}
   }
@@ -87,6 +144,10 @@ class _SopBookReaderScreenState extends State<SopBookReaderScreen> {
           'timestamp': DateTime.now().toIso8601String(),
         });
         box.put(_bookmarksKey, _bookmarkedPages.toList());
+        box.put('sop_font_size', _fontSize);
+        box.put('sop_font_family', _fontFamily);
+        box.put('sop_reader_theme', _readerTheme.name);
+        box.put('sop_view_mode', _viewMode.name);
       }
     } catch (_) {}
   }
@@ -240,6 +301,341 @@ class _SopBookReaderScreenState extends State<SopBookReaderScreen> {
     );
   }
 
+  void _showReadingPreferences() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setSheetState) {
+            final tts = SdaVoiceNarrationService.instance;
+            final isMale = tts.gender == SdaVoiceGender.male;
+
+            return Padding(
+              padding: const EdgeInsets.all(20),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text('Spirit of Prophecy & Voice Settings', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                        IconButton(
+                          icon: const Icon(Icons.close, size: 20),
+                          onPressed: () => Navigator.pop(context),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 14),
+
+                    // 🎙️ Voice Selection (Male vs Female)
+                    const Text('Voice Narration Gender', style: TextStyle(fontSize: 13, color: Colors.grey, fontWeight: FontWeight.bold)),
+                    const SizedBox(height: 8),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: InkWell(
+                            borderRadius: BorderRadius.circular(10),
+                            onTap: () {
+                              tts.setVoiceGender(SdaVoiceGender.male);
+                              setSheetState(() {});
+                              setState(() {});
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+                              decoration: BoxDecoration(
+                                color: isMale ? AppTheme.primaryBlue : Colors.grey.shade100,
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(
+                                  color: isMale ? AppTheme.sacredGold : Colors.grey.shade300,
+                                  width: isMale ? 2 : 1,
+                                ),
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.man, color: isMale ? AppTheme.sacredGold : Colors.black87),
+                                  const SizedBox(width: 6),
+                                  Text(
+                                    'Male Voice',
+                                    style: TextStyle(
+                                      color: isMale ? Colors.white : Colors.black87,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: InkWell(
+                            borderRadius: BorderRadius.circular(10),
+                            onTap: () {
+                              tts.setVoiceGender(SdaVoiceGender.female);
+                              setSheetState(() {});
+                              setState(() {});
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+                              decoration: BoxDecoration(
+                                color: !isMale ? AppTheme.primaryBlue : Colors.grey.shade100,
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(
+                                  color: !isMale ? AppTheme.sacredGold : Colors.grey.shade300,
+                                  width: !isMale ? 2 : 1,
+                                ),
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.woman, color: !isMale ? AppTheme.sacredGold : Colors.black87),
+                                  const SizedBox(width: 6),
+                                  Text(
+                                    'Female Voice',
+                                    style: TextStyle(
+                                      color: !isMale ? Colors.white : Colors.black87,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 18),
+
+                    // Speaking Pace
+                    const Text('Speaking Pace', style: TextStyle(fontSize: 13, color: Colors.grey, fontWeight: FontWeight.bold)),
+                    const SizedBox(height: 8),
+                    Row(
+                      children: [
+                        _buildPaceChoice(0.35, '0.8x Solemn', tts.speechRate, (r) {
+                          tts.setSpeechRate(r);
+                          setSheetState(() {});
+                        }),
+                        const SizedBox(width: 6),
+                        _buildPaceChoice(0.44, '1.0x Reverent', tts.speechRate, (r) {
+                          tts.setSpeechRate(r);
+                          setSheetState(() {});
+                        }),
+                        const SizedBox(width: 6),
+                        _buildPaceChoice(0.52, '1.2x Normal', tts.speechRate, (r) {
+                          tts.setSpeechRate(r);
+                          setSheetState(() {});
+                        }),
+                        const SizedBox(width: 6),
+                        _buildPaceChoice(0.60, '1.4x Fast', tts.speechRate, (r) {
+                          tts.setSpeechRate(r);
+                          setSheetState(() {});
+                        }),
+                      ],
+                    ),
+                    const SizedBox(height: 18),
+
+                    // Reading Theme
+                    const Text('Theme Mode', style: TextStyle(fontSize: 13, color: Colors.grey, fontWeight: FontWeight.bold)),
+                    const SizedBox(height: 8),
+                    Row(
+                      children: [
+                        _buildThemeButton('Light', ReaderTheme.light, Colors.white, Colors.black87, setSheetState),
+                        const SizedBox(width: 8),
+                        _buildThemeButton('Sepia', ReaderTheme.sepia, const Color(0xFFFBF0D9), const Color(0xFF3E2723), setSheetState),
+                        const SizedBox(width: 8),
+                        _buildThemeButton('Cream', ReaderTheme.cream, const Color(0xFFF7F4EA), const Color(0xFF2D3748), setSheetState),
+                        const SizedBox(width: 8),
+                        _buildThemeButton('Night', ReaderTheme.night, const Color(0xFF1E1E1E), Colors.white, setSheetState),
+                      ],
+                    ),
+                    const SizedBox(height: 18),
+
+                    // Font Size
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text('Text Size', style: TextStyle(fontSize: 13, color: Colors.grey, fontWeight: FontWeight.bold)),
+                        Text('${_fontSize.toInt()} pt', style: const TextStyle(fontWeight: FontWeight.bold, color: AppTheme.primaryBlue)),
+                      ],
+                    ),
+                    const SizedBox(height: 6),
+                    Row(
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.remove_circle_outline),
+                          onPressed: _fontSize > 12
+                              ? () {
+                                  setState(() => _fontSize -= 1.5);
+                                  setSheetState(() {});
+                                  _saveReadingProgress();
+                                }
+                              : null,
+                        ),
+                        Expanded(
+                          child: Slider(
+                            value: _fontSize,
+                            min: 12.0,
+                            max: 28.0,
+                            divisions: 8,
+                            activeColor: AppTheme.primaryBlue,
+                            onChanged: (val) {
+                              setState(() => _fontSize = val);
+                              setSheetState(() {});
+                              _saveReadingProgress();
+                            },
+                          ),
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.add_circle_outline),
+                          onPressed: _fontSize < 28
+                              ? () {
+                                  setState(() => _fontSize += 1.5);
+                                  setSheetState(() {});
+                                  _saveReadingProgress();
+                                }
+                              : null,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+
+                    // Reading Mode: Paginated vs Continuous
+                    const Text('Page Transition Mode', style: TextStyle(fontSize: 13, color: Colors.grey, fontWeight: FontWeight.bold)),
+                    const SizedBox(height: 8),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: ChoiceChip(
+                            label: const Center(child: Text('📖 Page Flip (Swipe ↔)')),
+                            selected: _viewMode == ReaderViewMode.paginated,
+                            selectedColor: AppTheme.primaryBlue,
+                            labelStyle: TextStyle(
+                              color: _viewMode == ReaderViewMode.paginated ? Colors.white : Colors.black87,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 12,
+                            ),
+                            onSelected: (sel) {
+                              if (sel) {
+                                setState(() => _viewMode = ReaderViewMode.paginated);
+                                setSheetState(() {});
+                                _saveReadingProgress();
+                              }
+                            },
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: ChoiceChip(
+                            label: const Center(child: Text('📜 Continuous Scroll')),
+                            selected: _viewMode == ReaderViewMode.continuous,
+                            selectedColor: AppTheme.primaryBlue,
+                            labelStyle: TextStyle(
+                              color: _viewMode == ReaderViewMode.continuous ? Colors.white : Colors.black87,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 12,
+                            ),
+                            onSelected: (sel) {
+                              if (sel) {
+                                setState(() => _viewMode = ReaderViewMode.continuous);
+                                setSheetState(() {});
+                                _saveReadingProgress();
+                              }
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Widget _buildThemeButton(
+    String label,
+    ReaderTheme theme,
+    Color bg,
+    Color text,
+    void Function(void Function()) setSheetState,
+  ) {
+    final isSelected = _readerTheme == theme;
+    return Expanded(
+      child: InkWell(
+        borderRadius: BorderRadius.circular(8),
+        onTap: () {
+          setState(() => _readerTheme = theme);
+          setSheetState(() {});
+          _saveReadingProgress();
+        },
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          decoration: BoxDecoration(
+            color: bg,
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(
+              color: isSelected ? AppTheme.sacredGold : Colors.grey.shade400,
+              width: isSelected ? 2.5 : 1,
+            ),
+          ),
+          alignment: Alignment.center,
+          child: Text(
+            label,
+            style: TextStyle(
+              fontSize: 11,
+              fontWeight: FontWeight.bold,
+              color: text,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPaceChoice(double rate, String label, double currentRate, Function(double) onSelected) {
+    final isSelected = (currentRate - rate).abs() < 0.04;
+    return Expanded(
+      child: InkWell(
+        borderRadius: BorderRadius.circular(8),
+        onTap: () => onSelected(rate),
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 2),
+          decoration: BoxDecoration(
+            color: isSelected ? AppTheme.primaryBlue : Colors.grey.shade100,
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(
+              color: isSelected ? AppTheme.sacredGold : Colors.grey.shade300,
+              width: isSelected ? 1.5 : 1,
+            ),
+          ),
+          alignment: Alignment.center,
+          child: Text(
+            label,
+            style: TextStyle(
+              fontSize: 10,
+              fontWeight: FontWeight.bold,
+              color: isSelected ? Colors.white : Colors.black87,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ),
+      ),
+    );
+  }
+
   Color _getBackgroundColor() {
     switch (_readerTheme) {
       case ReaderTheme.night:
@@ -319,7 +715,6 @@ class _SopBookReaderScreenState extends State<SopBookReaderScreen> {
     final totalBookPages = SopChaptersRepository.getTotalPagesForBook(widget.book.id, widget.book.title);
 
     final isBookmarked = _bookmarkedPages.contains('ch_${_selectedChapterIndex}_pg_$_currentPageIndex');
-    final progressPercent = ((_selectedChapterIndex + 1) / totalChapters * 100).toInt();
 
     final bgColor = _getBackgroundColor();
     final textColor = _getTextColor();
@@ -328,18 +723,22 @@ class _SopBookReaderScreenState extends State<SopBookReaderScreen> {
     return Scaffold(
       backgroundColor: bgColor,
       appBar: AppBar(
+        titleSpacing: 0,
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: [
             Text(
               widget.book.title,
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
             Text(
-              'Ch. ${_selectedChapterIndex + 1}/$totalChapters • Pg. ${_currentPageIndex + 1}/$totalPagesInChapter ($progressPercent% Done)',
-              style: const TextStyle(fontSize: 11, color: Colors.white70),
+              'Ch. ${_selectedChapterIndex + 1}/$totalChapters • Pg. ${_currentPageIndex + 1}/$totalPagesInChapter',
+              style: const TextStyle(fontSize: 10.5, color: Colors.white70),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
           ],
         ),
@@ -347,88 +746,67 @@ class _SopBookReaderScreenState extends State<SopBookReaderScreen> {
         foregroundColor: Colors.white,
         elevation: 0,
         actions: [
-          // Audio Read-Aloud Toggle
-          IconButton(
-            tooltip: _isPlayingAudio ? 'Pause Narration' : 'Listen to Chapter',
-            icon: Icon(_isPlayingAudio ? Icons.pause_circle : Icons.volume_up, size: 21),
-            onPressed: () {
-              setState(() {
-                _isPlayingAudio = !_isPlayingAudio;
-              });
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(_isPlayingAudio
-                      ? 'Audio Read-Aloud Activated for: $title'
-                      : 'Narration paused.'),
-                  duration: const Duration(seconds: 2),
+          // Audio Read-Aloud Toggle (Godly Voice Version)
+          AnimatedBuilder(
+            animation: SdaVoiceNarrationService.instance,
+            builder: (context, _) {
+              final isPlaying = SdaVoiceNarrationService.instance.isPlaying;
+              return IconButton(
+                padding: const EdgeInsets.symmetric(horizontal: 2),
+                constraints: const BoxConstraints(minWidth: 34, minHeight: 34),
+                tooltip: isPlaying ? 'Voice Narration Active' : 'Listen to Page (Godly Voice)',
+                icon: Icon(
+                  isPlaying ? Icons.record_voice_over : Icons.headphones,
+                  color: isPlaying ? AppTheme.sacredGold : Colors.white,
+                  size: 20,
                 ),
+                onPressed: () {
+                  if (isPlaying) {
+                    SdaVoiceNarrationService.instance.pause();
+                  } else if (SdaVoiceNarrationService.instance.isPaused) {
+                    SdaVoiceNarrationService.instance.resume();
+                  } else {
+                    _startSopVoiceNarration();
+                  }
+                },
               );
             },
           ),
           // Bookmark Page
           IconButton(
+            padding: const EdgeInsets.symmetric(horizontal: 2),
+            constraints: const BoxConstraints(minWidth: 34, minHeight: 34),
             tooltip: isBookmarked ? 'Remove Bookmark' : 'Bookmark Page',
             icon: Icon(
               isBookmarked ? Icons.bookmark : Icons.bookmark_border,
               color: isBookmarked ? AppTheme.sacredGold : Colors.white,
-              size: 21,
+              size: 20,
             ),
             onPressed: () => _toggleBookmark(_selectedChapterIndex, _currentPageIndex),
           ),
           // View Bookmarks
           IconButton(
+            padding: const EdgeInsets.symmetric(horizontal: 2),
+            constraints: const BoxConstraints(minWidth: 34, minHeight: 34),
             tooltip: 'View Bookmarks',
-            icon: const Icon(Icons.collections_bookmark_outlined, size: 20),
+            icon: const Icon(Icons.collections_bookmark_outlined, size: 19),
             onPressed: _showBookmarksSheet,
           ),
           // Read Online on EGW Writings
           IconButton(
+            padding: const EdgeInsets.symmetric(horizontal: 2),
+            constraints: const BoxConstraints(minWidth: 34, minHeight: 34),
             tooltip: 'Read Online (EGW Writings)',
-            icon: const Icon(Icons.public, size: 20),
+            icon: const Icon(Icons.public, size: 19),
             onPressed: _openOnlineReader,
           ),
-          // Reader Display Settings Menu
-          PopupMenuButton<String>(
-            icon: const Icon(Icons.tune, size: 20),
-            tooltip: 'Reader Settings & Themes',
-            onSelected: (val) {
-              setState(() {
-                if (val == 'theme_light') _readerTheme = ReaderTheme.light;
-                if (val == 'theme_night') _readerTheme = ReaderTheme.night;
-                if (val == 'theme_sepia') _readerTheme = ReaderTheme.sepia;
-                if (val == 'theme_cream') _readerTheme = ReaderTheme.cream;
-
-                if (val == 'font_serif') _fontFamily = 'Serif';
-                if (val == 'font_sans') _fontFamily = 'Sans';
-                if (val == 'font_mono') _fontFamily = 'Mono';
-
-                if (val == 'mode_paginated') _viewMode = ReaderViewMode.paginated;
-                if (val == 'mode_continuous') _viewMode = ReaderViewMode.continuous;
-
-                if (val == 'font_up' && _fontSize < 28) _fontSize += 1.5;
-                if (val == 'font_down' && _fontSize > 12) _fontSize -= 1.5;
-              });
-            },
-            itemBuilder: (_) => [
-              const PopupMenuItem(enabled: false, child: Text('🎨 READING THEME', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 11))),
-              const PopupMenuItem(value: 'theme_light', child: Text('☀️ Light Theme')),
-              const PopupMenuItem(value: 'theme_sepia', child: Text('📜 Warm Sepia')),
-              const PopupMenuItem(value: 'theme_cream', child: Text('🥛 Eye Comfort Cream')),
-              const PopupMenuItem(value: 'theme_night', child: Text('🌙 AMOLED Night')),
-              const PopupMenuDivider(),
-              const PopupMenuItem(enabled: false, child: Text('🔤 TYPOGRAPHY', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 11))),
-              const PopupMenuItem(value: 'font_serif', child: Text('Classic Serif (Bible)')),
-              const PopupMenuItem(value: 'font_sans', child: Text('Modern Sans-Serif')),
-              const PopupMenuItem(value: 'font_mono', child: Text('Monospace')),
-              const PopupMenuItem(value: 'font_up', child: Text('A+ Enlarge Font')),
-              const PopupMenuItem(value: 'font_down', child: Text('A- Reduce Font')),
-              const PopupMenuDivider(),
-              const PopupMenuItem(enabled: false, child: Text('📖 READING MODE', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 11))),
-              PopupMenuItem(
-                value: _viewMode == ReaderViewMode.paginated ? 'mode_continuous' : 'mode_paginated',
-                child: Text(_viewMode == ReaderViewMode.paginated ? 'Switch to Continuous Scroll' : 'Switch to Page Flip Mode'),
-              ),
-            ],
+          // Reading Customization & Voice
+          IconButton(
+            padding: const EdgeInsets.symmetric(horizontal: 2),
+            constraints: const BoxConstraints(minWidth: 34, minHeight: 34),
+            tooltip: 'Reading Customization & Voice',
+            icon: const Icon(Icons.format_size, size: 20),
+            onPressed: _showReadingPreferences,
           ),
         ],
       ),
@@ -550,12 +928,57 @@ class _SopBookReaderScreenState extends State<SopBookReaderScreen> {
           ],
         ),
       ),
-      // Main Body: Paginated View or Continuous View
-      body: _viewMode == ReaderViewMode.paginated
-          ? _buildPaginatedView(chapter, pages, title, subtitle, scripture, totalPagesInChapter, textColor, cardColor)
-          : _buildContinuousView(chapter, pages, title, subtitle, scripture, totalPagesInChapter, textColor, cardColor),
-      // Bottom Bar with Page Navigation, Counter, and Quick Sliders
-      bottomNavigationBar: _buildBottomPageBar(totalPagesInChapter, totalChapters, textColor, cardColor),
+      // Main Body: Paginated View or Continuous View with Top Status Bar
+      body: Column(
+        children: [
+          // Top Status Bar: Chapter & Page info with swipe prompt
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+            decoration: BoxDecoration(
+              color: Colors.black.withValues(alpha: 0.04),
+              border: Border(bottom: BorderSide(color: Colors.grey.withValues(alpha: 0.2))),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(Icons.check_circle, size: 13, color: Colors.green),
+                    const SizedBox(width: 4),
+                    Text(
+                      'Spirit of Prophecy • Offline Ready',
+                      style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: textColor.withValues(alpha: 0.7)),
+                    ),
+                  ],
+                ),
+                Flexible(
+                  child: Text(
+                    'Ch. ${_selectedChapterIndex + 1}/$totalChapters • Pg. ${_currentPageIndex + 1}/$totalPagesInChapter (Swipe ↔)',
+                    style: TextStyle(fontSize: 11, color: textColor.withValues(alpha: 0.7)),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.end,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: _viewMode == ReaderViewMode.paginated
+                ? _buildPaginatedView(chapter, pages, title, subtitle, scripture, totalPagesInChapter, textColor, cardColor)
+                : _buildContinuousView(chapter, pages, title, subtitle, scripture, totalPagesInChapter, textColor, cardColor),
+          ),
+        ],
+      ),
+      // Bottom Bar with Voice Audio Controller & Page Navigation
+      bottomNavigationBar: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const SdaVoiceAudioPlayerBar(),
+          _buildBottomPageBar(totalPagesInChapter, totalChapters, textColor, cardColor),
+        ],
+      ),
     );
   }
 
@@ -572,21 +995,40 @@ class _SopBookReaderScreenState extends State<SopBookReaderScreen> {
     Color textColor,
     Color cardColor,
   ) {
-    return PageView.builder(
-      controller: _pageController,
-      itemCount: totalPages,
-      onPageChanged: (idx) {
-        setState(() {
-          _currentPageIndex = idx;
-        });
-        _saveReadingProgress();
+    return NotificationListener<ScrollNotification>(
+      onNotification: (notification) {
+        if (notification is OverscrollNotification) {
+          if (notification.overscroll > 15 &&
+              _currentPageIndex == totalPages - 1 &&
+              _selectedChapterIndex < _allChapters.length - 1) {
+            _goToChapter(_selectedChapterIndex + 1, pageIndex: 0);
+            return true;
+          } else if (notification.overscroll < -15 &&
+              _currentPageIndex == 0 &&
+              _selectedChapterIndex > 0) {
+            final prevChapter = _allChapters[_selectedChapterIndex - 1];
+            final prevPages = SopChaptersRepository.getPagesForChapter(prevChapter);
+            _goToChapter(_selectedChapterIndex - 1, pageIndex: prevPages.isNotEmpty ? prevPages.length - 1 : 0);
+            return true;
+          }
+        }
+        return false;
       },
-      itemBuilder: (context, pageIdx) {
-        final pageText = pages[pageIdx];
-        final isFirstPage = pageIdx == 0;
-        final isLastPage = pageIdx == totalPages - 1;
+      child: PageView.builder(
+        controller: _pageController,
+        itemCount: totalPages,
+        onPageChanged: (idx) {
+          setState(() {
+            _currentPageIndex = idx;
+          });
+          _saveReadingProgress();
+        },
+        itemBuilder: (context, pageIdx) {
+          final pageText = pages[pageIdx];
+          final isFirstPage = pageIdx == 0;
+          final isLastPage = pageIdx == totalPages - 1;
 
-        return SingleChildScrollView(
+          return SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -666,10 +1108,7 @@ class _SopBookReaderScreenState extends State<SopBookReaderScreen> {
               ],
 
               // Actual Page Content
-              SelectableText(
-                pageText,
-                style: _getPageTextStyle(),
-              ),
+              _buildParagraphsView(pageText),
 
               // End of Chapter Extras (Key Scripture, Questions & Online Link)
               if (isLastPage) ...[
@@ -767,6 +1206,7 @@ class _SopBookReaderScreenState extends State<SopBookReaderScreen> {
           ),
         );
       },
+    ),
     );
   }
 
@@ -783,89 +1223,151 @@ class _SopBookReaderScreenState extends State<SopBookReaderScreen> {
     Color textColor,
     Color cardColor,
   ) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-            decoration: BoxDecoration(
-              color: AppTheme.primaryGreen.withValues(alpha: 0.15),
-              borderRadius: BorderRadius.circular(6),
-            ),
-            child: Text(
-              'CHAPTER ${_selectedChapterIndex + 1} OF ${_allChapters.length} • $totalPages PAGES',
-              style: const TextStyle(
-                color: AppTheme.primaryGreen,
-                fontSize: 11,
-                fontWeight: FontWeight.bold,
-                letterSpacing: 1.1,
-              ),
-            ),
-          ),
-          const SizedBox(height: 10),
-          Text(
-            title,
-            style: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-              color: _readerTheme == ReaderTheme.night ? Colors.white : AppTheme.primaryBlue,
-            ),
-          ),
-          if (subtitle.isNotEmpty) ...[
-            const SizedBox(height: 6),
-            Text(
-              subtitle,
-              style: TextStyle(fontSize: 14, fontStyle: FontStyle.italic, color: Colors.grey.shade600),
-            ),
-          ],
-          const SizedBox(height: 16),
-          Divider(color: Colors.grey.withValues(alpha: 0.2)),
-          const SizedBox(height: 16),
-
-          ...pages.asMap().entries.map((entry) {
-            final pageNum = entry.key + 1;
-            final text = entry.value;
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                      decoration: BoxDecoration(
-                        color: Colors.grey.withValues(alpha: 0.15),
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: Text('Page $pageNum of $totalPages', style: TextStyle(fontSize: 10, color: Colors.grey.shade600, fontWeight: FontWeight.bold)),
-                    ),
-                    const Expanded(child: Divider(indent: 10)),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                SelectableText(text, style: _getPageTextStyle()),
-                const SizedBox(height: 20),
-              ],
-            );
-          }),
-
-          if (scripture.isNotEmpty) ...[
-            const SizedBox(height: 16),
+    return GestureDetector(
+      onHorizontalDragEnd: (details) {
+        if (details.primaryVelocity != null) {
+          if (details.primaryVelocity! < -250 && _selectedChapterIndex < _allChapters.length - 1) {
+            // Swipe right-to-left -> Next Chapter
+            _goToChapter(_selectedChapterIndex + 1);
+          } else if (details.primaryVelocity! > 250 && _selectedChapterIndex > 0) {
+            // Swipe left-to-right -> Previous Chapter
+            _goToChapter(_selectedChapterIndex - 1);
+          }
+        }
+      },
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
             Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(14),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
               decoration: BoxDecoration(
-                color: cardColor,
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: AppTheme.sacredGold.withValues(alpha: 0.5)),
+                color: AppTheme.primaryGreen.withValues(alpha: 0.15),
+                borderRadius: BorderRadius.circular(6),
               ),
-              child: Text('Scripture: $scripture', style: TextStyle(fontWeight: FontWeight.bold, color: textColor)),
+              child: Text(
+                'CHAPTER ${_selectedChapterIndex + 1} OF ${_allChapters.length} • $totalPages PAGES',
+                style: const TextStyle(
+                  color: AppTheme.primaryGreen,
+                  fontSize: 11,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 1.1,
+                ),
+              ),
             ),
+            const SizedBox(height: 10),
+            Text(
+              title,
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                color: _readerTheme == ReaderTheme.night ? Colors.white : AppTheme.primaryBlue,
+              ),
+            ),
+            if (subtitle.isNotEmpty) ...[
+              const SizedBox(height: 6),
+              Text(
+                subtitle,
+                style: TextStyle(fontSize: 14, fontStyle: FontStyle.italic, color: Colors.grey.shade600),
+              ),
+            ],
+            const SizedBox(height: 16),
+            Divider(color: Colors.grey.withValues(alpha: 0.2)),
+            const SizedBox(height: 16),
+
+            ...pages.asMap().entries.map((entry) {
+              final pageNum = entry.key + 1;
+              final text = entry.value;
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: Colors.grey.withValues(alpha: 0.15),
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: Text('Page $pageNum of $totalPages', style: TextStyle(fontSize: 10, color: Colors.grey.shade600, fontWeight: FontWeight.bold)),
+                      ),
+                      const Expanded(child: Divider(indent: 10)),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  _buildParagraphsView(text),
+                  const SizedBox(height: 20),
+                ],
+              );
+            }),
+
+            if (scripture.isNotEmpty) ...[
+              const SizedBox(height: 16),
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(14),
+                decoration: BoxDecoration(
+                  color: cardColor,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: AppTheme.sacredGold.withValues(alpha: 0.5)),
+                ),
+                child: Text('Scripture: $scripture', style: TextStyle(fontWeight: FontWeight.bold, color: textColor)),
+              ),
+            ],
+            const SizedBox(height: 40),
           ],
-          const SizedBox(height: 40),
-        ],
+        ),
       ),
+    );
+  }
+
+  Widget _buildParagraphsView(String text) {
+    final rawParagraphs = text.split(RegExp(r'\n+'));
+    final paragraphs = rawParagraphs
+        .map((p) => p.trim())
+        .where((p) => p.isNotEmpty)
+        .toList();
+
+    if (paragraphs.isEmpty) {
+      return SelectableText(text, style: _getPageTextStyle());
+    }
+
+    final isTtsPlaying = SdaVoiceNarrationService.instance.isPlaying;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: List.generate(paragraphs.length, (idx) {
+        final p = paragraphs[idx];
+        final isSpeaking = _speakingParagraphIndex == idx && isTtsPlaying;
+
+        return AnimatedContainer(
+          duration: const Duration(milliseconds: 250),
+          margin: const EdgeInsets.only(bottom: 14),
+          padding: EdgeInsets.symmetric(
+            horizontal: isSpeaking ? 12 : 0,
+            vertical: isSpeaking ? 8 : 0,
+          ),
+          decoration: BoxDecoration(
+            color: isSpeaking
+                ? AppTheme.sacredGold.withValues(alpha: 0.15)
+                : Colors.transparent,
+            borderRadius: BorderRadius.circular(8),
+            border: isSpeaking
+                ? const Border(left: BorderSide(color: AppTheme.sacredGold, width: 3.5))
+                : null,
+          ),
+          child: InkWell(
+            onTap: () => _startSopVoiceNarration(idx),
+            child: SelectableText(
+              p,
+              style: _getPageTextStyle().copyWith(
+                fontWeight: isSpeaking ? FontWeight.w600 : FontWeight.w400,
+              ),
+            ),
+          ),
+        );
+      }),
     );
   }
 

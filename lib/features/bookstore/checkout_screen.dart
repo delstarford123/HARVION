@@ -47,9 +47,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         _phoneController.text = '0745090990';
       }
     } else {
-      _nameController.text = 'Alfredo Onuko';
-      _phoneController.text = '0745090990';
-      _addressController.text = 'Maxwell Adventist Centre, Nairobi';
+      _nameController.text = '';
+      _phoneController.text = '';
+      _addressController.text = '';
     }
   }
 

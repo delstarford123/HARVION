@@ -232,7 +232,7 @@ class _CartScreenState extends State<CartScreen> {
                                         controller: _promoController,
                                         textCapitalization: TextCapitalization.characters,
                                         decoration: const InputDecoration(
-                                          hintText: 'e.g. COLP-ALFREDO10',
+                                          hintText: 'e.g. COLP-HARVION10',
                                           isDense: true,
                                           contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                                         ),
@@ -260,7 +260,7 @@ class _CartScreenState extends State<CartScreen> {
                                         } else {
                                           ScaffoldMessenger.of(context).showSnackBar(
                                             const SnackBar(
-                                              content: Text('Invalid code. Try COLP-ALFREDO10 or MINISTRY10'),
+                                              content: Text('Invalid code. Try COLP-HARVION10 or MINISTRY10'),
                                               backgroundColor: Colors.red,
                                             ),
                                           );

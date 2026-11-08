@@ -32,6 +32,7 @@ import '../features/profile/order_history_screen.dart';
 import '../features/colporteur/camp_meeting_locations_screen.dart';
 import '../features/colporteur/request_sell_book_screen.dart';
 import '../features/admin/admin_dashboard_screen.dart';
+import '../features/admin/admin_login_screen.dart';
 import '../features/testimonies/testimonies_screen.dart';
 import '../features/library/kjv_bible_reader_screen.dart';
 import '../features/sermons/create_livestream_screen.dart';
@@ -405,8 +406,8 @@ class _MainNavigationState extends State<MainNavigation> {
               child: Text('ADMINISTRATION & MINISTRY OVERSIGHT',
                   style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.grey)),
             ),
-            _buildDrawerItem(Icons.admin_panel_settings, 'Admin Control Center', -1,
-                destination: const AdminDashboardScreen()),
+            _buildDrawerItem(Icons.admin_panel_settings, 'Admin Control Center (Secured)', -1,
+                destination: const AdminLoginScreen()),
             const SizedBox(height: 20),
           ],
         ),

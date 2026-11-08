@@ -46,7 +46,7 @@ class Book {
     return Book(
       id: documentId, // We inject the actual Firebase ID here
       title: json['title'] as String? ?? 'Untitled',
-      author: json['author'] as String? ?? 'Alfredo Onuko',
+      author: json['author'] as String? ?? 'Ellen G. White',
       category: json['category'] as String? ?? 'General',
       description: json['description'] as String? ?? '',
       pdfUrl: json['pdfUrl'] as String? ?? '',

@@ -109,7 +109,7 @@ class FamilyLifeScreen extends StatelessWidget {
           familySession = Sermon(
             id: 'family_live_01',
             title: 'Building an Edenic Home: Love, Worship & Wholesome Diet',
-            speaker: 'Pastor Alfredo Onuko & Family Life Ministry',
+            speaker: 'Adventist Family Life Ministry',
             description: 'A practical, spiritually uplifting study on establishing daily family worship and healthy meal habits.',
             mediaUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
             type: SermonMediaType.video,

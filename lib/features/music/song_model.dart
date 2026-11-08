@@ -28,7 +28,7 @@ class Song {
       // Maps 'speaker' from Admin Panel to 'artist' here
       artist: json['speaker'] as String? ??
           json['artist'] as String? ??
-          'Alfredo Onuko', // 🚀 Updated default
+          'HARVION SDA Music Ministry',
       audioUrl: json['audioUrl'] as String? ?? '',
 
       // Safely parse numbers (Firebase sometimes stores 0.0 as an int)

@@ -10,9 +10,9 @@ class ColporteurService extends ChangeNotifier {
 
   ColporteurProfile _profile = ColporteurProfile(
     leId: 'LE-KE-2026-042',
-    name: 'Alfredo Onuko',
+    name: 'David Mogaka',
     churchConference: 'Central Kenya Conference (CKC) - Publishing Dept',
-    referralCode: 'COLP-ALFREDO10',
+    referralCode: 'COLP-HARVION10',
     totalSalesCommission: 14850.0,
     booksDistributed: 64,
     activeCustomers: 28,

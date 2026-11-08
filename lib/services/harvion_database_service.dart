@@ -45,7 +45,7 @@ class HarvionDatabaseService {
       // 3. Seed Camp Meeting Colporteur Outposts
       onProgress?.call('Writing Camp Meeting book stands...');
       await _db.collection('camp_meeting_locations').doc('loc_maxwell_01').set({
-        'colporteurName': 'Alfredo Onuko',
+        'colporteurName': 'David Mogaka',
         'phone': '0745090990',
         'eventName': 'Central Kenya Conference Camp Meeting',
         'boothLocation': 'Literature Evangelism Tent #4 (Near Maxwell Book Stand)',
@@ -75,7 +75,7 @@ class HarvionDatabaseService {
       onProgress?.call('Writing sermons & live video sessions...');
       await _db.collection('sermons').doc('sermon_live_01').set({
         'title': 'LIVE: Sabbath Morning Divine Service & Revival Session',
-        'speaker': 'Pastor Alfredo Onuko',
+        'speaker': 'Pastor H.M.S. Richards',
         'description': 'Join us live for an inspiring Sabbath worship experience and deep study of the Sanctuary truth.',
         'mediaUrl': 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
         'videoSourceType': 'youtube',
@@ -128,11 +128,11 @@ class HarvionDatabaseService {
 
       // 6. Seed Colporteurs
       onProgress?.call('Writing Literature Evangelists & referral codes...');
-      await _db.collection(AppConstants.colColporteurs).doc('LE-ALFREDO').set({
+      await _db.collection(AppConstants.colColporteurs).doc('LE-MOGAKA').set({
         'leId': 'LE-KE-2026-042',
-        'name': 'Alfredo Onuko',
+        'name': 'David Mogaka',
         'churchConference': 'Central Kenya Conference (CKC) - Publishing Dept',
-        'referralCode': 'COLP-ALFREDO10',
+        'referralCode': 'COLP-HARVION10',
         'totalSalesCommission': 14850.0,
         'booksDistributed': 64,
         'activeCustomers': 28,

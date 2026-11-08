@@ -182,7 +182,7 @@ class _MediaLibraryScreenState extends State<MediaLibraryScreen> with SingleTick
     return [
       {
         'title': 'The Three Angels of Revelation 14',
-        'speaker': 'Alfredo Onuko',
+        'speaker': 'HARVION Evangelism Ministry',
         'duration': '48 mins',
         'type': 'Audio Sermon',
         'isVideo': false,
@@ -210,7 +210,7 @@ class _MediaLibraryScreenState extends State<MediaLibraryScreen> with SingleTick
       },
       {
         'title': 'Country Living: The Call of the Hour',
-        'speaker': 'Alfredo Onuko',
+        'speaker': 'HARVION Health Ministry',
         'duration': '52 mins',
         'type': 'Audio Sermon',
         'isVideo': false,

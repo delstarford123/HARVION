@@ -144,7 +144,7 @@ const sampleBooks = [
   },
   {
     title: "Edenic Stewardship & Country Living",
-    author: "Alfredo Onuko",
+    author: "HARVION Publishing",
     category: "Farming & Country Living",
     description: "Practical guide on organic farming, restoring degraded soil, water conservation, and establishing self-supporting country outposts for ministry.",
     price: 600.0,
@@ -336,7 +336,7 @@ const sampleSermons = [
   },
   {
     title: "LIVE: Sabbath Morning Divine Service & Revival Session",
-    speaker: "Pastor Alfredo Onuko",
+    speaker: "Pastor H.M.S. Richards",
     description: "Join us live for an inspiring Sabbath worship experience and deep study of the Sanctuary truth.",
     mediaUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     videoSourceType: "youtube",
@@ -365,7 +365,7 @@ const sampleSermons = [
 // Camp Meeting Locations & Colporteur Field Outposts
 const sampleCampMeetingLocations = [
   {
-    colporteurName: "Alfredo Onuko",
+    colporteurName: "David Mogaka",
     phone: "0745090990",
     eventName: "Central Kenya Conference Camp Meeting",
     boothLocation: "Literature Evangelism Tent #4 (Near Maxwell Book Stand)",

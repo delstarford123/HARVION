@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../core/theme.dart';
 import 'quote_model.dart';
 import '../admin/admin_dashboard_screen.dart';
+import '../admin/admin_login_screen.dart';
 import '../bookstore/bookstore_screen.dart';
 import '../bookstore/models/physical_book_model.dart';
 import '../bookstore/book_detail_screen.dart';
@@ -94,11 +95,11 @@ class HomeScreen extends StatelessWidget {
         ),
         const SizedBox(width: 8),
         IconButton(
-          tooltip: 'Admin & Notifications',
+          tooltip: 'Admin Portal (Secured)',
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const AdminDashboardScreen()),
+              MaterialPageRoute(builder: (context) => const AdminLoginScreen()),
             );
           },
           icon: CircleAvatar(

@@ -301,10 +301,10 @@ class ProfileScreen extends StatelessWidget {
                   const SizedBox(height: 28),
 
                   // ==========================================
-                  // 👤 ABOUT ALFREDO ONUKO & CONTACT
+                  // 👤 ABOUT HARVION MINISTRY & CONTACT
                   // ==========================================
                   const Text(
-                    'About Alfredo Onuko & Contact',
+                    'About Harvion Ministry & Contact',
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -325,8 +325,8 @@ class ProfileScreen extends StatelessWidget {
                   ),
                   _buildContactRow(
                     icon: Icons.email,
-                    text: 'afredoonuko@gmail.com',
-                    onTap: () => _sendEmail('afredoonuko@gmail.com'),
+                    text: 'harvion@delstarfordworks.co.ke',
+                    onTap: () => _sendEmail('harvion@delstarfordworks.co.ke'),
                   ),
                   const SizedBox(height: 24),
 

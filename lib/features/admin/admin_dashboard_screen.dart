@@ -5,6 +5,8 @@ import '../bookstore/models/physical_book_model.dart';
 import '../bookstore/models/order_model.dart';
 import '../sermons/sermon_model.dart';
 import '../sermons/video_player_screen.dart';
+import '../music/song_model.dart';
+import '../music/music_player_screen.dart';
 import 'admin_book_editor.dart';
 
 class AdminDashboardScreen extends StatefulWidget {
@@ -25,7 +27,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 6, vsync: this);
+    _tabController = TabController(length: 7, vsync: this);
   }
 
   @override
@@ -220,6 +222,32 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
             ),
           ],
         ),
+        actions: [
+          IconButton(
+            tooltip: 'Secure Admin Logout',
+            icon: const Icon(Icons.logout_rounded, color: Colors.white70),
+            onPressed: () async {
+              final confirm = await showDialog<bool>(
+                context: context,
+                builder: (ctx) => AlertDialog(
+                  title: const Text('Exit Admin Portal?'),
+                  content: const Text('You will need your admin email and password to re-enter the executive center.'),
+                  actions: [
+                    TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Stay')),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(backgroundColor: Colors.red, foregroundColor: Colors.white),
+                      onPressed: () => Navigator.pop(ctx, true),
+                      child: const Text('Logout'),
+                    ),
+                  ],
+                ),
+              );
+              if (confirm == true) {
+                Navigator.pop(context);
+              }
+            },
+          ),
+        ],
         backgroundColor: AppTheme.primaryBlue,
         foregroundColor: Colors.white,
         bottom: TabBar(
@@ -233,6 +261,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
             Tab(icon: Icon(Icons.analytics_outlined), text: 'Orders & Money'),
             Tab(icon: Icon(Icons.menu_book), text: 'Hardcopy Catalog'),
             Tab(icon: Icon(Icons.live_tv), text: 'Live Worship Control'),
+            Tab(icon: Icon(Icons.library_music), text: 'Music & Audio'),
             Tab(icon: Icon(Icons.how_to_reg), text: 'Seller Requests'),
             Tab(icon: Icon(Icons.format_quote), text: 'Devotionals & Quotes'),
             Tab(icon: Icon(Icons.settings_suggest), text: 'System & Database'),
@@ -245,6 +274,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
           _buildOrdersAndRevenueTab(),
           _buildBooksTab(),
           _buildLiveStreamsTab(),
+          _buildMusicAndAudioTab(),
           _buildSellerApprovalsTab(),
           _buildQuotesTab(),
           _buildSystemSanitizerTab(),
@@ -871,14 +901,26 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(book.title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
-                                Text('By ${book.author} • ${book.category}', style: TextStyle(fontSize: 11, color: Colors.grey.shade700)),
+                                Text(
+                                  book.title,
+                                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                Text(
+                                  'By ${book.author} • ${book.category}',
+                                  style: TextStyle(fontSize: 11, color: Colors.grey.shade700),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                                 const SizedBox(height: 4),
-                                Row(
+                                Wrap(
+                                  spacing: 8,
+                                  runSpacing: 4,
+                                  crossAxisAlignment: WrapCrossAlignment.center,
                                   children: [
                                     Text('Ksh ${book.price.toInt()}',
                                         style: const TextStyle(color: AppTheme.primaryGreen, fontWeight: FontWeight.bold, fontSize: 14)),
-                                    const SizedBox(width: 8),
                                     Container(
                                       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                                       decoration: BoxDecoration(
@@ -901,7 +943,12 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
                                   ],
                                 ),
                                 if (book.distributionHub != null)
-                                  Text('Hub: ${book.distributionHub}', style: TextStyle(fontSize: 10, color: Colors.grey.shade600)),
+                                  Text(
+                                    'Hub: ${book.distributionHub}',
+                                    style: TextStyle(fontSize: 10, color: Colors.grey.shade600),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
                               ],
                             ),
                           ),
@@ -909,33 +956,51 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
                       ),
                       const Divider(height: 16),
 
-                      // Quick Stock Adjustment & Edit Row
-                      Row(
-                        children: [
-                          const Text('Adjust Stock: ', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold)),
-                          IconButton(
-                            tooltip: 'Decrease 1',
-                            icon: const Icon(Icons.remove_circle_outline, size: 20, color: Colors.redAccent),
-                            onPressed: () => _adjustStock(book.id, -1),
-                          ),
-                          Text('${book.stockCount}', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
-                          IconButton(
-                            tooltip: 'Add 5 Copies',
-                            icon: const Icon(Icons.add_circle_outline, size: 20, color: AppTheme.primaryGreen),
-                            onPressed: () => _adjustStock(book.id, 5),
-                          ),
-                          const Spacer(),
-                          IconButton(
-                            icon: const Icon(Icons.edit, color: AppTheme.primaryBlue, size: 20),
-                            onPressed: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (_) => AdminBookEditorScreen(bookToEdit: book)));
-                            },
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.delete_outline, color: Colors.redAccent, size: 20),
-                            onPressed: () => _deleteBook(book.id, book.title),
-                          ),
-                        ],
+                      // Quick Stock Adjustment & Edit Row (FittedBox prevents any pixel overflow)
+                      FittedBox(
+                        fit: BoxFit.scaleDown,
+                        alignment: Alignment.centerLeft,
+                        child: Row(
+                          children: [
+                            const Text('Stock: ', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold)),
+                            IconButton(
+                              padding: const EdgeInsets.all(4),
+                              constraints: const BoxConstraints(minWidth: 28, minHeight: 28),
+                              tooltip: 'Decrease 1',
+                              icon: const Icon(Icons.remove_circle_outline, size: 18, color: Colors.redAccent),
+                              onPressed: () => _adjustStock(book.id, -1),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 2),
+                              child: Text('${book.stockCount}', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+                            ),
+                            IconButton(
+                              padding: const EdgeInsets.all(4),
+                              constraints: const BoxConstraints(minWidth: 28, minHeight: 28),
+                              tooltip: 'Add 5 Copies',
+                              icon: const Icon(Icons.add_circle_outline, size: 18, color: AppTheme.primaryGreen),
+                              onPressed: () => _adjustStock(book.id, 5),
+                            ),
+                            const SizedBox(width: 8),
+                            IconButton(
+                              padding: const EdgeInsets.all(4),
+                              constraints: const BoxConstraints(minWidth: 28, minHeight: 28),
+                              tooltip: 'Edit Book',
+                              icon: const Icon(Icons.edit, color: AppTheme.primaryBlue, size: 18),
+                              onPressed: () {
+                                Navigator.push(context, MaterialPageRoute(builder: (_) => AdminBookEditorScreen(bookToEdit: book)));
+                              },
+                            ),
+                            const SizedBox(width: 4),
+                            IconButton(
+                              padding: const EdgeInsets.all(4),
+                              constraints: const BoxConstraints(minWidth: 28, minHeight: 28),
+                              tooltip: 'Delete Book',
+                              icon: const Icon(Icons.delete_outline, color: Colors.redAccent, size: 18),
+                              onPressed: () => _deleteBook(book.id, book.title),
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
@@ -1350,6 +1415,585 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Removed "$title"'), backgroundColor: Colors.red),
+        );
+      }
+    }
+  }
+
+  // ==========================================
+  // 🎶 TAB 4: MUSIC & AUDIO MANAGEMENT
+  // ==========================================
+  Widget _buildMusicAndAudioTab() {
+    return StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance
+          .collection('sermons')
+          .orderBy('publishedDate', descending: true)
+          .snapshots(),
+      builder: (context, snapshot) {
+        final docs = snapshot.data?.docs ?? [];
+        final totalTracks = docs.length;
+
+        return SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              // Header Card
+              Container(
+                padding: const EdgeInsets.all(18),
+                decoration: BoxDecoration(
+                  color: AppTheme.primaryBlue,
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppTheme.primaryBlue.withValues(alpha: 0.25),
+                      blurRadius: 10,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Row(
+                          children: [
+                            Icon(Icons.library_music, color: AppTheme.sacredGold, size: 28),
+                            SizedBox(width: 10),
+                            Text(
+                              'Music & Audio Hub',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: AppTheme.sacredGold,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Text(
+                            '$totalTracks Tracks',
+                            style: const TextStyle(
+                              color: AppTheme.primaryBlue,
+                              fontWeight: FontWeight.w900,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    const Text(
+                      'Admin control over choir pieces, sermons, and sacred audio tracks. Believers can listen and learn hymns directly inside the app.',
+                      style: TextStyle(color: Colors.white70, fontSize: 13, height: 1.4),
+                    ),
+                    const SizedBox(height: 16),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: ElevatedButton.icon(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppTheme.sacredGold,
+                              foregroundColor: AppTheme.primaryBlue,
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                            ),
+                            icon: const Icon(Icons.add_circle, size: 18),
+                            label: const Text(
+                              'Post New Audio',
+                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                            ),
+                            onPressed: _showAdminAddAudioDialog,
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: OutlinedButton.icon(
+                            style: OutlinedButton.styleFrom(
+                              foregroundColor: Colors.white,
+                              side: const BorderSide(color: Colors.white54),
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                            ),
+                            icon: const Icon(Icons.auto_awesome, size: 18),
+                            label: const Text(
+                              'Seed SDA Audio',
+                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                            ),
+                            onPressed: _seedAdminSampleAudio,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 20),
+
+              // Track List Header
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Published Audio Library',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: AppTheme.primaryBlue),
+                  ),
+                  Text(
+                    '$totalTracks items',
+                    style: TextStyle(color: Colors.grey.shade600, fontSize: 13),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+
+              if (snapshot.connectionState == ConnectionState.waiting)
+                const Center(
+                  child: Padding(
+                    padding: EdgeInsets.all(40),
+                    child: CircularProgressIndicator(),
+                  ),
+                )
+              else if (docs.isEmpty)
+                Container(
+                  padding: const EdgeInsets.all(32),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: Colors.black12),
+                  ),
+                  child: Column(
+                    children: [
+                      Icon(Icons.queue_music, size: 56, color: Colors.grey.shade300),
+                      const SizedBox(height: 12),
+                      const Text(
+                        'No audio published yet',
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        'Tap "Post New Audio" or "Seed SDA Audio" to populate tracks for users.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.grey.shade600, fontSize: 13),
+                      ),
+                    ],
+                  ),
+                )
+              else
+                ListView.separated(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: docs.length,
+                  separatorBuilder: (_, __) => const SizedBox(height: 10),
+                  itemBuilder: (context, index) {
+                    final doc = docs[index];
+                    final data = doc.data() as Map<String, dynamic>;
+                    final song = Song.fromJson(data, doc.id);
+                    final category = data['category'] as String? ?? 'Sacred Audio';
+
+                    return Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(14),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.04),
+                            blurRadius: 6,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 44,
+                            height: 44,
+                            decoration: BoxDecoration(
+                              color: AppTheme.primaryBlue.withValues(alpha: 0.1),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: const Icon(Icons.music_note, color: AppTheme.primaryBlue),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  song.title,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                    color: AppTheme.primaryBlue,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                const SizedBox(height: 3),
+                                Text(
+                                  '${song.artist} • $category',
+                                  style: TextStyle(color: Colors.grey.shade600, fontSize: 12),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                const SizedBox(height: 3),
+                                if (song.isPremium)
+                                  Text(
+                                    'Ksh ${song.price.toInt()} (Premium)',
+                                    style: const TextStyle(
+                                      color: AppTheme.sacredGold,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 11,
+                                    ),
+                                  )
+                                else
+                                  const Text(
+                                    'Free Access',
+                                    style: TextStyle(
+                                      color: AppTheme.primaryGreen,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 11,
+                                    ),
+                                  ),
+                              ],
+                            ),
+                          ),
+                          IconButton(
+                            tooltip: 'Preview Audio',
+                            icon: const Icon(Icons.play_circle_fill, color: AppTheme.primaryGreen, size: 28),
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (_) => MusicPlayerScreen(song: song)),
+                              );
+                            },
+                          ),
+                          IconButton(
+                            tooltip: 'Delete Track',
+                            icon: Icon(Icons.delete_outline, color: Colors.red.shade400, size: 22),
+                            onPressed: () => _deleteAdminAudioTrack(doc.id, song.title),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  // ==========================================
+  // 🗑️ DELETE AUDIO TRACK (ADMIN)
+  // ==========================================
+  Future<void> _deleteAdminAudioTrack(String docId, String title) async {
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Delete Audio Track?'),
+        content: Text('Are you sure you want to permanently delete "$title"? Believers will no longer be able to listen to it.'),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Cancel')),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.red, foregroundColor: Colors.white),
+            onPressed: () => Navigator.pop(ctx, true),
+            child: const Text('Delete'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirm == true) {
+      try {
+        await FirebaseFirestore.instance.collection('sermons').doc(docId).delete();
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Deleted "$title" from audio library.'), backgroundColor: Colors.red),
+          );
+        }
+      } catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Failed to delete track: $e'), backgroundColor: Colors.red),
+          );
+        }
+      }
+    }
+  }
+
+  // ==========================================
+  // ➕ POST AUDIO TRACK (ADMIN)
+  // ==========================================
+  void _showAdminAddAudioDialog() {
+    final titleCtrl = TextEditingController();
+    final artistCtrl = TextEditingController();
+    final urlCtrl = TextEditingController();
+    final priceCtrl = TextEditingController(text: '0');
+    String selectedCategory = 'Sacred Choir';
+    bool isSubmitting = false;
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setModalState) => Padding(
+          padding: EdgeInsets.only(
+            left: 20,
+            right: 20,
+            top: 24,
+            bottom: MediaQuery.of(ctx).viewInsets.bottom + 24,
+          ),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Row(
+                      children: [
+                        Icon(Icons.library_music, color: AppTheme.primaryBlue),
+                        SizedBox(width: 8),
+                        Text(
+                          'Upload Audio / Sermon',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: AppTheme.primaryBlue,
+                          ),
+                        ),
+                      ],
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.close),
+                      onPressed: () => Navigator.pop(ctx),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: titleCtrl,
+                  decoration: InputDecoration(
+                    labelText: 'Audio Title *',
+                    hintText: 'e.g. Great Is Thy Faithfulness',
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                TextField(
+                  controller: artistCtrl,
+                  decoration: InputDecoration(
+                    labelText: 'Artist / Choir / Speaker *',
+                    hintText: 'e.g. HARVION Sacred Choir',
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                TextField(
+                  controller: urlCtrl,
+                  decoration: InputDecoration(
+                    labelText: 'Audio MP3 URL *',
+                    hintText: 'https://... direct audio link',
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Row(
+                  children: [
+                    Expanded(
+                      flex: 2,
+                      child: DropdownButtonFormField<String>(
+                        value: selectedCategory,
+                        decoration: InputDecoration(
+                          labelText: 'Category',
+                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                        ),
+                        items: const [
+                          DropdownMenuItem(value: 'Sacred Choir', child: Text('Sacred Choir')),
+                          DropdownMenuItem(value: 'Sermon', child: Text('Sermon')),
+                          DropdownMenuItem(value: 'SDA Hymn', child: Text('SDA Hymn')),
+                          DropdownMenuItem(value: 'Devotional', child: Text('Devotional')),
+                          DropdownMenuItem(value: 'Health Lecture', child: Text('Health Lecture')),
+                        ],
+                        onChanged: (val) {
+                          if (val != null) setModalState(() => selectedCategory = val);
+                        },
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      flex: 1,
+                      child: TextField(
+                        controller: priceCtrl,
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          labelText: 'Price (Ksh)',
+                          hintText: '0 = Free',
+                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppTheme.primaryBlue,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  ),
+                  icon: isSubmitting
+                      ? const SizedBox(
+                          width: 18,
+                          height: 18,
+                          child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                        )
+                      : const Icon(Icons.cloud_upload_outlined),
+                  label: Text(
+                    isSubmitting ? 'Publishing...' : 'Publish to Library',
+                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  ),
+                  onPressed: isSubmitting
+                      ? null
+                      : () async {
+                          final title = titleCtrl.text.trim();
+                          final artist = artistCtrl.text.trim();
+                          final url = urlCtrl.text.trim();
+                          final price = double.tryParse(priceCtrl.text.trim()) ?? 0.0;
+
+                          if (title.isEmpty || artist.isEmpty || url.isEmpty) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Please complete all required fields.'),
+                                backgroundColor: Colors.red,
+                              ),
+                            );
+                            return;
+                          }
+
+                          setModalState(() => isSubmitting = true);
+
+                          try {
+                            await FirebaseFirestore.instance.collection('sermons').add({
+                              'title': title,
+                              'speaker': artist,
+                              'audioUrl': url,
+                              'category': selectedCategory,
+                              'price': price,
+                              'publishedDate': FieldValue.serverTimestamp(),
+                            });
+
+                            if (mounted) {
+                              Navigator.pop(ctx);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text('Published "$title" to audio library!'),
+                                  backgroundColor: AppTheme.primaryGreen,
+                                ),
+                              );
+                            }
+                          } catch (e) {
+                            setModalState(() => isSubmitting = false);
+                            if (mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text('Failed to publish audio: $e'),
+                                  backgroundColor: Colors.red,
+                                ),
+                              );
+                            }
+                          }
+                        },
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  // ==========================================
+  // 🌱 SEED ADMIN SAMPLE AUDIO
+  // ==========================================
+  Future<void> _seedAdminSampleAudio() async {
+    final tracks = [
+      {
+        'title': 'Praise to the Lord, the Almighty',
+        'speaker': 'HARVION Adventist Symphony Choir',
+        'audioUrl': 'https://archive.org/download/sda-hymnal-instrumental/001_Praise_to_the_Lord.mp3',
+        'category': 'SDA Hymn',
+        'price': 0.0,
+      },
+      {
+        'title': 'Great Is Thy Faithfulness',
+        'speaker': 'HARVION Sacred Choir',
+        'audioUrl': 'https://archive.org/download/sda-hymnal-instrumental/100_Great_Is_Thy_Faithfulness.mp3',
+        'category': 'Sacred Choir',
+        'price': 0.0,
+      },
+      {
+        'title': 'We Have This Hope (Advent Hymn)',
+        'speaker': 'SDA General Conference Choir',
+        'audioUrl': 'https://archive.org/download/sda-hymnal-instrumental/214_We_Have_This_Hope.mp3',
+        'category': 'SDA Hymn',
+        'price': 0.0,
+      },
+      {
+        'title': 'Holy Sabbath, Day of Rest',
+        'speaker': 'East Africa Heritage Chorale',
+        'audioUrl': 'https://archive.org/download/sda-hymnal-instrumental/381_Holy_Sabbath_Day_of_Rest.mp3',
+        'category': 'Sacred Choir',
+        'price': 0.0,
+      },
+      {
+        'title': 'The Three Angels\' Messages Proclaimed',
+        'speaker': 'Pastor H.M.S. Richards',
+        'audioUrl': 'https://archive.org/download/sda-hymnal-instrumental/108_Amazing_Grace.mp3',
+        'category': 'Sermon',
+        'price': 0.0,
+      },
+    ];
+
+    try {
+      final batch = FirebaseFirestore.instance.batch();
+      final coll = FirebaseFirestore.instance.collection('sermons');
+      for (final t in tracks) {
+        final doc = coll.doc();
+        batch.set(doc, {
+          ...t,
+          'publishedDate': FieldValue.serverTimestamp(),
+        });
+      }
+      await batch.commit();
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Seeded 5 official SDA audio tracks into the library!'),
+            backgroundColor: AppTheme.primaryGreen,
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to seed audio: $e'), backgroundColor: Colors.red),
         );
       }
     }

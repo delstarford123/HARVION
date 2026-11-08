@@ -5,10 +5,9 @@ import '../../core/constants.dart';
 import '../../core/theme.dart';
 import 'book_model.dart';
 import 'data/sop_books_catalog.dart';
-import 'pdf_detail_screen.dart';
 import 'kjv_bible_reader_screen.dart';
+import 'sop_book_reader_screen.dart';
 import 'services/book_cache_service.dart';
-import 'services/online_reader_service.dart';
 
 class LibraryScreen extends StatefulWidget {
   const LibraryScreen({super.key});
@@ -303,14 +302,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => PdfDetailScreen(
-                  pdfId: book.id,
-                  title: book.title,
-                  description: book.description,
-                  price: book.price.toInt(),
-                  pdfUrl: book.pdfUrl,
-                  bookObject: book,
-                ),
+                builder: (context) => SopBookReaderScreen(book: book),
               ),
             );
           },
@@ -431,10 +423,10 @@ class _LibraryScreenState extends State<LibraryScreen> {
                 const Divider(height: 1),
                 const SizedBox(height: 8),
 
-                // Action Buttons Row (Read Online + Offline / Details + Share)
+                // Action Buttons Row (Read Offline Chapters + Listen + Details + Share)
                 Row(
                   children: [
-                    // Quick Read Online Button (EGW Writings)
+                    // Primary: Read Chapters Offline
                     ElevatedButton.icon(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppTheme.primaryBlue,
@@ -444,22 +436,21 @@ class _LibraryScreenState extends State<LibraryScreen> {
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                         elevation: 0,
                       ),
-                      icon: const Icon(Icons.public, color: AppTheme.sacredGold, size: 14),
+                      icon: const Icon(Icons.auto_stories, color: AppTheme.sacredGold, size: 14),
                       label: const Text(
-                        'Read Online',
+                        'Read Book',
                         style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold),
                       ),
                       onPressed: () {
-                        OnlineReaderService.openOnlineBook(
+                        Navigator.push(
                           context,
-                          book.effectiveOnlineUrl,
-                          title: book.title,
+                          MaterialPageRoute(builder: (context) => SopBookReaderScreen(book: book)),
                         );
                       },
                     ),
                     const SizedBox(width: 8),
 
-                    // Quick Chapter Reader
+                    // Quick Listen & Audio Narration
                     OutlinedButton.icon(
                       style: OutlinedButton.styleFrom(
                         foregroundColor: AppTheme.primaryGreen,
@@ -468,24 +459,15 @@ class _LibraryScreenState extends State<LibraryScreen> {
                         minimumSize: const Size(60, 32),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                       ),
-                      icon: const Icon(Icons.auto_stories, size: 14),
+                      icon: const Icon(Icons.record_voice_over, size: 14),
                       label: const Text(
-                        'Chapters',
+                        'Voice Audio',
                         style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold),
                       ),
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(
-                            builder: (context) => PdfDetailScreen(
-                              pdfId: book.id,
-                              title: book.title,
-                              description: book.description,
-                              price: book.price.toInt(),
-                              pdfUrl: book.pdfUrl,
-                              bookObject: book,
-                            ),
-                          ),
+                          MaterialPageRoute(builder: (context) => SopBookReaderScreen(book: book)),
                         );
                       },
                     ),

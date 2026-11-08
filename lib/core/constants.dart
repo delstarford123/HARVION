@@ -12,13 +12,11 @@ class AppConstants {
   // ==========================================
   // 👨‍💻 DEVELOPER & CONTACT DETAILS
   // ==========================================
-  static const String developerName = 'Alfredo Onuko';
+  static const String developerName = 'Delstarford Works';
   static const String developerBio =
-      'A passionate young minister, teacher, and creative dedicated to sharing truth, '
-      'inspiring growth, and building lives through faith and practical knowledge. '
-      'Committed to empowering communities through spiritual understanding and organic farming.';
+      'A dedicated Seventh-day Adventist literature evangelism and digital media ministry sharing the Everlasting Gospel, Spirit of Prophecy, and health truth worldwide.';
 
-  static const String contactEmail = 'afredoonuko@gmail.com';
+  static const String contactEmail = 'harvion@delstarfordworks.co.ke';
   static const String contactPhone = '0745090990';
   static const String fellowshipLink =
       'https://chat.whatsapp.com/J8Lg4qCKyVqALdtDlXGClh?mode=gi_t';
