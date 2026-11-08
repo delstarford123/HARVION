@@ -25,16 +25,16 @@ class _PaymentScreenState extends State<PaymentScreen> {
   final TextEditingController _phoneController = TextEditingController();
   bool _isProcessing = false;
 
-  // ⚠️ TODO: Replace these with your actual Safaricom Daraja credentials
-  final String consumerKey = 'noADlOJZOn5nLv6DM4ZlC1P5M1ynrU3nRkT7ywNYkfjri2Xz';
+  // Safaricom Daraja Production Credentials
+  final String consumerKey = 'OgkAKD4soo5xGVEegeGPvWS9HK3QuRgZYGQXnKmDxVTxnMDG';
   final String consumerSecret =
-      '2yzsavvoXEaYKn8OiAR6gwM4wEWlQ7Sz8FDVYcuF164PTPQmBrDY1gcheYX3aXdX';
+      'LXgsZGYdl6kpunxzGuAw4Fi3JK7FtTLqbCK9JZjI6VDR6e93n5mmW8gFKUORhuQQ';
   final String passkey =
-      'bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919';
-  final String shortCode = '174379'; // Paybill or Till
+      'f2d5541751a9649a49971680017613ecec69eb7bd886bda8bfb5d07c5d1c2d1f';
+  final String shortCode = '4050545'; // Live ShortCode / Till / Paybill
 
-  // Note: Use sandbox for testing. Change to 'api' for production.
-  final String baseUrl = 'https://sandbox.safaricom.co.ke';
+  // Safaricom Live Production API
+  final String baseUrl = 'https://api.safaricom.co.ke';
 
   @override
   void initState() {
