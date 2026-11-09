@@ -321,13 +321,39 @@ class _CreateLiveStreamScreenState extends State<CreateLiveStreamScreen> {
               const SizedBox(height: 12),
               TextFormField(
                 controller: _urlController,
+                onChanged: (val) {
+                  final trimmed = val.trim().toLowerCase();
+                  if (trimmed.contains('youtube.com') || trimmed.contains('youtu.be')) {
+                    if (_platform != 'youtube') {
+                      setState(() => _platform = 'youtube');
+                    }
+                  } else if (trimmed.contains('tiktok.com') || (trimmed.startsWith('@') && trimmed.length > 2)) {
+                    if (_platform != 'tiktok') {
+                      setState(() => _platform = 'tiktok');
+                    }
+                  }
+                },
                 decoration: InputDecoration(
                   labelText: _platform == 'tiktok'
                       ? 'TikTok Live Link or @Username *'
-                      : 'Live Stream URL (YouTube, Drive, or HLS) *',
+                      : 'Live Stream URL (YouTube, TikTok, Drive, HLS) *',
                   hintText: _platform == 'tiktok'
-                      ? 'e.g. @pastor_john or https://www.tiktok.com/@pastor_john/live'
-                      : 'https://youtube.com/live/... or https://drive.google.com/...',
+                      ? 'e.g. https://www.tiktok.com/@pastor_john/live or @pastor_john'
+                      : 'e.g. https://youtube.com/live/... or https://youtu.be/...',
+                  helperText: _platform == 'youtube'
+                      ? '✓ YouTube link detected — In-app responsive live player will be embedded automatically'
+                      : _platform == 'tiktok'
+                          ? '✓ TikTok link detected — In-app live stream player will be embedded automatically'
+                          : 'Paste a YouTube or TikTok live link to embed in-app',
+                  helperStyle: TextStyle(
+                    color: _platform == 'youtube'
+                        ? Colors.red.shade700
+                        : _platform == 'tiktok'
+                            ? const Color(0xFF00B4D8)
+                            : Colors.grey.shade600,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 11,
+                  ),
                   prefixIcon: Icon(
                     _platform == 'tiktok' ? Icons.tag : Icons.link,
                     color: AppTheme.primaryBlue,

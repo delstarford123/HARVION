@@ -50,13 +50,33 @@ app.use((req, res, next) => {
 // 🌐 WEB PAGES (Always served to browsers)
 // ==========================================
 
+// Hymnal Page Handler (matches /hymns, /hymns.html, /hymnal)
+app.get(["/hymns", "/hymns.html", "/hymnal", "/hymnal.html"], (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "hymns.html"));
+});
+
+// 50 SOP Books Page Handler (matches /books, /books.html)
+app.get(["/books", "/books.html"], (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "books.html"));
+});
+
 // About Page Handler (matches /about and /about.html)
 app.get(["/about", "/about.html"], (req, res) => {
   res.sendFile(path.join(__dirname, "public", "about.html"));
 });
 
-// Home Page Handler (matches /, /home, /index.html, /server.js)
-app.get(["/", "/home", "/index.html", "/server.js"], (req, res) => {
+// Support Page Handler (matches /support and /support.html)
+app.get(["/support", "/support.html"], (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "support.html"));
+});
+
+// Contact Page Handler (matches /contact and /contact.html)
+app.get(["/contact", "/contact.html"], (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "contact.html"));
+});
+
+// Home Page Handler (matches /, /home, /home.html, /index.html, /server.js)
+app.get(["/", "/home", "/home.html", "/index.html", "/server.js"], (req, res) => {
   // If explicitly requested as JSON without accepting HTML (e.g. backend curl/fetch)
   const isJsonClient = req.headers["accept"] &&
       req.headers["accept"].includes("application/json") &&
@@ -125,6 +145,7 @@ app.get("/api/health", (req, res) => {
 // 📦 APPLICATION API ROUTES
 // ==========================================
 app.use("/api/books", require("./routes/books"));
+app.use("/api/hymns", require("./routes/hymns"));
 app.use("/api/orders", require("./routes/orders"));
 app.use("/api/payments", require("./routes/payments"));
 app.use("/api/colporteurs", require("./routes/colporteurs"));

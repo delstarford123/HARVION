@@ -31,12 +31,12 @@ import '../features/profile/profile_screen.dart';
 import '../features/profile/order_history_screen.dart';
 import '../features/colporteur/camp_meeting_locations_screen.dart';
 import '../features/colporteur/request_sell_book_screen.dart';
-import '../features/admin/admin_dashboard_screen.dart';
 import '../features/admin/admin_login_screen.dart';
 import '../features/testimonies/testimonies_screen.dart';
 import '../features/library/kjv_bible_reader_screen.dart';
 import '../features/sermons/create_livestream_screen.dart';
 import '../features/notifications/notification_center_screen.dart';
+import 'services/notification_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MainNavigation extends StatefulWidget {
@@ -63,6 +63,7 @@ class _MainNavigationState extends State<MainNavigation> {
   @override
   void initState() {
     super.initState();
+    NotificationService().initialize();
     _initNetworkListener();
   }
 
@@ -163,58 +164,67 @@ class _MainNavigationState extends State<MainNavigation> {
           ),
 
           // 🔔 Real-Time Live Worship & Notification Bell
-          StreamBuilder<QuerySnapshot>(
-            stream: FirebaseFirestore.instance
-                .collection('live_announcements')
-                .where('isActive', isEqualTo: true)
-                .snapshots(),
-            builder: (context, snapshot) {
-              final int liveCount = snapshot.hasData ? snapshot.data!.docs.length : 0;
+          AnimatedBuilder(
+            animation: NotificationService(),
+            builder: (context, _) {
+              return StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection('live_announcements')
+                    .where('isActive', isEqualTo: true)
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  final activeDocs = snapshot.hasData ? snapshot.data!.docs : [];
+                  final List<String> activeIds = activeDocs.map((d) => d.id).cast<String>().toList();
+                  final int unreadCount = NotificationService().getUnreadCount(activeIds);
 
-              return Stack(
-                alignment: Alignment.center,
-                children: [
-                  IconButton(
-                    tooltip: 'Live Worship & Notifications',
-                    icon: Icon(
-                      liveCount > 0 ? Icons.notifications_active : Icons.notifications_outlined,
-                      color: liveCount > 0 ? AppTheme.sacredGold : Colors.white,
-                    ),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (_) => const NotificationCenterScreen()),
-                      );
-                    },
-                  ),
-                  if (liveCount > 0)
-                    Positioned(
-                      right: 6,
-                      top: 6,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
-                        decoration: BoxDecoration(
-                          color: Colors.red,
-                          borderRadius: BorderRadius.circular(10),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.red.withValues(alpha: 0.6),
-                              blurRadius: 6,
-                              spreadRadius: 1,
-                            ),
-                          ],
+                  return Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      IconButton(
+                        tooltip: 'Live Worship & Notifications',
+                        icon: Icon(
+                          unreadCount > 0 ? Icons.notifications_active : Icons.notifications_outlined,
+                          color: unreadCount > 0 ? AppTheme.sacredGold : Colors.white,
                         ),
-                        child: const Text(
-                          'LIVE',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 8,
-                            fontWeight: FontWeight.bold,
+                        onPressed: () {
+                          // Immediately mark notifications as read when bell is clicked
+                          NotificationService().markAllAsRead(activeIds);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (_) => const NotificationCenterScreen()),
+                          );
+                        },
+                      ),
+                      if (unreadCount > 0)
+                        Positioned(
+                          right: 6,
+                          top: 6,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+                            decoration: BoxDecoration(
+                              color: Colors.red,
+                              borderRadius: BorderRadius.circular(10),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.red.withValues(alpha: 0.6),
+                                  blurRadius: 6,
+                                  spreadRadius: 1,
+                                ),
+                              ],
+                            ),
+                            child: Text(
+                              '$unreadCount',
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 8,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                    ),
-                ],
+                    ],
+                  );
+                },
               );
             },
           ),

@@ -6,6 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../core/theme.dart';
 import 'sermon_model.dart';
+import 'widgets/livestream_embed_player.dart';
 
 class VideoPlayerScreen extends StatefulWidget {
   final Sermon sermon;
@@ -419,104 +420,22 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
   }
 
   Widget _buildVideoContent() {
-    if (widget.sermon.isYouTube) {
-      final ytId = widget.sermon.youtubeId;
-      return Stack(
-        alignment: Alignment.center,
-        children: [
-          if (ytId != null)
-            Image.network(
-              'https://img.youtube.com/vi/$ytId/hqdefault.jpg',
-              width: double.infinity,
-              height: double.infinity,
-              fit: BoxFit.cover,
-              errorBuilder: (_, __, ___) => Container(color: Colors.black87),
-            )
-          else
-            Container(color: Colors.black87),
-          Container(color: Colors.black45),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              IconButton(
-                iconSize: 64,
-                icon: const Icon(Icons.play_circle_fill, color: Colors.red),
-                onPressed: () => _openExternalVideo(widget.sermon.mediaUrl),
-              ),
-              const Text(
-                'Watch on YouTube',
-                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13),
-              ),
-            ],
-          ),
-        ],
+    if (widget.sermon.isYouTube || widget.sermon.videoSourceType.toLowerCase() == 'youtube') {
+      return LivestreamEmbedPlayer(
+        mediaUrl: widget.sermon.mediaUrl,
+        platform: 'youtube',
+        title: widget.sermon.title,
       );
     }
 
-    if (widget.sermon.isTikTok) {
-      final username = widget.sermon.tikTokUsername ?? widget.sermon.speaker;
-      return Container(
-        width: double.infinity,
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Color(0xFF000000), Color(0xFF161823)],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
-        ),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: const BoxDecoration(
-                      color: Color(0xFFEE1D52),
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(Icons.live_tv, color: Colors.white, size: 24),
-                  ),
-                  const SizedBox(width: 8),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF69C9D0).withOpacity(0.2),
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: const Color(0xFF69C9D0)),
-                    ),
-                    child: const Text('TIKTOK LIVE STREAM',
-                        style: TextStyle(color: Color(0xFF69C9D0), fontWeight: FontWeight.bold, fontSize: 11)),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 10),
-              Text(
-                username,
-                style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                'Language: ${widget.sermon.language} • ${widget.sermon.ministryName}',
-                style: const TextStyle(color: Colors.white70, fontSize: 12),
-              ),
-              const SizedBox(height: 14),
-              ElevatedButton.icon(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFFEE1D52),
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                ),
-                icon: const Icon(Icons.play_circle_fill),
-                label: const Text('WATCH ON TIKTOK LIVE', style: TextStyle(fontWeight: FontWeight.bold)),
-                onPressed: () => _openExternalVideo(widget.sermon.tikTokLiveUrl),
-              ),
-            ],
-          ),
-        ),
+    if (widget.sermon.isTikTok || widget.sermon.videoSourceType.toLowerCase() == 'tiktok') {
+      final tikTokUrl = widget.sermon.tikTokLiveUrl.isNotEmpty
+          ? widget.sermon.tikTokLiveUrl
+          : widget.sermon.mediaUrl;
+      return LivestreamEmbedPlayer(
+        mediaUrl: tikTokUrl,
+        platform: 'tiktok',
+        title: widget.sermon.title,
       );
     }
 

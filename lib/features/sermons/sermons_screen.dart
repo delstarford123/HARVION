@@ -209,9 +209,44 @@ class SermonsScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 8),
-                  Text(
-                    '${liveSermons.length} Live',
-                    style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.grey.shade700),
+                  TextButton.icon(
+                    style: TextButton.styleFrom(
+                      foregroundColor: Colors.red.shade700,
+                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                      visualDensity: VisualDensity.compact,
+                    ),
+                    icon: const Icon(Icons.stop_circle_outlined, size: 14),
+                    label: const Text('Clear All Lives', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold)),
+                    onPressed: () async {
+                      final confirm = await showDialog<bool>(
+                        context: context,
+                        builder: (ctx) => AlertDialog(
+                          title: const Text('End All Active Lives?'),
+                          content: const Text('This will remove all active live broadcasts from all devices.'),
+                          actions: [
+                            TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('CANCEL')),
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(backgroundColor: Colors.red, foregroundColor: Colors.white),
+                              onPressed: () => Navigator.pop(ctx, true),
+                              child: const Text('CLEAR ALL'),
+                            ),
+                          ],
+                        ),
+                      );
+                      if (confirm == true) {
+                        for (final s in liveSermons) {
+                          try {
+                            await FirebaseFirestore.instance.collection('sermons').doc(s.id).delete();
+                            await FirebaseFirestore.instance.collection('live_announcements').doc(s.id).delete();
+                          } catch (_) {}
+                        }
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('All active live broadcasts ended and cleared.')),
+                          );
+                        }
+                      }
+                    },
                   ),
                 ],
               ),
@@ -269,6 +304,35 @@ class SermonsScreen extends StatelessWidget {
                                     s.language,
                                     style: TextStyle(fontSize: 10, color: Colors.grey.shade700, fontWeight: FontWeight.w600),
                                     overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                                InkWell(
+                                  onTap: () async {
+                                    final confirm = await showDialog<bool>(
+                                      context: context,
+                                      builder: (ctx) => AlertDialog(
+                                        title: const Text('End Live Stream?'),
+                                        content: Text('Remove live stream "${s.title}"?'),
+                                        actions: [
+                                          TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('CANCEL')),
+                                          ElevatedButton(
+                                            style: ElevatedButton.styleFrom(backgroundColor: Colors.red, foregroundColor: Colors.white),
+                                            onPressed: () => Navigator.pop(ctx, true),
+                                            child: const Text('REMOVE'),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                    if (confirm == true) {
+                                      try {
+                                        await FirebaseFirestore.instance.collection('sermons').doc(s.id).delete();
+                                        await FirebaseFirestore.instance.collection('live_announcements').doc(s.id).delete();
+                                      } catch (_) {}
+                                    }
+                                  },
+                                  child: const Padding(
+                                    padding: EdgeInsets.all(2.0),
+                                    child: Icon(Icons.close, size: 14, color: Colors.grey),
                                   ),
                                 ),
                               ],

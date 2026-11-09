@@ -12,7 +12,8 @@
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://harvion.delstarfordworks.co.ke/hymns.html">
   <meta property="og:title" content="Seventh-day Adventist Hymnal (All 695 Hymns & Piano Accompaniment)">
-  <meta property="og:description" content="Sing and worship anywhere. Complete 695 Seventh-day Adventist hymns with lyrics, stanzas, chorus, and piano accompaniment audio.">
+  <meta property="og:description" content="Sing and worship anywhere. Complete 695 Seventh-day Adventist hymns with lyrics, stanzas,
+chorus, and piano accompaniment audio.">
   <meta property="og:image" content="https://images.unsplash.com/photo-1504052434569-70ad5836ab65?w=1200&q=80">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="HARVION — Adventist Truth & Literature Evangelism">
@@ -106,15 +107,47 @@
     border-color: #D4AF37 !important;
     background: rgba(212, 175, 55, 0.14) !important;
   }
+
   /* Reader themes */
-  .theme-night { background-color: #0b1528; color: #e2e8f0; border-color: rgba(212, 175, 55, 0.28); }
-  .theme-night .stanza-text { color: #f1f5f9; }
-  .theme-sepia { background-color: #fbf0d9; color: #3e2723; border-color: #d7ccc8; }
-  .theme-sepia .stanza-text { color: #2e1c14; }
-  .theme-cream { background-color: #f7f4ea; color: #2d3748; border-color: #e2e8f0; }
-  .theme-cream .stanza-text { color: #1a202c; }
-  .theme-light { background-color: #ffffff; color: #1a202c; border-color: #e2e8f0; }
-  .theme-light .stanza-text { color: #0f172a; }
+  .theme-night {
+    background-color: #0b1528;
+    color: #e2e8f0;
+    border-color: rgba(212, 175, 55, 0.28);
+  }
+
+  .theme-night .stanza-text {
+    color: #f1f5f9;
+  }
+
+  .theme-sepia {
+    background-color: #fbf0d9;
+    color: #3e2723;
+    border-color: #d7ccc8;
+  }
+
+  .theme-sepia .stanza-text {
+    color: #2e1c14;
+  }
+
+  .theme-cream {
+    background-color: #f7f4ea;
+    color: #2d3748;
+    border-color: #e2e8f0;
+  }
+
+  .theme-cream .stanza-text {
+    color: #1a202c;
+  }
+
+  .theme-light {
+    background-color: #ffffff;
+    color: #1a202c;
+    border-color: #e2e8f0;
+  }
+
+  .theme-light .stanza-text {
+    color: #0f172a;
+  }
 </style>
 
 </head>
@@ -138,13 +171,13 @@
       </a>
 
       <!-- Desktop Navigation Links -->
-      <nav class="hidden lg:flex items-center space-x-7 text-sm font-medium text-slate-300" id="desktop-nav">
+      <nav class="hidden lg:flex items-center space-x-6 text-sm font-medium text-slate-300" id="desktop-nav">
         <a href="/home.html" data-page="home" class="hover:text-brand-gold transition py-1">Home</a>
+        <a href="/hymns.html" data-page="hymns" class="px-3.5 py-1.5 rounded-full bg-brand-gold/15 border border-brand-gold/50 text-brand-gold hover:bg-brand-gold hover:text-brand-dark transition font-bold flex items-center gap-2 shadow-sm">
+          <i class="fa-solid fa-music text-xs animate-pulse"></i> 695 SDA Hymnal
+        </a>
         <a href="/books.html" data-page="books" class="hover:text-brand-gold transition py-1 flex items-center gap-1.5">
           <i class="fa-solid fa-book-bible text-xs text-brand-gold"></i> 50 SOP Books
-        </a>
-        <a href="/hymns.html" data-page="hymns" class="hover:text-brand-gold transition py-1 flex items-center gap-1.5">
-          <i class="fa-solid fa-music text-xs text-brand-gold animate-pulse"></i> 695 SDA Hymnal
         </a>
         <a href="/about.html" data-page="about" class="hover:text-brand-gold transition py-1">About & Faith</a>
         <a href="/support.html" data-page="support" class="hover:text-brand-gold transition py-1 flex items-center gap-1.5">
@@ -155,8 +188,8 @@
 
       <!-- Desktop Action Buttons -->
       <div class="hidden md:flex items-center space-x-3">
-        <a href="/hymns.html" class="px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-white/10 hover:bg-white/15 border border-brand-gold/40 text-brand-gold hover:text-white transition flex items-center gap-2">
-          <i class="fa-solid fa-headphones"></i> Sing Hymns
+        <a href="/hymns.html" class="px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-brand-gold/10 hover:bg-brand-gold hover:text-brand-dark border border-brand-gold/40 text-brand-gold transition flex items-center gap-2">
+          <i class="fa-solid fa-headphones"></i> Listen Piano
         </a>
         <a href="/support.html" class="px-5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider bg-gradient-to-r from-brand-gold via-yellow-400 to-brand-gold text-brand-dark hover:brightness-110 shadow-lg shadow-brand-gold/25 transition flex items-center gap-2">
           <i class="fa-solid fa-mobile-screen-button"></i> M-Pesa Support
@@ -204,80 +237,83 @@
 <!-- ========================================== -->
 <div class="pt-32 pb-24">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    
+
     <!-- Top Announcement Banner -->
     <div class="text-center max-w-4xl mx-auto mb-8">
-      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-gold/10 border border-brand-gold/30 text-brand-gold text-xs font-semibold uppercase tracking-wider mb-3">
+      <div
+        class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-gold/10 border border-brand-gold/30 text-brand-gold text-xs font-semibold uppercase tracking-wider mb-3">
         <i class="fa-solid fa-music"></i> Standard 1985 Seventh-day Adventist Hymnal (Hymns 1 – 695)
       </div>
       <h1 class="text-3xl sm:text-5xl font-heading font-extrabold text-white leading-tight">
         Sing Along With Authentic <span class="gold-gradient-text">Piano Accompaniment</span>
       </h1>
       <p class="text-slate-300 font-serif text-sm sm:text-base mt-3 leading-relaxed">
-        Access all 695 hymns with complete stanzas, choruses, author histories, tunes, and pure piano accompaniment for worship, church services, and offline devotions.
+        Access all 695 hymns with complete stanzas, choruses, author histories, tunes, and pure piano accompaniment for
+        worship, church services, and offline devotions.
       </p>
     </div>
 
     <!-- Dual-Panel Hymnal Workspace -->
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-      
+
       <!-- ========================================== -->
       <!-- 📋 LEFT PANEL: 695 HYMN CATALOGUE & SEARCH -->
       <!-- ========================================== -->
-      <div class="lg:col-span-5 bg-brand-navy/60 rounded-3xl p-6 gold-border shadow-2xl flex flex-col h-[750px] relative">
-        
+      <div
+        class="lg:col-span-5 bg-brand-navy/60 rounded-3xl p-6 gold-border shadow-2xl flex flex-col h-[750px] relative">
+
         <!-- Search & Number Jump Bar -->
         <div class="space-y-3 mb-4 shrink-0">
           <div class="flex gap-2">
             <!-- Text Search -->
             <div class="relative flex-1">
-              <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-brand-gold text-xs"></i>
-              <input 
-                type="text" 
-                id="hymnSearchInput" 
-                oninput="filterHymns()" 
-                placeholder="Search title, lyric, or topic..." 
-                class="w-full pl-9 pr-3 py-2.5 rounded-xl bg-brand-dark border border-white/10 text-white placeholder-slate-400 focus:outline-none focus:border-brand-gold text-xs transition"
-              >
+              <i
+                class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-brand-gold text-xs"></i>
+              <input type="text" id="hymnSearchInput" oninput="filterHymns()"
+                placeholder="Search title, lyric, or topic..."
+                class="w-full pl-9 pr-3 py-2.5 rounded-xl bg-brand-dark border border-white/10 text-white placeholder-slate-400 focus:outline-none focus:border-brand-gold text-xs transition">
             </div>
             <!-- Quick Number Jump -->
             <div class="w-24 shrink-0">
-              <input 
-                type="number" 
-                id="quickJumpInput" 
-                min="1" 
-                max="695" 
-                onkeydown="if(event.key === 'Enter') jumpToHymnNumber()" 
-                placeholder="# (1-695)" 
-                class="w-full px-3 py-2.5 rounded-xl bg-brand-dark border border-brand-gold/40 text-brand-gold font-bold text-center placeholder-slate-500 focus:outline-none focus:border-brand-gold text-xs transition"
-              >
+              <input type="number" id="quickJumpInput" min="1" max="695"
+                onkeydown="if(event.key === 'Enter') jumpToHymnNumber()" placeholder="# (1-695)"
+                class="w-full px-3 py-2.5 rounded-xl bg-brand-dark border border-brand-gold/40 text-brand-gold font-bold text-center placeholder-slate-500 focus:outline-none focus:border-brand-gold text-xs transition">
             </div>
-            <button onclick="jumpToHymnNumber()" class="px-3.5 py-2.5 rounded-xl bg-brand-gold text-brand-dark font-bold text-xs uppercase hover:brightness-110 transition shrink-0" title="Jump to hymn">
+            <button onclick="jumpToHymnNumber()"
+              class="px-3.5 py-2.5 rounded-xl bg-brand-gold text-brand-dark font-bold text-xs uppercase hover:brightness-110 transition shrink-0"
+              title="Jump to hymn">
               <i class="fa-solid fa-arrow-right"></i>
             </button>
           </div>
 
           <!-- Category Filter Bar (Horizontal Scrolling Chips) -->
           <div class="flex items-center gap-2 overflow-x-auto pb-1 text-[11px] no-scrollbar">
-            <button onclick="filterCategory('')" class="category-pill px-3 py-1.5 rounded-lg gold-border-active shrink-0 transition font-semibold">
+            <button onclick="filterCategory('')"
+              class="category-pill px-3 py-1.5 rounded-lg gold-border-active shrink-0 transition font-semibold">
               All 695
             </button>
-            <button onclick="filterCategory('Worship & Praise')" class="category-pill px-3 py-1.5 rounded-lg gold-border text-slate-300 hover:text-brand-gold shrink-0 transition">
+            <button onclick="filterCategory('Worship & Praise')"
+              class="category-pill px-3 py-1.5 rounded-lg gold-border text-slate-300 hover:text-brand-gold shrink-0 transition">
               Worship & Praise
             </button>
-            <button onclick="filterCategory('Grace / Assurance')" class="category-pill px-3 py-1.5 rounded-lg gold-border text-slate-300 hover:text-brand-gold shrink-0 transition">
+            <button onclick="filterCategory('Grace / Assurance')"
+              class="category-pill px-3 py-1.5 rounded-lg gold-border text-slate-300 hover:text-brand-gold shrink-0 transition">
               Grace & Assurance
             </button>
-            <button onclick="filterCategory('Christ Our Lord')" class="category-pill px-3 py-1.5 rounded-lg gold-border text-slate-300 hover:text-brand-gold shrink-0 transition">
+            <button onclick="filterCategory('Christ Our Lord')"
+              class="category-pill px-3 py-1.5 rounded-lg gold-border text-slate-300 hover:text-brand-gold shrink-0 transition">
               Christ Jesus
             </button>
-            <button onclick="filterCategory('Sabbath')" class="category-pill px-3 py-1.5 rounded-lg gold-border text-slate-300 hover:text-brand-gold shrink-0 transition">
+            <button onclick="filterCategory('Sabbath')"
+              class="category-pill px-3 py-1.5 rounded-lg gold-border text-slate-300 hover:text-brand-gold shrink-0 transition">
               Holy Sabbath
             </button>
-            <button onclick="filterCategory('Second Coming')" class="category-pill px-3 py-1.5 rounded-lg gold-border text-slate-300 hover:text-brand-gold shrink-0 transition">
+            <button onclick="filterCategory('Second Coming')"
+              class="category-pill px-3 py-1.5 rounded-lg gold-border text-slate-300 hover:text-brand-gold shrink-0 transition">
               Second Coming
             </button>
-            <button onclick="filterCategory('Christian Life')" class="category-pill px-3 py-1.5 rounded-lg gold-border text-slate-300 hover:text-brand-gold shrink-0 transition">
+            <button onclick="filterCategory('Christian Life')"
+              class="category-pill px-3 py-1.5 rounded-lg gold-border text-slate-300 hover:text-brand-gold shrink-0 transition">
               Christian Life
             </button>
           </div>
@@ -301,14 +337,16 @@
       <!-- 📖 RIGHT PANEL: ACTIVE HYMN READER & AUDIO -->
       <!-- ========================================== -->
       <div class="lg:col-span-7 space-y-6">
-        
+
         <!-- Active Hymn Desk Card -->
-        <div id="activeHymnCard" class="rounded-3xl border border-brand-gold/30 p-6 sm:p-10 shadow-2xl relative transition duration-300 theme-night bg-brand-navy">
-          
+        <div id="activeHymnCard"
+          class="rounded-3xl border border-brand-gold/30 p-6 sm:p-10 shadow-2xl relative transition duration-300 theme-night bg-brand-navy">
+
           <!-- Top Row: Hymn Number Badge & Reader Controls -->
           <div class="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-white/10">
             <div class="flex items-center gap-3">
-              <span id="activeHymnBadge" class="px-4 py-1.5 rounded-xl bg-gradient-to-r from-brand-gold to-yellow-400 text-brand-dark font-heading font-black text-sm tracking-wider shadow-md">
+              <span id="activeHymnBadge"
+                class="px-4 py-1.5 rounded-xl bg-gradient-to-r from-brand-gold to-yellow-400 text-brand-dark font-heading font-black text-sm tracking-wider shadow-md">
                 HYMN 108
               </span>
               <span id="activeHymnCategory" class="text-xs uppercase font-bold tracking-widest text-brand-gold">
@@ -320,30 +358,42 @@
             <div class="flex items-center gap-2">
               <!-- Font Size Toggles -->
               <div class="inline-flex rounded-lg bg-white/5 border border-white/10 p-1 text-xs">
-                <button onclick="changeFontSize(-2)" class="px-2 py-1 hover:text-brand-gold transition" title="Decrease font">A-</button>
-                <button onclick="changeFontSize(2)" class="px-2 py-1 hover:text-brand-gold transition" title="Increase font">A+</button>
+                <button onclick="changeFontSize(-2)" class="px-2 py-1 hover:text-brand-gold transition"
+                  title="Decrease font">A-</button>
+                <button onclick="changeFontSize(2)" class="px-2 py-1 hover:text-brand-gold transition"
+                  title="Increase font">A+</button>
               </div>
 
               <!-- Theme Switchers -->
               <div class="inline-flex rounded-lg bg-white/5 border border-white/10 p-1 text-xs gap-1">
-                <button onclick="setReaderTheme('night')" class="w-6 h-6 rounded bg-[#081325] border border-white/20 text-[10px]" title="Night Theme">🌙</button>
-                <button onclick="setReaderTheme('sepia')" class="w-6 h-6 rounded bg-[#fbf0d9] border border-amber-900/30 text-[10px]" title="Sepia Theme">📜</button>
-                <button onclick="setReaderTheme('cream')" class="w-6 h-6 rounded bg-[#f7f4ea] border border-slate-400 text-[10px]" title="Cream Theme">🥛</button>
-                <button onclick="setReaderTheme('light')" class="w-6 h-6 rounded bg-white border border-slate-300 text-[10px]" title="Light Theme">☀️</button>
+                <button onclick="setReaderTheme('night')"
+                  class="w-6 h-6 rounded bg-[#081325] border border-white/20 text-[10px]"
+                  title="Night Theme">🌙</button>
+                <button onclick="setReaderTheme('sepia')"
+                  class="w-6 h-6 rounded bg-[#fbf0d9] border border-amber-900/30 text-[10px]"
+                  title="Sepia Theme">📜</button>
+                <button onclick="setReaderTheme('cream')"
+                  class="w-6 h-6 rounded bg-[#f7f4ea] border border-slate-400 text-[10px]"
+                  title="Cream Theme">🥛</button>
+                <button onclick="setReaderTheme('light')"
+                  class="w-6 h-6 rounded bg-white border border-slate-300 text-[10px]" title="Light Theme">☀️</button>
               </div>
             </div>
           </div>
 
           <!-- Hymn Title & Metadata -->
           <div class="pt-6 pb-4">
-            <h2 id="activeHymnTitle" class="text-2xl sm:text-4xl font-heading font-extrabold text-white mb-2 leading-tight">
+            <h2 id="activeHymnTitle"
+              class="text-2xl sm:text-4xl font-heading font-extrabold text-white mb-2 leading-tight">
               Amazing Grace
             </h2>
             <div class="flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-slate-300 font-serif">
-              <span id="activeHymnAuthor"><i class="fa-solid fa-pen-nib text-brand-gold mr-1"></i> Author: John Newton (1779)</span>
+              <span id="activeHymnAuthor"><i class="fa-solid fa-pen-nib text-brand-gold mr-1"></i> Author: John Newton
+                (1779)</span>
               <span id="activeHymnTune"><i class="fa-solid fa-music text-brand-gold mr-1"></i> Tune: NEW BRITAIN</span>
               <span id="activeHymnKey"><i class="fa-solid fa-key text-brand-gold mr-1"></i> Key: G Major</span>
-              <span id="activeHymnScripture"><i class="fa-solid fa-bible text-brand-gold mr-1"></i> 1 Chron. 17:16-17</span>
+              <span id="activeHymnScripture"><i class="fa-solid fa-bible text-brand-gold mr-1"></i> 1 Chron.
+                17:16-17</span>
             </div>
           </div>
 
@@ -356,16 +406,20 @@
                 </div>
                 <div>
                   <span class="text-xs font-bold uppercase tracking-wider text-white block">Piano Accompaniment</span>
-                  <span class="text-[11px] text-slate-400">Pure instrumental piano for congregational & personal singing</span>
+                  <span class="text-[11px] text-slate-400">Pure instrumental piano for congregational & personal
+                    singing</span>
                 </div>
               </div>
 
               <!-- Playback Speed -->
               <div class="flex items-center gap-1.5 text-xs">
                 <span class="text-slate-400 text-[11px]">Tempo:</span>
-                <button onclick="setAudioPlaybackRate(0.8)" class="speed-btn px-2 py-1 rounded bg-white/5 hover:bg-brand-gold hover:text-brand-dark transition text-[11px] font-bold">0.8×</button>
-                <button onclick="setAudioPlaybackRate(1.0)" class="speed-btn px-2 py-1 rounded bg-brand-gold text-brand-dark transition text-[11px] font-bold">1.0×</button>
-                <button onclick="setAudioPlaybackRate(1.2)" class="speed-btn px-2 py-1 rounded bg-white/5 hover:bg-brand-gold hover:text-brand-dark transition text-[11px] font-bold">1.2×</button>
+                <button onclick="setAudioPlaybackRate(0.8)"
+                  class="speed-btn px-2 py-1 rounded bg-white/5 hover:bg-brand-gold hover:text-brand-dark transition text-[11px] font-bold">0.8×</button>
+                <button onclick="setAudioPlaybackRate(1.0)"
+                  class="speed-btn px-2 py-1 rounded bg-brand-gold text-brand-dark transition text-[11px] font-bold">1.0×</button>
+                <button onclick="setAudioPlaybackRate(1.2)"
+                  class="speed-btn px-2 py-1 rounded bg-white/5 hover:bg-brand-gold hover:text-brand-dark transition text-[11px] font-bold">1.2×</button>
               </div>
             </div>
 
@@ -380,7 +434,8 @@
               <span class="text-slate-400 flex items-center gap-1.5">
                 <i class="fa-solid fa-circle-check text-emerald-400"></i> High-Fidelity MP3 Audio
               </span>
-              <button onclick="cacheCurrentHymnAudio()" class="text-brand-gold hover:underline flex items-center gap-1 font-semibold">
+              <button onclick="cacheCurrentHymnAudio()"
+                class="text-brand-gold hover:underline flex items-center gap-1 font-semibold">
                 <i class="fa-solid fa-cloud-arrow-down"></i> Save for Offline Play
               </button>
             </div>
@@ -393,13 +448,16 @@
 
           <!-- Bottom Navigation: Prev / Next Hymn -->
           <div class="flex items-center justify-between pt-8 mt-8 border-t border-white/10">
-            <button id="prevHymnBtn" onclick="navigateHymn(-1)" class="px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-white font-semibold text-xs sm:text-sm flex items-center gap-2 transition">
+            <button id="prevHymnBtn" onclick="navigateHymn(-1)"
+              class="px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-white font-semibold text-xs sm:text-sm flex items-center gap-2 transition">
               <i class="fa-solid fa-chevron-left text-xs"></i> Previous Hymn
             </button>
-            <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="text-xs text-slate-400 hover:text-brand-gold transition">
+            <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})"
+              class="text-xs text-slate-400 hover:text-brand-gold transition">
               <i class="fa-solid fa-arrow-up mr-1"></i> Top of Page
             </button>
-            <button id="nextHymnBtn" onclick="navigateHymn(1)" class="px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-white font-semibold text-xs sm:text-sm flex items-center gap-2 transition">
+            <button id="nextHymnBtn" onclick="navigateHymn(1)"
+              class="px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-white font-semibold text-xs sm:text-sm flex items-center gap-2 transition">
               Next Hymn <i class="fa-solid fa-chevron-right text-xs"></i>
             </button>
           </div>
@@ -746,7 +804,7 @@
         const res = await fetch(`/api/hymns/${number}`);
         const data = await res.json();
         if (data.success) hymn = data.hymn;
-      } catch (_) {}
+      } catch (_) { }
     }
 
     if (!hymn) return;
@@ -832,7 +890,7 @@
     }
 
     if (query) {
-      filtered = filtered.filter(h => 
+      filtered = filtered.filter(h =>
         h.hymn_number.toString().includes(query) ||
         h.title.toLowerCase().includes(query) ||
         (h.tune && h.tune.toLowerCase().includes(query)) ||
