@@ -1,7 +1,57 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
+
+/// Real-time status model for batch downloads
+class BatchDownloadStatus {
+  final bool isRunning;
+  final bool isPaused;
+  final int completed;
+  final int total;
+  final int currentHymnNumber;
+  final String currentHymnTitle;
+  final double currentHymnProgress;
+  final double overallProgress;
+  final String message;
+
+  const BatchDownloadStatus({
+    this.isRunning = false,
+    this.isPaused = false,
+    this.completed = 0,
+    this.total = 695,
+    this.currentHymnNumber = 0,
+    this.currentHymnTitle = '',
+    this.currentHymnProgress = 0.0,
+    this.overallProgress = 0.0,
+    this.message = '',
+  });
+
+  BatchDownloadStatus copyWith({
+    bool? isRunning,
+    bool? isPaused,
+    int? completed,
+    int? total,
+    int? currentHymnNumber,
+    String? currentHymnTitle,
+    double? currentHymnProgress,
+    double? overallProgress,
+    String? message,
+  }) {
+    return BatchDownloadStatus(
+      isRunning: isRunning ?? this.isRunning,
+      isPaused: isPaused ?? this.isPaused,
+      completed: completed ?? this.completed,
+      total: total ?? this.total,
+      currentHymnNumber: currentHymnNumber ?? this.currentHymnNumber,
+      currentHymnTitle: currentHymnTitle ?? this.currentHymnTitle,
+      currentHymnProgress: currentHymnProgress ?? this.currentHymnProgress,
+      overallProgress: overallProgress ?? this.overallProgress,
+      message: message ?? this.message,
+    );
+  }
+}
 
 class SdaHymnAudioService {
   static final SdaHymnAudioService _instance = SdaHymnAudioService._internal();
@@ -10,6 +60,17 @@ class SdaHymnAudioService {
 
   final Map<int, double> _downloadProgress = {};
   final Set<int> _activeDownloads = {};
+
+  // Batch download state
+  final StreamController<BatchDownloadStatus> _batchStatusController =
+      StreamController<BatchDownloadStatus>.broadcast();
+  Stream<BatchDownloadStatus> get batchStatusStream => _batchStatusController.stream;
+
+  BatchDownloadStatus _currentBatchStatus = const BatchDownloadStatus();
+  BatchDownloadStatus get currentBatchStatus => _currentBatchStatus;
+
+  bool _isBatchCancelled = false;
+  bool _isBatchPaused = false;
 
   double getProgress(int hymnNumber) => _downloadProgress[hymnNumber] ?? 0.0;
   bool isDownloading(int hymnNumber) => _activeDownloads.contains(hymnNumber);
@@ -141,6 +202,149 @@ class SdaHymnAudioService {
     }
   }
 
+  // ==========================================
+  // 🚀 BATCH DOWNLOAD ALL 695 HYMNS
+  // ==========================================
+
+  void _emitBatchStatus(BatchDownloadStatus status) {
+    _currentBatchStatus = status;
+    _batchStatusController.add(status);
+  }
+
+  /// Pause current batch download
+  void pauseBatchDownload() {
+    _isBatchPaused = true;
+    _emitBatchStatus(_currentBatchStatus.copyWith(
+      isPaused: true,
+      message: 'Download paused by user.',
+    ));
+  }
+
+  /// Resume paused batch download
+  void resumeBatchDownload() {
+    _isBatchPaused = false;
+    _emitBatchStatus(_currentBatchStatus.copyWith(
+      isPaused: false,
+      message: 'Resuming download...',
+    ));
+  }
+
+  /// Cancel batch download
+  void cancelBatchDownload() {
+    _isBatchCancelled = true;
+    _isBatchPaused = false;
+    _emitBatchStatus(_currentBatchStatus.copyWith(
+      isRunning: false,
+      isPaused: false,
+      message: 'Batch download cancelled.',
+    ));
+  }
+
+  /// Start downloading all remaining hymns (1 to 695)
+  Future<void> startBatchDownload({
+    int totalHymns = 695,
+    Map<int, String>? hymnTitles,
+  }) async {
+    if (_currentBatchStatus.isRunning && !_currentBatchStatus.isPaused) {
+      return;
+    }
+
+    _isBatchCancelled = false;
+    _isBatchPaused = false;
+
+    final downloadedSet = await getDownloadedHymnNumbers();
+    final toDownload = <int>[];
+    for (int i = 1; i <= totalHymns; i++) {
+      if (!downloadedSet.contains(i)) {
+        toDownload.add(i);
+      }
+    }
+
+    int completedCount = downloadedSet.length;
+    _emitBatchStatus(BatchDownloadStatus(
+      isRunning: true,
+      isPaused: false,
+      completed: completedCount,
+      total: totalHymns,
+      currentHymnNumber: toDownload.isNotEmpty ? toDownload.first : 0,
+      currentHymnTitle: hymnTitles?[toDownload.isNotEmpty ? toDownload.first : 0] ?? '',
+      overallProgress: completedCount / totalHymns,
+      message: 'Starting offline piano pack download...',
+    ));
+
+    if (toDownload.isEmpty) {
+      _emitBatchStatus(BatchDownloadStatus(
+        isRunning: false,
+        isPaused: false,
+        completed: totalHymns,
+        total: totalHymns,
+        overallProgress: 1.0,
+        message: 'All $totalHymns hymns are already downloaded!',
+      ));
+      return;
+    }
+
+    for (int i = 0; i < toDownload.length; i++) {
+      if (_isBatchCancelled) {
+        break;
+      }
+
+      // Check if paused
+      while (_isBatchPaused && !_isBatchCancelled) {
+        await Future.delayed(const Duration(milliseconds: 500));
+      }
+
+      if (_isBatchCancelled) {
+        break;
+      }
+
+      final hymnNum = toDownload[i];
+      final title = hymnTitles?[hymnNum] ?? 'Hymn #$hymnNum';
+
+      _emitBatchStatus(_currentBatchStatus.copyWith(
+        isRunning: true,
+        currentHymnNumber: hymnNum,
+        currentHymnTitle: title,
+        currentHymnProgress: 0.0,
+        overallProgress: completedCount / totalHymns,
+        message: 'Downloading #$hymnNum: $title',
+      ));
+
+      final file = await downloadHymn(
+        hymnNum,
+        onProgress: (p) {
+          _emitBatchStatus(_currentBatchStatus.copyWith(
+            currentHymnProgress: p,
+            overallProgress: (completedCount + p) / totalHymns,
+          ));
+        },
+      );
+
+      if (file != null) {
+        completedCount++;
+      }
+
+      _emitBatchStatus(_currentBatchStatus.copyWith(
+        completed: completedCount,
+        overallProgress: completedCount / totalHymns,
+      ));
+
+      // Friendly delay between tracks to respect CDN
+      await Future.delayed(const Duration(milliseconds: 200));
+    }
+
+    _emitBatchStatus(BatchDownloadStatus(
+      isRunning: false,
+      isPaused: false,
+      completed: completedCount,
+      total: totalHymns,
+      overallProgress: completedCount / totalHymns,
+      message: completedCount >= totalHymns
+          ? '✓ Complete! All $totalHymns hymn piano tracks are saved offline.'
+          : 'Download session finished ($completedCount of $totalHymns saved).',
+    ));
+  }
+
   /// Delete cached hymn to free up local space if desired
   Future<bool> deleteHymn(int hymnNumber) async {
     try {
@@ -155,4 +359,3 @@ class SdaHymnAudioService {
     return false;
   }
 }
-

@@ -284,9 +284,9 @@
 
           <div class="flex items-center justify-between text-[11px] text-slate-400 pt-1 border-t border-white/5">
             <span id="hymnsCountLabel">Loading 695 Hymns...</span>
-            <span class="text-brand-gold/80 flex items-center gap-1">
-              <i class="fa-solid fa-cloud-arrow-down text-xs"></i> Zero-Data Offline Ready
-            </span>
+            <button onclick="openBatchDownloadModal()" class="text-brand-gold hover:text-white px-2 py-0.5 rounded bg-brand-gold/15 border border-brand-gold/30 flex items-center gap-1.5 font-semibold transition cursor-pointer" title="Download all 695 piano accompaniments for offline use">
+              <i class="fa-solid fa-cloud-arrow-down text-xs"></i> Download All Offline
+            </button>
           </div>
         </div>
 
@@ -409,6 +409,61 @@
 
     </div>
 
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- 📥 BATCH DOWNLOAD MODAL FOR OFFLINE PIANO  -->
+<!-- ========================================== -->
+<div id="batchDownloadModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4">
+  <div class="bg-brand-navy border border-brand-gold/40 rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl relative">
+    <div class="flex items-center justify-between mb-4 pb-3 border-b border-white/10">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-2xl bg-brand-gold/20 flex items-center justify-center text-brand-gold text-lg">
+          <i class="fa-solid fa-cloud-arrow-down"></i>
+        </div>
+        <div>
+          <h3 class="text-lg font-heading font-black text-white">Offline Hymnal Piano Library</h3>
+          <p class="text-xs text-slate-400">Download all 695 piano accompaniments</p>
+        </div>
+      </div>
+      <button onclick="closeBatchDownloadModal()" class="text-slate-400 hover:text-white text-xl">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <!-- Stats & Progress -->
+    <div class="space-y-4 my-6">
+      <div class="flex items-baseline justify-between">
+        <span class="text-xs text-slate-300 font-semibold truncate max-w-[280px]" id="batchCurrentTitle">Ready to start download</span>
+        <span class="text-xl font-heading font-black text-brand-gold" id="batchPercentage">0%</span>
+      </div>
+
+      <!-- Outer Progress Bar -->
+      <div class="w-full bg-brand-dark/90 rounded-full h-3.5 p-0.5 border border-white/10 overflow-hidden">
+        <div id="batchProgressBar" class="h-full bg-gradient-to-r from-brand-gold to-yellow-400 rounded-full transition-all duration-200" style="width: 0%"></div>
+      </div>
+
+      <div class="flex items-center justify-between text-xs text-slate-400">
+        <span id="batchCountLabel">0 / 695 Hymns Downloaded</span>
+        <span id="batchStatusLabel" class="text-brand-gold font-medium">Idle</span>
+      </div>
+
+      <div class="p-3 rounded-xl bg-white/5 border border-white/10 text-xs text-slate-300 flex items-start gap-2.5">
+        <i class="fa-solid fa-circle-info text-brand-gold mt-0.5"></i>
+        <span>Audio files are saved to your browser cache for zero-data offline singing. You can pause or resume at any time.</span>
+      </div>
+    </div>
+
+    <!-- Modal Controls -->
+    <div class="flex items-center justify-end gap-3 pt-4 border-t border-white/10">
+      <button id="batchCancelBtn" onclick="cancelBatchWebDownload()" class="hidden px-4 py-2.5 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-400 font-semibold text-xs transition">
+        Cancel
+      </button>
+      <button id="batchToggleBtn" onclick="toggleBatchWebDownload()" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-brand-gold to-yellow-500 hover:brightness-110 text-brand-dark font-black text-xs uppercase tracking-wider transition shadow-lg flex items-center gap-2 cursor-pointer">
+        <i class="fa-solid fa-download"></i> Start Download All
+      </button>
+    </div>
   </div>
 </div>
 
@@ -843,6 +898,125 @@
         showToast('Audio cached successfully!');
       }
     }
+  }
+
+  // 12. Batch Download All 695 Piano Tracks for Web Offline Play
+  let isBatchDownloading = false;
+  let batchIsPaused = false;
+  let batchIndex = 0;
+  let batchDownloadedCount = 0;
+
+  function openBatchDownloadModal() {
+    const modal = document.getElementById('batchDownloadModal');
+    if (!modal) return;
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    checkExistingCacheCount();
+  }
+
+  function closeBatchDownloadModal() {
+    const modal = document.getElementById('batchDownloadModal');
+    if (!modal) return;
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+  }
+
+  async function checkExistingCacheCount() {
+    if (!('caches' in window)) return;
+    try {
+      const cache = await caches.open('sda-hymnal-v1');
+      const keys = await cache.keys();
+      const hymnAudioKeys = keys.filter(req => req.url.includes('/sda-hymnal/mp3/'));
+      batchDownloadedCount = hymnAudioKeys.length;
+      updateBatchUI();
+    } catch (_) {}
+  }
+
+  function updateBatchUI() {
+    const total = 695;
+    const pct = Math.min(100, Math.round((batchDownloadedCount / total) * 100));
+    const pctEl = document.getElementById('batchPercentage');
+    const barEl = document.getElementById('batchProgressBar');
+    const countEl = document.getElementById('batchCountLabel');
+    if (pctEl) pctEl.innerText = `${pct}%`;
+    if (barEl) barEl.style.width = `${pct}%`;
+    if (countEl) countEl.innerText = `${batchDownloadedCount} / ${total} Hymns Downloaded`;
+  }
+
+  async function toggleBatchWebDownload() {
+    if (!('caches' in window)) {
+      alert('Offline Cache Storage is not supported by your current browser.');
+      return;
+    }
+    const btn = document.getElementById('batchToggleBtn');
+    const cancelBtn = document.getElementById('batchCancelBtn');
+    const statusLabel = document.getElementById('batchStatusLabel');
+    const titleLabel = document.getElementById('batchCurrentTitle');
+
+    if (isBatchDownloading) {
+      batchIsPaused = true;
+      isBatchDownloading = false;
+      if (btn) btn.innerHTML = '<i class="fa-solid fa-play"></i> Resume Download';
+      if (statusLabel) statusLabel.innerText = 'Paused';
+      return;
+    }
+
+    isBatchDownloading = true;
+    batchIsPaused = false;
+    if (btn) btn.innerHTML = '<i class="fa-solid fa-pause"></i> Pause Download';
+    if (cancelBtn) cancelBtn.classList.remove('hidden');
+    if (statusLabel) statusLabel.innerText = 'Downloading...';
+
+    const cache = await caches.open('sda-hymnal-v1');
+
+    for (let i = batchIndex + 1; i <= 695; i++) {
+      if (!isBatchDownloading || batchIsPaused) break;
+      batchIndex = i;
+      const padNum = String(i).padStart(3, '0');
+      const audioUrl = `https://hymnal.pro/sda-hymnal/mp3/${padNum}.mp3`;
+      if (titleLabel) titleLabel.innerText = `Downloading Hymn #${i}...`;
+
+      try {
+        const match = await cache.match(audioUrl);
+        if (!match) {
+          const resp = await fetch(audioUrl, { mode: 'cors' });
+          if (resp && resp.ok) {
+            await cache.put(audioUrl, resp);
+            batchDownloadedCount++;
+          }
+        } else {
+          // Already in cache
+        }
+      } catch (err) {
+        console.warn(`Hymn ${i} cache skip/error:`, err);
+      }
+      updateBatchUI();
+    }
+
+    if (batchDownloadedCount >= 695 || batchIndex >= 695) {
+      isBatchDownloading = false;
+      if (titleLabel) titleLabel.innerText = 'All 695 Hymn Accompaniments Ready!';
+      if (statusLabel) statusLabel.innerText = 'Complete (100%)';
+      if (btn) {
+        btn.innerHTML = '<i class="fa-solid fa-check"></i> Library Ready';
+        btn.disabled = true;
+      }
+      if (cancelBtn) cancelBtn.classList.add('hidden');
+      if (typeof showToast === 'function') {
+        showToast('All 695 hymns downloaded for offline singing!');
+      }
+    }
+  }
+
+  function cancelBatchWebDownload() {
+    isBatchDownloading = false;
+    batchIsPaused = false;
+    const btn = document.getElementById('batchToggleBtn');
+    const cancelBtn = document.getElementById('batchCancelBtn');
+    const statusLabel = document.getElementById('batchStatusLabel');
+    if (btn) btn.innerHTML = '<i class="fa-solid fa-download"></i> Start Download All';
+    if (cancelBtn) cancelBtn.classList.add('hidden');
+    if (statusLabel) statusLabel.innerText = 'Cancelled';
   }
 
   // Initialize when page loads

@@ -137,6 +137,8 @@ class _SdaHymnDetailScreenState extends State<SdaHymnDetailScreen> {
                 child: Text(
                   'Hymn #${widget.hymn.number} piano downloaded! Available 100% offline.',
                   style: const TextStyle(fontWeight: FontWeight.bold),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
                 ),
               ),
             ],
@@ -246,68 +248,121 @@ class _SdaHymnDetailScreenState extends State<SdaHymnDetailScreen> {
         backgroundColor: AppTheme.primaryBlue,
         foregroundColor: Colors.white,
         elevation: 0,
+        titleSpacing: 0,
         title: Text(
           'Hymn #${widget.hymn.number}',
-          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
+          overflow: TextOverflow.ellipsis,
         ),
         actions: [
-          // Previous Hymn
+          // Previous Hymn Navigation
           if (canGoPrev)
             IconButton(
+              padding: const EdgeInsets.symmetric(horizontal: 4),
+              constraints: const BoxConstraints(),
               tooltip: 'Previous Hymn (#${widget.hymn.number - 1})',
-              icon: const Icon(Icons.chevron_left_rounded),
+              icon: const Icon(Icons.chevron_left_rounded, size: 24),
               onPressed: () => _navigateToHymn(widget.hymn.number - 1),
             ),
-          // Next Hymn
+          // Next Hymn Navigation
           if (canGoNext)
             IconButton(
+              padding: const EdgeInsets.symmetric(horizontal: 4),
+              constraints: const BoxConstraints(),
               tooltip: 'Next Hymn (#${widget.hymn.number + 1})',
-              icon: const Icon(Icons.chevron_right_rounded),
+              icon: const Icon(Icons.chevron_right_rounded, size: 24),
               onPressed: () => _navigateToHymn(widget.hymn.number + 1),
             ),
-          // Lyrics Font Size
+          // Lyrics Font Size Quick Button
           IconButton(
+            padding: const EdgeInsets.symmetric(horizontal: 6),
+            constraints: const BoxConstraints(),
             tooltip: 'Lyrics Size (A- / A+)',
-            icon: const Icon(Icons.format_size_rounded),
+            icon: const Icon(Icons.format_size_rounded, size: 20),
             onPressed: () {
               setState(() {
                 _lyricsFontSize = _lyricsFontSize >= 24 ? 15.0 : _lyricsFontSize + 2.0;
               });
             },
           ),
-          // Copy Lyrics
-          IconButton(
-            tooltip: 'Copy Lyrics',
-            icon: const Icon(Icons.copy_rounded),
-            onPressed: () {
-              Clipboard.setData(ClipboardData(
-                text: 'SDA Hymnal #${widget.hymn.number} - ${widget.hymn.title}\n\n${widget.hymn.fullLyrics}',
-              ));
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Hymn lyrics copied to clipboard!'),
-                  duration: Duration(seconds: 2),
+          // Overflow Menu for Copy & Share (Prevents AppBar Overflow)
+          PopupMenuButton<String>(
+            tooltip: 'More Actions',
+            icon: const Icon(Icons.more_vert_rounded),
+            itemBuilder: (ctx) => [
+              const PopupMenuItem(
+                value: 'copy',
+                child: Row(
+                  children: [
+                    Icon(Icons.copy_rounded, size: 18, color: AppTheme.primaryBlue),
+                    SizedBox(width: 10),
+                    Text('Copy Lyrics'),
+                  ],
                 ),
-              );
+              ),
+              const PopupMenuItem(
+                value: 'share',
+                child: Row(
+                  children: [
+                    Icon(Icons.share_rounded, size: 18, color: AppTheme.primaryBlue),
+                    SizedBox(width: 10),
+                    Text('Share Hymn'),
+                  ],
+                ),
+              ),
+              if (_isDownloaded)
+                const PopupMenuItem(
+                  value: 'delete',
+                  child: Row(
+                    children: [
+                      Icon(Icons.delete_outline, size: 18, color: Colors.red),
+                      SizedBox(width: 10),
+                      Text('Delete Offline Piano', style: TextStyle(color: Colors.red)),
+                    ],
+                  ),
+                )
+              else
+                const PopupMenuItem(
+                  value: 'download',
+                  child: Row(
+                    children: [
+                      Icon(Icons.cloud_download_rounded, size: 18, color: Colors.green),
+                      SizedBox(width: 10),
+                      Text('Download Piano'),
+                    ],
+                  ),
+                ),
+            ],
+            onSelected: (val) {
+              if (val == 'copy') {
+                Clipboard.setData(ClipboardData(
+                  text: 'SDA Hymnal #${widget.hymn.number} - ${widget.hymn.title}\n\n${widget.hymn.fullLyrics}',
+                ));
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Hymn lyrics copied to clipboard!'),
+                    duration: Duration(seconds: 2),
+                  ),
+                );
+              } else if (val == 'share') {
+                Share.share(
+                  '📖 SDA Hymn #${widget.hymn.number}: "${widget.hymn.title}"\n\n'
+                  '${widget.hymn.fullLyrics}\n\n'
+                  '— Sourced from HARVION SDA Ministry App & Hymnal',
+                );
+              } else if (val == 'download') {
+                _downloadCurrentHymn();
+              } else if (val == 'delete') {
+                _deleteDownloadedHymn();
+              }
             },
           ),
-          // Share Hymn
-          IconButton(
-            tooltip: 'Share Hymn',
-            icon: const Icon(Icons.share_rounded),
-            onPressed: () {
-              Share.share(
-                '📖 SDA Hymn #${widget.hymn.number}: "${widget.hymn.title}"\n\n'
-                '${widget.hymn.fullLyrics}\n\n'
-                '— Sourced from HARVION SDA Ministry App & Hymnal',
-              );
-            },
-          ),
+          const SizedBox(width: 4),
         ],
       ),
       bottomNavigationBar: _buildStickyPianoPlayerBar(),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.fromLTRB(16, 16, 16, 140),
+        padding: const EdgeInsets.fromLTRB(16, 16, 16, 150),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -350,7 +405,7 @@ class _SdaHymnDetailScreenState extends State<SdaHymnDetailScreen> {
 
   Widget _buildHeaderCard() {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
         color: AppTheme.primaryBlue,
         borderRadius: BorderRadius.circular(20),
@@ -368,22 +423,26 @@ class _SdaHymnDetailScreenState extends State<SdaHymnDetailScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                decoration: BoxDecoration(
-                  color: AppTheme.sacredGold,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Text(
-                  'HYMN #${widget.hymn.number}',
-                  style: const TextStyle(
-                    color: AppTheme.primaryBlue,
-                    fontWeight: FontWeight.w900,
-                    fontSize: 14,
-                    letterSpacing: 1.1,
+              Flexible(
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: AppTheme.sacredGold,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Text(
+                    'HYMN #${widget.hymn.number}',
+                    style: const TextStyle(
+                      color: AppTheme.primaryBlue,
+                      fontWeight: FontWeight.w900,
+                      fontSize: 13,
+                      letterSpacing: 1.1,
+                    ),
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
               ),
+              const SizedBox(width: 8),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(
@@ -391,6 +450,7 @@ class _SdaHymnDetailScreenState extends State<SdaHymnDetailScreen> {
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Row(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     const Icon(Icons.music_note, color: Colors.white, size: 14),
                     const SizedBox(width: 4),
@@ -412,7 +472,7 @@ class _SdaHymnDetailScreenState extends State<SdaHymnDetailScreen> {
             widget.hymn.title,
             style: const TextStyle(
               color: Colors.white,
-              fontSize: 24,
+              fontSize: 22,
               fontWeight: FontWeight.w800,
               fontFamily: 'Serif',
               height: 1.25,
@@ -423,12 +483,16 @@ class _SdaHymnDetailScreenState extends State<SdaHymnDetailScreen> {
             children: [
               const Icon(Icons.category_outlined, color: AppTheme.sacredGold, size: 14),
               const SizedBox(width: 6),
-              Text(
-                widget.hymn.category,
-                style: const TextStyle(
-                  color: AppTheme.sacredGold,
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
+              Expanded(
+                child: Text(
+                  widget.hymn.category,
+                  style: const TextStyle(
+                    color: AppTheme.sacredGold,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
             ],
@@ -462,8 +526,8 @@ class _SdaHymnDetailScreenState extends State<SdaHymnDetailScreen> {
           Row(
             children: [
               Container(
-                width: 46,
-                height: 46,
+                width: 44,
+                height: 44,
                 decoration: BoxDecoration(
                   color: _isDownloaded ? Colors.green.shade50 : AppTheme.sacredGold.withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(12),
@@ -471,7 +535,7 @@ class _SdaHymnDetailScreenState extends State<SdaHymnDetailScreen> {
                 child: Icon(
                   _isDownloaded ? Icons.offline_pin_rounded : Icons.piano,
                   color: _isDownloaded ? Colors.green.shade700 : AppTheme.primaryBlue,
-                  size: 26,
+                  size: 24,
                 ),
               ),
               const SizedBox(width: 12),
@@ -485,16 +549,20 @@ class _SdaHymnDetailScreenState extends State<SdaHymnDetailScreen> {
                           : 'Piano Accompaniment (Sing Along)',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: 14,
+                        fontSize: 13.5,
                         color: _isDownloaded ? Colors.green.shade800 : AppTheme.primaryBlue,
                       ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
                     const SizedBox(height: 2),
                     Text(
                       _isDownloaded
                           ? 'Saved on device • Plays 100% offline without internet.'
-                          : 'Listen to the instrumental piano chords and sing along.',
-                      style: const TextStyle(fontSize: 11.5, color: Colors.black54),
+                          : 'Pure instrumental piano chords for sing-along.',
+                      style: const TextStyle(fontSize: 11, color: Colors.black54),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ],
                 ),
@@ -503,7 +571,7 @@ class _SdaHymnDetailScreenState extends State<SdaHymnDetailScreen> {
           ),
           const SizedBox(height: 12),
 
-          // Download Progress Bar or Action Buttons
+          // Download Progress Bar or Action Buttons (Safe from pixel overflow)
           if (_isDownloading)
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -521,10 +589,15 @@ class _SdaHymnDetailScreenState extends State<SdaHymnDetailScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
-                      'Downloading piano track for offline use...',
-                      style: TextStyle(fontSize: 11, color: AppTheme.primaryBlue, fontWeight: FontWeight.w600),
+                    const Expanded(
+                      child: Text(
+                        'Downloading piano audio for offline use...',
+                        style: TextStyle(fontSize: 11, color: AppTheme.primaryBlue, fontWeight: FontWeight.w600),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
+                    const SizedBox(width: 8),
                     Text(
                       '${(_downloadProgress * 100).toInt()}%',
                       style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AppTheme.primaryBlue),
@@ -538,7 +611,7 @@ class _SdaHymnDetailScreenState extends State<SdaHymnDetailScreen> {
               children: [
                 Expanded(
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
                     decoration: BoxDecoration(
                       color: Colors.green.shade50,
                       borderRadius: BorderRadius.circular(8),
@@ -549,12 +622,15 @@ class _SdaHymnDetailScreenState extends State<SdaHymnDetailScreen> {
                       children: [
                         Icon(Icons.check_circle, size: 16, color: Colors.green.shade700),
                         const SizedBox(width: 6),
-                        Text(
-                          'Downloaded for Offline Play',
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.green.shade800,
+                        const Flexible(
+                          child: Text(
+                            'Downloaded for Offline Play',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF1B5E20),
+                            ),
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
                       ],
@@ -574,14 +650,17 @@ class _SdaHymnDetailScreenState extends State<SdaHymnDetailScreen> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppTheme.primaryBlue,
                 foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(vertical: 11),
+                padding: const EdgeInsets.symmetric(vertical: 11, horizontal: 12),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                 elevation: 0,
               ),
-              icon: const Icon(Icons.cloud_download_rounded, size: 19),
-              label: const Text(
-                'DOWNLOAD PIANO FOR OFFLINE PLAY',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12, letterSpacing: 0.5),
+              icon: const Icon(Icons.cloud_download_rounded, size: 18),
+              label: const FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  'DOWNLOAD PIANO FOR OFFLINE PLAY',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12, letterSpacing: 0.5),
+                ),
               ),
               onPressed: _downloadCurrentHymn,
             ),
@@ -602,7 +681,7 @@ class _SdaHymnDetailScreenState extends State<SdaHymnDetailScreen> {
         return Container(
           decoration: BoxDecoration(
             color: AppTheme.primaryBlue,
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(22)),
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withValues(alpha: 0.25),
@@ -611,7 +690,7 @@ class _SdaHymnDetailScreenState extends State<SdaHymnDetailScreen> {
               ),
             ],
           ),
-          padding: const EdgeInsets.fromLTRB(16, 12, 16, 14),
+          padding: const EdgeInsets.fromLTRB(14, 10, 14, 12),
           child: SafeArea(
             top: false,
             child: Column(
@@ -621,18 +700,18 @@ class _SdaHymnDetailScreenState extends State<SdaHymnDetailScreen> {
                 Row(
                   children: [
                     Container(
-                      padding: const EdgeInsets.all(8),
+                      padding: const EdgeInsets.all(7),
                       decoration: BoxDecoration(
                         color: _isDownloaded ? Colors.green.withValues(alpha: 0.25) : AppTheme.sacredGold.withValues(alpha: 0.2),
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(9),
                       ),
                       child: Icon(
                         _isDownloaded ? Icons.offline_pin_rounded : Icons.piano,
                         color: _isDownloaded ? Colors.greenAccent : AppTheme.sacredGold,
-                        size: 20,
+                        size: 19,
                       ),
                     ),
-                    const SizedBox(width: 10),
+                    const SizedBox(width: 8),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -642,55 +721,65 @@ class _SdaHymnDetailScreenState extends State<SdaHymnDetailScreen> {
                             style: const TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
-                              fontSize: 13,
+                              fontSize: 12.5,
                             ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
                           Text(
                             _hasError
-                                ? '⚠️ Offline / Connection error (Tap to retry)'
+                                ? '⚠️ Connection error (Tap to retry)'
                                 : isPlaying
                                     ? (_isDownloaded ? '✓ Playing Offline Piano • Sing Along' : '🎹 Streaming Piano • Sing Along')
                                     : (isBuffering ? '⏳ Loading Piano Accompaniment...' : '⏸ Piano Paused • Tap Play'),
                             style: TextStyle(
                               color: _hasError ? Colors.amberAccent : (isPlaying ? AppTheme.sacredGold : Colors.white70),
-                              fontSize: 11,
+                              fontSize: 10.5,
                               fontWeight: isPlaying ? FontWeight.w600 : FontWeight.normal,
                             ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ],
                       ),
                     ),
                     // Replay Button
                     IconButton(
-                      icon: const Icon(Icons.replay, color: Colors.white70, size: 20),
+                      padding: const EdgeInsets.all(4),
+                      constraints: const BoxConstraints(),
+                      icon: const Icon(Icons.replay, color: Colors.white70, size: 18),
                       tooltip: 'Replay from Start',
                       onPressed: _replayAudio,
                     ),
+                    const SizedBox(width: 6),
                     // Loop Toggle
                     IconButton(
+                      padding: const EdgeInsets.all(4),
+                      constraints: const BoxConstraints(),
                       icon: Icon(
                         Icons.repeat,
                         color: _isLooping ? AppTheme.sacredGold : Colors.white38,
-                        size: 20,
+                        size: 18,
                       ),
                       tooltip: _isLooping ? 'Loop Active' : 'Repeat Off',
                       onPressed: _toggleLoop,
                     ),
+                    const SizedBox(width: 6),
                     // Speed Menu
                     PopupMenuButton<double>(
                       tooltip: 'Playback Pace',
                       initialValue: _playbackSpeed,
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints(),
                       icon: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
                         decoration: BoxDecoration(
                           color: Colors.white.withValues(alpha: 0.15),
-                          borderRadius: BorderRadius.circular(6),
+                          borderRadius: BorderRadius.circular(5),
                         ),
                         child: Text(
                           '${_playbackSpeed}x',
-                          style: const TextStyle(color: AppTheme.sacredGold, fontSize: 11, fontWeight: FontWeight.bold),
+                          style: const TextStyle(color: AppTheme.sacredGold, fontSize: 10, fontWeight: FontWeight.bold),
                         ),
                       ),
                       itemBuilder: (context) => [
@@ -702,7 +791,7 @@ class _SdaHymnDetailScreenState extends State<SdaHymnDetailScreen> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: 2),
 
                 // Audio Seek Bar
                 StreamBuilder<Duration>(
@@ -721,8 +810,8 @@ class _SdaHymnDetailScreenState extends State<SdaHymnDetailScreen> {
                       children: [
                         SliderTheme(
                           data: SliderTheme.of(context).copyWith(
-                            trackHeight: 3.5,
-                            thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 6),
+                            trackHeight: 3.0,
+                            thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 5),
                             activeTrackColor: AppTheme.sacredGold,
                             inactiveTrackColor: Colors.white.withValues(alpha: 0.2),
                             thumbColor: AppTheme.sacredGold,
@@ -738,7 +827,7 @@ class _SdaHymnDetailScreenState extends State<SdaHymnDetailScreen> {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          padding: const EdgeInsets.symmetric(horizontal: 6),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -757,32 +846,37 @@ class _SdaHymnDetailScreenState extends State<SdaHymnDetailScreen> {
                     );
                   },
                 ),
-                const SizedBox(height: 6),
+                const SizedBox(height: 4),
 
-                // Main Play / Pause Button Row
+                // Main Play / Pause Button Row (Never overflows)
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    ElevatedButton.icon(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppTheme.sacredGold,
-                        foregroundColor: AppTheme.primaryBlue,
-                        padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 12),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                        elevation: 4,
+                    Flexible(
+                      child: ElevatedButton.icon(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppTheme.sacredGold,
+                          foregroundColor: AppTheme.primaryBlue,
+                          padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 10),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
+                          elevation: 3,
+                        ),
+                        icon: isBuffering
+                            ? const SizedBox(
+                                width: 16,
+                                height: 16,
+                                child: CircularProgressIndicator(strokeWidth: 2, color: AppTheme.primaryBlue),
+                              )
+                            : Icon(isPlaying ? Icons.pause_rounded : Icons.play_arrow_rounded, size: 22),
+                        label: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Text(
+                            isPlaying ? 'PAUSE PIANO' : 'PLAY PIANO & SING ALONG',
+                            style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 12.5, letterSpacing: 0.6),
+                          ),
+                        ),
+                        onPressed: _togglePlayPause,
                       ),
-                      icon: isBuffering
-                          ? const SizedBox(
-                              width: 18,
-                              height: 18,
-                              child: CircularProgressIndicator(strokeWidth: 2, color: AppTheme.primaryBlue),
-                            )
-                          : Icon(isPlaying ? Icons.pause_rounded : Icons.play_arrow_rounded, size: 24),
-                      label: Text(
-                        isPlaying ? 'PAUSE PIANO' : 'PLAY PIANO & SING ALONG',
-                        style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 13, letterSpacing: 0.8),
-                      ),
-                      onPressed: _togglePlayPause,
                     ),
                   ],
                 ),
@@ -803,7 +897,7 @@ class _SdaHymnDetailScreenState extends State<SdaHymnDetailScreen> {
       // Stanza Card
       items.add(
         Container(
-          padding: const EdgeInsets.all(18),
+          padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(16),
@@ -820,7 +914,7 @@ class _SdaHymnDetailScreenState extends State<SdaHymnDetailScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
                 decoration: BoxDecoration(
                   color: AppTheme.primaryBlue.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
@@ -835,7 +929,7 @@ class _SdaHymnDetailScreenState extends State<SdaHymnDetailScreen> {
                   ),
                 ),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 10),
               Text(
                 widget.hymn.stanzas[stanzaIndex],
                 style: TextStyle(
@@ -856,7 +950,7 @@ class _SdaHymnDetailScreenState extends State<SdaHymnDetailScreen> {
         items.add(const SizedBox(height: 12));
         items.add(
           Container(
-            padding: const EdgeInsets.all(18),
+            padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               color: AppTheme.sacredGold.withValues(alpha: 0.12),
               borderRadius: BorderRadius.circular(16),
@@ -865,17 +959,20 @@ class _SdaHymnDetailScreenState extends State<SdaHymnDetailScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
+                const Row(
                   children: [
-                    const Icon(Icons.star_rounded, color: AppTheme.primaryBlue, size: 16),
-                    const SizedBox(width: 6),
-                    Text(
-                      'REFRAIN / CHORUS',
-                      style: TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w900,
-                        color: AppTheme.primaryBlue.withValues(alpha: 0.85),
-                        letterSpacing: 1.1,
+                    Icon(Icons.star_rounded, color: AppTheme.primaryBlue, size: 16),
+                    SizedBox(width: 6),
+                    Expanded(
+                      child: Text(
+                        'REFRAIN / CHORUS',
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w900,
+                          color: AppTheme.primaryBlue,
+                          letterSpacing: 1.1,
+                        ),
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                   ],

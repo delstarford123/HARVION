@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:share_plus/share_plus.dart';
@@ -25,12 +26,20 @@ class _MusicScreenState extends State<MusicScreen> with SingleTickerProviderStat
   String _hymnSearchQuery = '';
   String _selectedCategory = 'All';
   Set<int> _downloadedHymns = {};
+  StreamSubscription<BatchDownloadStatus>? _batchStatusSub;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
     _loadDownloadedHymns();
+
+    // Listen to real-time batch downloads to update offline badges dynamically
+    _batchStatusSub = SdaHymnAudioService().batchStatusStream.listen((status) {
+      if (mounted) {
+        _loadDownloadedHymns();
+      }
+    });
   }
 
   Future<void> _loadDownloadedHymns() async {
@@ -42,6 +51,7 @@ class _MusicScreenState extends State<MusicScreen> with SingleTickerProviderStat
 
   @override
   void dispose() {
+    _batchStatusSub?.cancel();
     _tabController.dispose();
     _hymnSearchController.dispose();
     super.dispose();
@@ -148,10 +158,10 @@ class _MusicScreenState extends State<MusicScreen> with SingleTickerProviderStat
                   children: [
                     const Row(
                       children: [
-                        Icon(Icons.library_music, color: AppTheme.primaryBlue),
+                        Icon(Icons.cloud_upload_rounded, color: AppTheme.primaryBlue, size: 24),
                         SizedBox(width: 8),
                         Text(
-                          'Post Audio / Sermon',
+                          'Post New Sacred Audio',
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -170,70 +180,57 @@ class _MusicScreenState extends State<MusicScreen> with SingleTickerProviderStat
                 TextField(
                   controller: titleCtrl,
                   decoration: InputDecoration(
-                    labelText: 'Audio Title *',
-                    hintText: 'e.g. Abide With Me - Male Chorale',
+                    labelText: 'Song / Sermon Title *',
+                    hintText: 'e.g. Great Is Thy Faithfulness',
                     border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-                    prefixIcon: const Icon(Icons.title),
                   ),
                 ),
                 const SizedBox(height: 12),
                 TextField(
                   controller: artistCtrl,
                   decoration: InputDecoration(
-                    labelText: 'Artist / Choir / Preacher *',
-                    hintText: 'e.g. HARVION Sacred Choir',
+                    labelText: 'Choir / Speaker Name *',
+                    hintText: 'e.g. Heritage Singers / Pastor Mwangi',
                     border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-                    prefixIcon: const Icon(Icons.person),
                   ),
+                ),
+                const SizedBox(height: 12),
+                DropdownButtonFormField<String>(
+                  value: selectedCategory,
+                  decoration: InputDecoration(
+                    labelText: 'Category',
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                  ),
+                  items: const [
+                    DropdownMenuItem(value: 'Sacred Choir', child: Text('Sacred Choir')),
+                    DropdownMenuItem(value: 'SDA Hymn', child: Text('SDA Hymn')),
+                    DropdownMenuItem(value: 'Sermon', child: Text('Sermon')),
+                    DropdownMenuItem(value: 'Devotional', child: Text('Devotional')),
+                    DropdownMenuItem(value: 'Youth Praise', child: Text('Youth Praise')),
+                    DropdownMenuItem(value: 'Instrumental', child: Text('Instrumental')),
+                  ],
+                  onChanged: (val) {
+                    if (val != null) setModalState(() => selectedCategory = val);
+                  },
                 ),
                 const SizedBox(height: 12),
                 TextField(
                   controller: urlCtrl,
                   decoration: InputDecoration(
-                    labelText: 'Audio MP3 URL *',
-                    hintText: 'https://archive.org/... or direct mp3',
+                    labelText: 'Direct Audio MP3 URL *',
+                    hintText: 'https://archive.org/... or hosted MP3',
                     border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-                    prefixIcon: const Icon(Icons.link),
                   ),
                 ),
                 const SizedBox(height: 12),
-                Row(
-                  children: [
-                    Expanded(
-                      flex: 2,
-                      child: DropdownButtonFormField<String>(
-                        value: selectedCategory,
-                        decoration: InputDecoration(
-                          labelText: 'Category',
-                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-                        ),
-                        items: const [
-                          DropdownMenuItem(value: 'Sacred Choir', child: Text('Sacred Choir')),
-                          DropdownMenuItem(value: 'Sermon', child: Text('Sermon')),
-                          DropdownMenuItem(value: 'SDA Hymn', child: Text('SDA Hymn')),
-                          DropdownMenuItem(value: 'Devotional', child: Text('Devotional')),
-                          DropdownMenuItem(value: 'Health Lecture', child: Text('Health Lecture')),
-                          DropdownMenuItem(value: 'Youth Worship', child: Text('Youth Worship')),
-                        ],
-                        onChanged: (val) {
-                          if (val != null) setModalState(() => selectedCategory = val);
-                        },
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      flex: 1,
-                      child: TextField(
-                        controller: priceCtrl,
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                          labelText: 'Price (Ksh)',
-                          hintText: '0 = Free',
-                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-                        ),
-                      ),
-                    ),
-                  ],
+                TextField(
+                  controller: priceCtrl,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    labelText: 'Access Price (Ksh) — 0 for Free',
+                    hintText: '0',
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                  ),
                 ),
                 const SizedBox(height: 20),
                 ElevatedButton.icon(
@@ -249,10 +246,10 @@ class _MusicScreenState extends State<MusicScreen> with SingleTickerProviderStat
                           height: 18,
                           child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
                         )
-                      : const Icon(Icons.cloud_upload_outlined),
+                      : const Icon(Icons.check_circle_outline),
                   label: Text(
-                    isSubmitting ? 'Uploading to Library...' : 'Publish Audio Track',
-                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    isSubmitting ? 'Publishing...' : 'Publish Audio to Library',
+                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
                   ),
                   onPressed: isSubmitting
                       ? null
@@ -264,10 +261,7 @@ class _MusicScreenState extends State<MusicScreen> with SingleTickerProviderStat
 
                           if (title.isEmpty || artist.isEmpty || url.isEmpty) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Please fill in Title, Artist, and Audio URL.'),
-                                backgroundColor: Colors.red,
-                              ),
+                              const SnackBar(content: Text('Please fill all required fields.')),
                             );
                             return;
                           }
@@ -284,11 +278,13 @@ class _MusicScreenState extends State<MusicScreen> with SingleTickerProviderStat
                               'publishedDate': FieldValue.serverTimestamp(),
                             });
 
+                            if (!ctx.mounted) return;
+                            Navigator.pop(ctx);
+
                             if (mounted) {
-                              Navigator.pop(ctx);
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
-                                  content: Text('Audio track "$title" published successfully!'),
+                                  content: Text('Published "$title" successfully!'),
                                   backgroundColor: AppTheme.primaryGreen,
                                 ),
                               );
@@ -322,35 +318,35 @@ class _MusicScreenState extends State<MusicScreen> with SingleTickerProviderStat
       {
         'title': 'Great Is Thy Faithfulness',
         'speaker': 'HARVION Adventist Symphony Choir',
-        'audioUrl': 'https://archive.org/download/sda-hymnal-instrumental/100_Great_Is_Thy_Faithfulness.mp3',
+        'audioUrl': 'https://hymnal.pro/sda-hymnal/mp3/100.mp3',
         'category': 'Sacred Choir',
         'price': 0.0,
       },
       {
         'title': 'The Three Angels\' Messages Explained',
         'speaker': 'Pastor H.M.S. Richards',
-        'audioUrl': 'https://archive.org/download/sda-hymnal-instrumental/001_Praise_to_the_Lord.mp3',
+        'audioUrl': 'https://hymnal.pro/sda-hymnal/mp3/001.mp3',
         'category': 'Sermon',
         'price': 0.0,
       },
       {
         'title': 'We Have This Hope (Advent Hymn)',
         'speaker': 'SDA General Conference Session Choir',
-        'audioUrl': 'https://archive.org/download/sda-hymnal-instrumental/214_We_Have_This_Hope.mp3',
+        'audioUrl': 'https://hymnal.pro/sda-hymnal/mp3/214.mp3',
         'category': 'SDA Hymn',
         'price': 0.0,
       },
       {
         'title': 'Holy Sabbath, Day of Rest',
         'speaker': 'East Africa Heritage Chorale',
-        'audioUrl': 'https://archive.org/download/sda-hymnal-instrumental/381_Holy_Sabbath_Day_of_Rest.mp3',
+        'audioUrl': 'https://hymnal.pro/sda-hymnal/mp3/381.mp3',
         'category': 'Sacred Choir',
         'price': 0.0,
       },
       {
         'title': 'God\'s Love for Man (Steps to Christ Ch. 1)',
         'speaker': 'HARVION Audio Ministry',
-        'audioUrl': 'https://archive.org/download/sda-hymnal-instrumental/108_Amazing_Grace.mp3',
+        'audioUrl': 'https://hymnal.pro/sda-hymnal/mp3/108.mp3',
         'category': 'Devotional',
         'price': 0.0,
       },
@@ -383,6 +379,473 @@ class _MusicScreenState extends State<MusicScreen> with SingleTickerProviderStat
         );
       }
     }
+  }
+
+  // ==========================================
+  // ⚡ BATCH DOWNLOAD: DOWNLOAD ALL HYMNS
+  // ==========================================
+  void _startAndShowBatchDownload() {
+    final titles = <int, String>{};
+    for (final h in SdaHymnalData.hymns) {
+      titles[h.number] = h.title;
+    }
+
+    SdaHymnAudioService().startBatchDownload(
+      totalHymns: SdaHymnalData.hymns.length,
+      hymnTitles: titles,
+    );
+
+    _showBatchDownloadSheet();
+  }
+
+  void _showBatchDownloadSheet() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (ctx) {
+        return StreamBuilder<BatchDownloadStatus>(
+          stream: SdaHymnAudioService().batchStatusStream,
+          initialData: SdaHymnAudioService().currentBatchStatus,
+          builder: (context, snapshot) {
+            final status = snapshot.data ?? const BatchDownloadStatus();
+            final percent = (status.overallProgress * 100).toInt();
+
+            return Padding(
+              padding: const EdgeInsets.fromLTRB(20, 20, 20, 30),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: AppTheme.sacredGold.withValues(alpha: 0.2),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: const Icon(Icons.piano, color: AppTheme.primaryBlue, size: 22),
+                          ),
+                          const SizedBox(width: 10),
+                          const Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Offline Piano Pack',
+                                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: AppTheme.primaryBlue),
+                              ),
+                              Text(
+                                'All 695 SDA Hymnal Accompaniments',
+                                style: TextStyle(fontSize: 11, color: Colors.black54),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.close_rounded),
+                        onPressed: () => Navigator.pop(ctx),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 18),
+
+                  // Metric Progress Box
+                  Container(
+                    padding: const EdgeInsets.all(18),
+                    decoration: BoxDecoration(
+                      color: AppTheme.backgroundLight,
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(color: Colors.black12),
+                    ),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              '$percent%',
+                              style: const TextStyle(
+                                fontSize: 32,
+                                fontWeight: FontWeight.w900,
+                                color: AppTheme.primaryBlue,
+                                height: 1,
+                              ),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                              decoration: BoxDecoration(
+                                color: status.isRunning
+                                    ? (status.isPaused ? Colors.amber.shade100 : Colors.green.shade100)
+                                    : Colors.grey.shade200,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Text(
+                                status.isRunning
+                                    ? (status.isPaused ? 'PAUSED' : 'DOWNLOADING')
+                                    : (status.completed >= status.total ? 'COMPLETE' : 'IDLE'),
+                                style: TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w900,
+                                  color: status.isRunning
+                                      ? (status.isPaused ? Colors.amber.shade900 : Colors.green.shade900)
+                                      : Colors.grey.shade700,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 12),
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
+                          child: LinearProgressIndicator(
+                            value: status.overallProgress > 0 ? status.overallProgress : null,
+                            minHeight: 10,
+                            backgroundColor: Colors.grey.shade300,
+                            valueColor: const AlwaysStoppedAnimation<Color>(AppTheme.primaryBlue),
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              '${status.completed} of ${status.total} hymns downloaded',
+                              style: const TextStyle(fontSize: 11.5, fontWeight: FontWeight.w600, color: Colors.black87),
+                            ),
+                            Text(
+                              '${status.total - status.completed} left',
+                              style: const TextStyle(fontSize: 11, color: Colors.black54),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 14),
+
+                  // Current Track Progress Details
+                  if (status.isRunning && status.currentHymnNumber > 0)
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: AppTheme.primaryBlue.withValues(alpha: 0.2)),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              const Icon(Icons.music_note, size: 14, color: AppTheme.sacredGold),
+                              const SizedBox(width: 6),
+                              Expanded(
+                                child: Text(
+                                  'Current: Hymn #${status.currentHymnNumber} • ${status.currentHymnTitle}',
+                                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: AppTheme.primaryBlue),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                              Text(
+                                '${(status.currentHymnProgress * 100).toInt()}%',
+                                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 11, color: AppTheme.primaryBlue),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 6),
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(4),
+                            child: LinearProgressIndicator(
+                              value: status.currentHymnProgress > 0 ? status.currentHymnProgress : null,
+                              minHeight: 4,
+                              backgroundColor: Colors.grey.shade200,
+                              valueColor: const AlwaysStoppedAnimation<Color>(AppTheme.sacredGold),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  const SizedBox(height: 18),
+
+                  // Action Buttons Row
+                  if (status.isRunning)
+                    Row(
+                      children: [
+                        Expanded(
+                          child: OutlinedButton.icon(
+                            style: OutlinedButton.styleFrom(
+                              foregroundColor: status.isPaused ? Colors.green.shade800 : AppTheme.primaryBlue,
+                              side: BorderSide(color: status.isPaused ? Colors.green : AppTheme.primaryBlue),
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                            ),
+                            icon: Icon(status.isPaused ? Icons.play_arrow_rounded : Icons.pause_rounded),
+                            label: Text(status.isPaused ? 'Resume' : 'Pause'),
+                            onPressed: () {
+                              if (status.isPaused) {
+                                SdaHymnAudioService().resumeBatchDownload();
+                              } else {
+                                SdaHymnAudioService().pauseBatchDownload();
+                              }
+                            },
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: ElevatedButton.icon(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.red.shade700,
+                              foregroundColor: Colors.white,
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                              elevation: 0,
+                            ),
+                            icon: const Icon(Icons.stop_rounded),
+                            label: const Text('Cancel'),
+                            onPressed: () {
+                              SdaHymnAudioService().cancelBatchDownload();
+                              _loadDownloadedHymns();
+                            },
+                          ),
+                        ),
+                      ],
+                    )
+                  else
+                    ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppTheme.primaryBlue,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(vertical: 13),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      ),
+                      icon: const Icon(Icons.cloud_download_rounded),
+                      label: Text(status.completed >= status.total ? 'All Hymns Downloaded' : 'Start Downloading Remaining Tracks'),
+                      onPressed: status.completed >= status.total
+                          ? null
+                          : () {
+                              final titles = <int, String>{};
+                              for (final h in SdaHymnalData.hymns) {
+                                titles[h.number] = h.title;
+                              }
+                              SdaHymnAudioService().startBatchDownload(
+                                totalHymns: SdaHymnalData.hymns.length,
+                                hymnTitles: titles,
+                              );
+                            },
+                    ),
+
+                  const SizedBox(height: 10),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(ctx);
+                      _loadDownloadedHymns();
+                    },
+                    child: const Text('Keep Downloading in Background', style: TextStyle(color: Colors.black54, fontSize: 12)),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Widget _buildBatchDownloadBanner() {
+    return StreamBuilder<BatchDownloadStatus>(
+      stream: SdaHymnAudioService().batchStatusStream,
+      initialData: SdaHymnAudioService().currentBatchStatus,
+      builder: (context, snapshot) {
+        final status = snapshot.data ?? const BatchDownloadStatus();
+        final isRunning = status.isRunning;
+        final totalCount = SdaHymnalData.hymns.length;
+        final downloadedCount = _downloadedHymns.length;
+        final isAllDownloaded = downloadedCount >= totalCount && totalCount > 0;
+
+        return Container(
+          margin: const EdgeInsets.fromLTRB(16, 10, 16, 6),
+          padding: const EdgeInsets.all(14),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: isAllDownloaded
+                  ? Colors.green.shade400
+                  : (isRunning ? AppTheme.primaryBlue : AppTheme.sacredGold.withValues(alpha: 0.6)),
+              width: 1.5,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.04),
+                blurRadius: 8,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    width: 42,
+                    height: 42,
+                    decoration: BoxDecoration(
+                      color: isAllDownloaded
+                          ? Colors.green.shade50
+                          : (isRunning ? AppTheme.primaryBlue.withValues(alpha: 0.1) : AppTheme.sacredGold.withValues(alpha: 0.15)),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Icon(
+                      isAllDownloaded
+                          ? Icons.offline_pin_rounded
+                          : (isRunning ? Icons.cloud_download_rounded : Icons.piano),
+                      color: isAllDownloaded
+                          ? Colors.green.shade700
+                          : AppTheme.primaryBlue,
+                      size: 24,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          isAllDownloaded
+                              ? 'Offline Piano Pack Ready (All 695 Hymns)'
+                              : (isRunning ? 'Downloading Piano Pack...' : 'Complete Offline Piano Pack'),
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 13.5,
+                            color: isAllDownloaded ? Colors.green.shade800 : AppTheme.primaryBlue,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          isAllDownloaded
+                              ? 'All 695 piano accompaniments saved. Zero data needed!'
+                              : (isRunning
+                                  ? 'Saved ${status.completed} / ${status.total} hymns (${(status.overallProgress * 100).toInt()}%)'
+                                  : 'Downloaded $downloadedCount of $totalCount piano tracks (${(downloadedCount / (totalCount > 0 ? totalCount : 1) * 100).toInt()}%)'),
+                          style: const TextStyle(fontSize: 11, color: Colors.black54),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+
+              if (isRunning) ...[
+                const SizedBox(height: 10),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(6),
+                  child: LinearProgressIndicator(
+                    value: status.overallProgress > 0 ? status.overallProgress : null,
+                    backgroundColor: Colors.grey.shade200,
+                    valueColor: const AlwaysStoppedAnimation<Color>(AppTheme.primaryBlue),
+                    minHeight: 7,
+                  ),
+                ),
+                const SizedBox(height: 6),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        status.message.isNotEmpty
+                            ? status.message
+                            : 'Downloading hymn audio tracks...',
+                        style: const TextStyle(fontSize: 10.5, color: AppTheme.primaryBlue, fontWeight: FontWeight.w600),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      '${(status.overallProgress * 100).toInt()}%',
+                      style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AppTheme.primaryBlue),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    Expanded(
+                      child: OutlinedButton.icon(
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: AppTheme.primaryBlue,
+                          side: const BorderSide(color: AppTheme.primaryBlue),
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                        ),
+                        icon: Icon(status.isPaused ? Icons.play_arrow_rounded : Icons.pause_rounded, size: 16),
+                        label: Text(status.isPaused ? 'Resume' : 'Pause', style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold)),
+                        onPressed: () {
+                          if (status.isPaused) {
+                            SdaHymnAudioService().resumeBatchDownload();
+                          } else {
+                            SdaHymnAudioService().pauseBatchDownload();
+                          }
+                        },
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: ElevatedButton.icon(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppTheme.primaryBlue,
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                          elevation: 0,
+                        ),
+                        icon: const Icon(Icons.fullscreen_rounded, size: 16),
+                        label: const Text('View Progress', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold)),
+                        onPressed: _showBatchDownloadSheet,
+                      ),
+                    ),
+                  ],
+                ),
+              ] else if (!isAllDownloaded) ...[
+                const SizedBox(height: 10),
+                ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppTheme.primaryBlue,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                    elevation: 0,
+                  ),
+                  icon: const Icon(Icons.cloud_download_rounded, size: 18),
+                  label: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(
+                      'DOWNLOAD ALL PIANO TRACKS (${totalCount - downloadedCount} REMAINING)',
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 11.5, letterSpacing: 0.5),
+                    ),
+                  ),
+                  onPressed: _startAndShowBatchDownload,
+                ),
+              ],
+            ],
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -441,9 +904,12 @@ class _MusicScreenState extends State<MusicScreen> with SingleTickerProviderStat
 
     return Column(
       children: [
+        // Batch Download All Hymns Card
+        _buildBatchDownloadBanner(),
+
         // Search & Category Bar
         Container(
-          padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
           color: Colors.white,
           child: Column(
             children: [
@@ -502,26 +968,32 @@ class _MusicScreenState extends State<MusicScreen> with SingleTickerProviderStat
           ),
         ),
 
-        // Hymn Count Header
+        // Hymn Count Header (Safe from pixel overflow)
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                'Showing ${hymns.length} Hymns',
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.grey.shade700,
+              Expanded(
+                child: Text(
+                  'Showing ${hymns.length} Hymns',
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.grey.shade700,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
+              const SizedBox(width: 8),
               const Row(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Icon(Icons.piano, color: AppTheme.primaryBlue, size: 16),
                   SizedBox(width: 4),
                   Text(
-                    'Piano Accompaniment (Sing Along)',
+                    'Piano (Sing Along)',
                     style: TextStyle(
                       fontSize: 11,
                       fontWeight: FontWeight.w600,
@@ -626,7 +1098,7 @@ class _MusicScreenState extends State<MusicScreen> with SingleTickerProviderStat
                 ),
                 const SizedBox(width: 14),
 
-                // Details
+                // Details (Overflow proof)
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -644,18 +1116,22 @@ class _MusicScreenState extends State<MusicScreen> with SingleTickerProviderStat
                       const SizedBox(height: 4),
                       Row(
                         children: [
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                            decoration: BoxDecoration(
-                              color: AppTheme.sacredGold.withValues(alpha: 0.15),
-                              borderRadius: BorderRadius.circular(6),
-                            ),
-                            child: Text(
-                              hymn.category,
-                              style: const TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.bold,
-                                color: AppTheme.primaryBlue,
+                          Flexible(
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                              decoration: BoxDecoration(
+                                color: AppTheme.sacredGold.withValues(alpha: 0.15),
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              child: Text(
+                                hymn.category,
+                                style: const TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.bold,
+                                  color: AppTheme.primaryBlue,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                               ),
                             ),
                           ),
@@ -723,7 +1199,7 @@ class _MusicScreenState extends State<MusicScreen> with SingleTickerProviderStat
   }
 
   // ==========================================
-  // 🎶 TAB 2: SACRED AUDIO & SERMONS
+  // 🎙️ TAB 2: SACRED AUDIO & SERMONS
   // ==========================================
   Widget _buildAudioSermonsTab() {
     return SingleChildScrollView(
