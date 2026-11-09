@@ -163,18 +163,21 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Badges row
-                    Row(
+                    // Badges row (wrapped to prevent RenderFlex overflow)
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      crossAxisAlignment: WrapCrossAlignment.center,
                       children: [
                         if (widget.sermon.isLiveStream)
                           Container(
-                            margin: const EdgeInsets.only(right: 8),
                             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                             decoration: BoxDecoration(
                               color: Colors.red,
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: const Row(
+                              mainAxisSize: MainAxisSize.min,
                               children: [
                                 CircleAvatar(radius: 3, backgroundColor: Colors.white),
                                 SizedBox(width: 4),
@@ -188,7 +191,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                           decoration: BoxDecoration(
-                            color: AppTheme.primaryGreen.withOpacity(0.1),
+                            color: AppTheme.primaryGreen.withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Text(
@@ -201,8 +204,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                             ),
                           ),
                         ),
-                        if (widget.sermon.isYouTube) ...[
-                          const SizedBox(width: 8),
+                        if (widget.sermon.isYouTube)
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                             decoration: BoxDecoration(
@@ -215,9 +217,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                               style: TextStyle(fontSize: 10, color: Colors.red, fontWeight: FontWeight.bold),
                             ),
                           ),
-                        ],
-                        if (widget.sermon.isTikTok) ...[
-                          const SizedBox(width: 8),
+                        if (widget.sermon.isTikTok)
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                             decoration: BoxDecoration(
@@ -225,6 +225,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: const Row(
+                              mainAxisSize: MainAxisSize.min,
                               children: [
                                 Icon(Icons.videocam, color: Colors.white, size: 10),
                                 SizedBox(width: 4),
@@ -235,8 +236,6 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                               ],
                             ),
                           ),
-                        ],
-                        const SizedBox(width: 8),
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                           decoration: BoxDecoration(
@@ -274,13 +273,16 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                           child: Icon(Icons.person, size: 18, color: Colors.white),
                         ),
                         const SizedBox(width: 8),
-                        Text(
-                          widget.sermon.speaker,
-                          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Colors.black87),
+                        Expanded(
+                          child: Text(
+                            widget.sermon.speaker,
+                            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Colors.black87),
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ),
-                        const SizedBox(width: 12),
+                        const SizedBox(width: 8),
                         const Text("•", style: TextStyle(color: Colors.grey)),
-                        const SizedBox(width: 12),
+                        const SizedBox(width: 8),
                         Text(
                           _formatDate(widget.sermon.datePreached),
                           style: TextStyle(fontSize: 12, color: Colors.grey.shade600),

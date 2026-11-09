@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart'; // 🚀 Added for real security
 import '../../core/theme.dart';
-import '../../core/constants.dart';
 import 'admin_dashboard_screen.dart';
 
 class AdminLoginScreen extends StatefulWidget {
@@ -12,9 +11,8 @@ class AdminLoginScreen extends StatefulWidget {
 }
 
 class _AdminLoginScreenState extends State<AdminLoginScreen> {
-  // Use your actual email as the default to save time
-  final TextEditingController _emailController =
-      TextEditingController(text: AppConstants.contactEmail);
+  // Clean empty controller without any prefilled placeholder
+  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
   bool _isLoading = false;
@@ -141,6 +139,7 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
                 keyboardType: TextInputType.emailAddress,
                 decoration: InputDecoration(
                   labelText: 'Admin Email',
+                  hintText: 'Enter your admin email',
                   prefixIcon: const Icon(Icons.email_outlined),
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12)),

@@ -153,53 +153,78 @@ class SdaHymnAudioService {
     _activeDownloads.add(hymnNumber);
     _downloadProgress[hymnNumber] = 0.0;
 
-    try {
-      final url = getOnlineUrl(hymnNumber);
-      final client = http.Client();
-      final request = http.Request('GET', Uri.parse(url));
-      request.headers['User-Agent'] = 'HARVION_SDA_App/1.0';
-
-      final response = await client.send(request);
-
-      if (response.statusCode != 200) {
-        client.close();
-        _activeDownloads.remove(hymnNumber);
-        return null;
-      }
-
-      final contentLength = response.contentLength ?? 0;
-      final file = await getLocalFile(hymnNumber);
-      final sink = file.openWrite();
-
-      int receivedBytes = 0;
-      await response.stream.listen((chunk) {
-        sink.add(chunk);
-        receivedBytes += chunk.length;
-        if (contentLength > 0) {
-          final progress = receivedBytes / contentLength;
-          _downloadProgress[hymnNumber] = progress;
-          onProgress?.call(progress);
-        }
-      }).asFuture();
-
-      await sink.flush();
-      await sink.close();
-      client.close();
-
-      _downloadProgress[hymnNumber] = 1.0;
-      _activeDownloads.remove(hymnNumber);
-      onProgress?.call(1.0);
-
-      return file;
-    } catch (e) {
-      debugPrint('[SdaHymnAudioService] Download failed for Hymn #$hymnNumber: $e');
-      _activeDownloads.remove(hymnNumber);
+    for (int attempt = 1; attempt <= 3; attempt++) {
+      http.Client? client;
+      IOSink? sink;
       try {
-        final f = await getLocalFile(hymnNumber);
-        if (await f.exists()) await f.delete();
-      } catch (_) {}
-      return null;
+        final url = getOnlineUrl(hymnNumber);
+        client = http.Client();
+        final request = http.Request('GET', Uri.parse(url));
+        request.headers['User-Agent'] = 'HARVION_SDA_App/1.0';
+
+        final response = await client.send(request);
+
+        if (response.statusCode != 200) {
+          client.close();
+          if (attempt < 3) {
+            await Future.delayed(const Duration(milliseconds: 600));
+            continue;
+          }
+          _activeDownloads.remove(hymnNumber);
+          return null;
+        }
+
+        final contentLength = response.contentLength ?? 0;
+        final file = await getLocalFile(hymnNumber);
+        sink = file.openWrite();
+
+        int receivedBytes = 0;
+        await response.stream.listen((chunk) {
+          sink?.add(chunk);
+          receivedBytes += chunk.length;
+          if (contentLength > 0) {
+            final progress = receivedBytes / contentLength;
+            _downloadProgress[hymnNumber] = progress;
+            onProgress?.call(progress);
+          }
+        }).asFuture();
+
+        await sink.flush();
+        await sink.close();
+        sink = null;
+        client.close();
+
+        // Validate downloaded file size
+        if (await file.exists() && await file.length() > 2000) {
+          _downloadProgress[hymnNumber] = 1.0;
+          _activeDownloads.remove(hymnNumber);
+          onProgress?.call(1.0);
+          return file;
+        } else {
+          throw Exception('Incomplete file downloaded');
+        }
+      } catch (e) {
+        try {
+          await sink?.close();
+        } catch (_) {}
+        client?.close();
+
+        if (attempt < 3) {
+          debugPrint('[SdaHymnAudioService] Retry $attempt for Hymn #$hymnNumber due to: $e');
+          await Future.delayed(Duration(milliseconds: 500 * attempt));
+        } else {
+          debugPrint('[SdaHymnAudioService] Download failed after 3 attempts for Hymn #$hymnNumber: $e');
+          _activeDownloads.remove(hymnNumber);
+          try {
+            final f = await getLocalFile(hymnNumber);
+            if (await f.exists()) await f.delete();
+          } catch (_) {}
+          return null;
+        }
+      }
     }
+    _activeDownloads.remove(hymnNumber);
+    return null;
   }
 
   // ==========================================
