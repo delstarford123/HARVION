@@ -75,6 +75,11 @@ app.get(["/contact", "/contact.html"], (req, res) => {
   res.sendFile(path.join(__dirname, "public", "contact.html"));
 });
 
+// Privacy Policy Handler (matches /privacy and /privacy.html)
+app.get(["/privacy", "/privacy.html"], (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "privacy.html"));
+});
+
 // Home Page Handler (matches /, /home, /home.html, /index.html, /server.js)
 app.get(["/", "/home", "/home.html", "/index.html", "/server.js"], (req, res) => {
   // If explicitly requested as JSON without accepting HTML (e.g. backend curl/fetch)

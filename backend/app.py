@@ -170,6 +170,18 @@ def support():
         return send_file(os.path.join(PUBLIC_DIR, "index.html"))
 
 
+@app.route("/privacy", methods=["GET"])
+@app.route("/privacy.html", methods=["GET"])
+def privacy():
+    try:
+        return render_template("privacy.html")
+    except Exception:
+        privacy_path = os.path.join(PUBLIC_DIR, "privacy.html")
+        if os.path.exists(privacy_path):
+            return send_file(privacy_path)
+        return send_file(os.path.join(PUBLIC_DIR, "index.html"))
+
+
 @app.route("/books", methods=["GET"])
 @app.route("/books.html", methods=["GET"])
 @app.route("/library", methods=["GET"])
