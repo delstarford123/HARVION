@@ -11,10 +11,18 @@ plugins {
     id("dev.flutter.flutter-gradle-plugin")
 }
 
-val keystorePropertiesFile = rootProject.file("key.properties")
+val keystorePropertiesFile = when {
+    rootProject.file("key.properties").exists() -> rootProject.file("key.properties")
+    file("../key.properties").exists() -> file("../key.properties")
+    file("key.properties").exists() -> file("key.properties")
+    else -> rootProject.file("key.properties")
+}
 val keystoreProperties = Properties()
 if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(FileInputStream(keystorePropertiesFile))
+    println("[HARVION Signing] Loaded key.properties from: ${keystorePropertiesFile.absolutePath}")
+} else {
+    println("[HARVION Signing] WARNING: key.properties not found!")
 }
 
 android {
@@ -47,8 +55,15 @@ android {
             if (keystorePropertiesFile.exists()) {
                 keyAlias = keystoreProperties["keyAlias"] as String
                 keyPassword = keystoreProperties["keyPassword"] as String
-                storeFile = file(keystoreProperties["storeFile"] as String)
+                val rawStoreFile = keystoreProperties["storeFile"] as String
+                storeFile = when {
+                    file(rawStoreFile).exists() -> file(rawStoreFile)
+                    file("upload-keystore.jks").exists() -> file("upload-keystore.jks")
+                    rootProject.file("app/upload-keystore.jks").exists() -> rootProject.file("app/upload-keystore.jks")
+                    else -> file(rawStoreFile)
+                }
                 storePassword = keystoreProperties["storePassword"] as String
+                println("[HARVION Signing] Release signing configured with keystore: ${storeFile?.absolutePath} (alias: $keyAlias)")
             }
         }
     }
